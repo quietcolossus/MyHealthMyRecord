@@ -81,6 +81,7 @@ public class CameraApi extends AppCompatActivity {
     private CameraDevice.StateCallback mCameraDeviceStateCallback = new CameraDevice.StateCallback() {
         @Override
         public void onOpened(CameraDevice cameraDevice) {
+            Toast.makeText(getApplicationContext(), "Camera connected", Toast.LENGTH_SHORT).show();
             mCameraDevice = cameraDevice;
             if(mIsRecording){
                 try {
@@ -198,8 +199,9 @@ public class CameraApi extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(requestCode == REQUEST_CAMERA_PERMISSION_RESULT){
-            if(grantResults[0] != PackageManager.PERMISSION_GRANTED ){
-                Toast.makeText(getApplicationContext(), "Application cannot run without camera permissions", Toast.LENGTH_SHORT).show();
+            if(grantResults[0] != PackageManager.PERMISSION_GRANTED ) //if something is wrong with the request
+            {
+                Toast.makeText(getApplicationContext(), "Without camera permissions application will not run", Toast.LENGTH_SHORT).show();
             }
         }
         if(requestCode == REQUEST_EXTERNAL_STORAGE_PERMISSION_RESULT){
@@ -271,6 +273,7 @@ public class CameraApi extends AppCompatActivity {
     private void connectCamera() {
         CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
         try {
+            //checks to see if its marshmallow android version or later
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
@@ -282,11 +285,12 @@ public class CameraApi extends AppCompatActivity {
                     // for ActivityCompat#requestPermissions for more details.
                     cameraManager.openCamera(mCameraId, mCameraDeviceStateCallback, mBackgroundHandler);
                 }
-                else{
+                else{ //if you previously denied access to camera and you're starting up application again
                     if(shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)){
-                        Toast.makeText(this, "Video application requires access to camera", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "You must grant access to your camera this video application requires it", Toast.LENGTH_SHORT).show();
                     }
                     requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION_RESULT);
+                    //above line if you're starting up application for teh first time its getting camera permissions
                 }
 
             }
