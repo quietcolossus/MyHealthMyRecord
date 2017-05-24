@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import java.io.File;
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private String[] myDate;
     private String[] myTime;
 
+
     public boolean videosExist = false;
 
     @Override
@@ -62,6 +64,18 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+
+
+        View b = (View) findViewById(R.id.CameraTestButton);
+        b.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v){
+                    startActivity(new Intent (MainActivity.this, CameraApi.class));
+                }
+        });
+
+
+
         // specify an adapter (see also next example)
         if(videosExist()) {
             myDataset = populateList("names");

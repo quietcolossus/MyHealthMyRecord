@@ -15,7 +15,6 @@ import android.hardware.camera2.CameraDevice;
 import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
-import android.media.Image;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Environment;
@@ -26,7 +25,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.os.EnvironmentCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Size;
@@ -151,7 +149,7 @@ public class CameraApi extends AppCompatActivity {
         //storage method call
         createVideoFolder();
 
-        mMediaRecorder = new MediaRecorder();
+        /*mMediaRecorder = new MediaRecorder();
         mChronometer = (Chronometer) findViewById(R.id.chronometer);
         mTextureView = (TextureView) findViewById(R.id.textureView);
 
@@ -179,7 +177,8 @@ public class CameraApi extends AppCompatActivity {
             public void onClick(View v){
 
             }
-        });
+        });*/
+        startPreveiw();
     }
 
     @Override
@@ -338,15 +337,16 @@ public class CameraApi extends AppCompatActivity {
     private void startPreveiw(){
         SurfaceTexture surfaceTexture = mTextureView.getSurfaceTexture();
         surfaceTexture.setDefaultBufferSize(mPreveiwSize.getWidth(), mPreveiwSize.getHeight());
-        Surface preveiwSurface = new Surface(surfaceTexture);
+        Surface previewSurface = new Surface(surfaceTexture);
         try {
             mCaptureRequestBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
-            mCaptureRequestBuilder.addTarget(preveiwSurface);
-            mCameraDevice. createCaptureSession(Arrays.asList(preveiwSurface), new CameraCaptureSession.StateCallback() {
+            mCaptureRequestBuilder.addTarget(previewSurface);
+            mCameraDevice. createCaptureSession(Arrays.asList(previewSurface), new CameraCaptureSession.StateCallback() {
                 @Override
-                public void onConfigured(CameraCaptureSession cameraCaptureSession) {
+                public void onConfigured(CameraCaptureSession cameraCaptureSession) { //method you enter when everything is succesful
                     try {
                         cameraCaptureSession.setRepeatingRequest(mCaptureRequestBuilder.build(),null, mBackgroundHandler);
+                        //so it keeps updating the display for video (preview)
                     }
                     catch (CameraAccessException e) {
                         e.printStackTrace();
@@ -354,8 +354,8 @@ public class CameraApi extends AppCompatActivity {
                 }
 
                 @Override
-                public void onConfigureFailed(CameraCaptureSession cameraCaptureSession) {
-                    Toast.makeText(getApplicationContext(), " Cannot setup camera preveiw", Toast.LENGTH_SHORT).show();
+                public void onConfigureFailed(CameraCaptureSession cameraCaptureSession) { //method you enter when something failed
+                    Toast.makeText(getApplicationContext(), "Camera preview cannot be set up", Toast.LENGTH_SHORT).show();
                 }
             }, null);
         }
