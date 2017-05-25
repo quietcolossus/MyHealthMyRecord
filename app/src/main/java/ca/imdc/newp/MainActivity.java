@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
         File cFileDir = new File(cfileName);
         takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile((new File(cfileName))));
         if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
+            startActivity(new Intent(MainActivity.this, CameraApi.class));
         }
 
     }
@@ -353,11 +353,11 @@ public class MainActivity extends AppCompatActivity {
                     .setNeutralButton("Agree", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
 
-                                    startActivity(new Intent(MainActivity.this, CameraApi.class));
 
 
-                            //dispatchTakeVideoIntent();
-                            //mAdapter.notifyDataSetChanged();
+
+                            dispatchTakeVideoIntent();
+                            mAdapter.notifyDataSetChanged();
                             // User cancelled the dialog
                         }
                     });
