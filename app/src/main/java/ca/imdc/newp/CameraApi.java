@@ -285,7 +285,7 @@ public class CameraApi extends AppCompatActivity {
                 }
                 else{ //if you previously denied access to camera and you're starting up application again
                     if(shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)){
-                        Toast.makeText(this, "You must grant access to your camera this video application requires it", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "You must grant access to your camera,this video application requires it", Toast.LENGTH_SHORT).show();
                     }
                     requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION_RESULT);
                     //above line if you're starting up application for teh first time its getting camera permissions
