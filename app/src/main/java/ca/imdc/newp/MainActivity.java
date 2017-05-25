@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
         toolbar.setLogo(R.drawable.logo);
@@ -66,22 +67,20 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
-
         View b = (View) findViewById(R.id.CameraTestButton);
         b.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v){
-                    startActivity(new Intent (MainActivity.this, CameraApi.class));
-                }
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, CameraApi.class));
+            }
         });
 
 
-
         // specify an adapter (see also next example)
-        if(videosExist()) {
+        if (videosExist()) {
             myDataset = populateList("names");
             myDate = populateList("date");
         }
-        mAdapter = new MyAdapter(myDataset, myDate,this);
+        mAdapter = new MyAdapter(myDataset, myDate, this);
         mRecyclerView.setAdapter(mAdapter);
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -178,9 +177,10 @@ public class MainActivity extends AppCompatActivity {
         Random random = new Random();
         a = random.nextInt(70) + 1;
         Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        takeVideoIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         //File videoDir = new File(System.getProperty("user.dir") + "/Video/");
         File videoDir = new File(getExternalFilesDir(null).getAbsolutePath() + "/Video/");
-        if(!videoDir.exists()) videoDir.mkdir();
+        if (!videoDir.exists()) videoDir.mkdir();
         cfileName = videoDir.getAbsolutePath() + "/Untitled-" + a + ".mp4";
         //encfileName = new File(System.getProperty("user.dir") + "/Encrypted/").getAbsolutePath() + "/Untitled-" + a + ".mp4";
         encfileName = getExternalFilesDir(null).getAbsolutePath() + "/Encrypted/Untitled-" + a + ".mp4";
@@ -201,11 +201,11 @@ public class MainActivity extends AppCompatActivity {
             if (requestCode == REQUEST_VIDEO_CAPTURE) {
                 cry();
                 deleteAllVids();
-                if(videosExist()) {
+                if (videosExist()) {
                     myDataset = populateList("names");
                     myDate = populateList("date");
                 }
-                mAdapter = new MyAdapter(myDataset, myDate,this);
+                mAdapter = new MyAdapter(myDataset, myDate, this);
                 mRecyclerView.setAdapter(mAdapter);
 
             }
@@ -235,9 +235,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void deleteAllVids()
-    {
-        File folder = new File(getExternalFilesDir(null).getAbsolutePath()+"/Video/");
+    public void deleteAllVids() {
+        File folder = new File(getExternalFilesDir(null).getAbsolutePath() + "/Video/");
         File[] listOfFiles = folder.listFiles();
         for (int i = 0; i < listOfFiles.length; i++) {
             if (listOfFiles[i].isFile()) {
@@ -246,18 +245,19 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-    public boolean videosExist(){
+
+    public boolean videosExist() {
         File folder = new File(getExternalFilesDir(null).getAbsolutePath() + "/Encrypted/");
-        if(folder.exists() && (folder.list().length>0)) return true;
-        else if(folder.exists() && (folder.list().length==0)) return false;
-        else folder.mkdir() ;
+        if (folder.exists() && (folder.list().length > 0)) return true;
+        else if (folder.exists() && (folder.list().length == 0)) return false;
+        else folder.mkdir();
         return false;
     }
-    public void deleteIt(String path)
-    {
+
+    public void deleteIt(String path) {
         File folder = new File(path);
-        if(folder.exists())
-        folder.delete();
+        if (folder.exists())
+            folder.delete();
     }
 
 
@@ -293,39 +293,31 @@ public class MainActivity extends AppCompatActivity {
         return decr.getAbsolutePath();
     }
 
-    public void halo(String ubc )
-    {
+    public void halo(String ubc) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(ubc));
         intent.setDataAndType(Uri.parse(ubc), "video/mp4");
         startActivity(intent);
     }
 
-    private String createfile(String type)
-    {
+    private String createfile(String type) {
         String fName = null;
-        if(type == "decrypt")
-        {
-            fName = cfileName ;
-        }
-        else if(type == "encrypt")
-        {
-            fName =  encfileName + ".encrypt";
-        }
-        else
+        if (type == "decrypt") {
+            fName = cfileName;
+        } else if (type == "encrypt") {
+            fName = encfileName + ".encrypt";
+        } else
             return fName;
         File file = new File(fName);
-        try
-        {
+        try {
             file.createNewFile();
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         return fName;
     }
 
-    public class dialog  extends DialogFragment{
+
+    public class dialog extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstance) {
 
@@ -348,15 +340,15 @@ public class MainActivity extends AppCompatActivity {
             return builder.create();
         }
     }
-    public class dialog2 extends DialogFragment
-    {
+
+    public class dialog2 extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstance) {
 
             // Use the Builder class for convenient dialog construction
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
             LayoutInflater inflater = getActivity().getLayoutInflater();
-            builder.setView(inflater.inflate(R.layout.dialog_text,null))
+            builder.setView(inflater.inflate(R.layout.dialog_text, null))
                     .setTitle("Consent")
                     .setPositiveButton("Disagree", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
