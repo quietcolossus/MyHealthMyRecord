@@ -145,11 +145,11 @@ public class CameraApi extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_cameraapi);
         //storage method call
         createVideoFolder();
 
-        /*mMediaRecorder = new MediaRecorder();
+        mMediaRecorder = new MediaRecorder();
         mChronometer = (Chronometer) findViewById(R.id.chronometer);
         mTextureView = (TextureView) findViewById(R.id.textureView);
 
@@ -177,8 +177,7 @@ public class CameraApi extends AppCompatActivity {
             public void onClick(View v){
 
             }
-        });*/
-        startPreveiw();
+        });
     }
 
     @Override
