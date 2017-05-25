@@ -67,12 +67,6 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 
-        View b = (View) findViewById(R.id.CameraTestButton);
-        b.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, CameraApi.class));
-            }
-        });
 
 
         // specify an adapter (see also next example)
@@ -192,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
         if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
         }
+
     }
 
     @Override
@@ -357,8 +352,12 @@ public class MainActivity extends AppCompatActivity {
                     })
                     .setNeutralButton("Agree", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            dispatchTakeVideoIntent();
-                            mAdapter.notifyDataSetChanged();
+
+                                    startActivity(new Intent(MainActivity.this, CameraApi.class));
+
+
+                            //dispatchTakeVideoIntent();
+                            //mAdapter.notifyDataSetChanged();
                             // User cancelled the dialog
                         }
                     });
