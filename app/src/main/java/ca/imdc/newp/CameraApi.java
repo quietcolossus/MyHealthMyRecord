@@ -79,8 +79,15 @@ public class CameraApi extends AppCompatActivity {
     private CameraDevice.StateCallback mCameraDeviceStateCallback = new CameraDevice.StateCallback() {
         @Override
         public void onOpened(CameraDevice cameraDevice) {
+
+
+
+
             Toast.makeText(getApplicationContext(), "Camera connected", Toast.LENGTH_SHORT).show();
             mCameraDevice = cameraDevice;
+
+
+
             if(mIsRecording){
                 try {
                     createVideoFileName();
@@ -155,6 +162,7 @@ public class CameraApi extends AppCompatActivity {
 
         mRecordImageButton = (ImageButton) findViewById(R.id.videoOnlineImageButton);
         mFlipCamera = (ImageButton) findViewById(R.id.cameraFlipImageButton);
+
         mRecordImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -245,6 +253,7 @@ public class CameraApi extends AppCompatActivity {
                 CameraCharacteristics cameraCharacteristics = cameraManager.getCameraCharacteristics(cameraId);
                 if (cameraCharacteristics.get(CameraCharacteristics.LENS_FACING) ==
                         CameraCharacteristics.LENS_FACING_FRONT) {
+
                     continue;
                     //setting up camera here
                 }
@@ -260,7 +269,15 @@ public class CameraApi extends AppCompatActivity {
                 }
                 mPreveiwSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class), rotatedWidth, rotatedHeight);
                 mVideoSize = chooseOptimalSize(map.getOutputSizes(MediaRecorder.class), rotatedWidth, rotatedHeight);
-                mCameraId = cameraId;
+                if (MainActivity.clicked) {
+                    mCameraId = "1";
+                }
+                else{
+                    mCameraId=cameraId;
+                }
+
+
+
                 return;
             }
         } catch (CameraAccessException e) {

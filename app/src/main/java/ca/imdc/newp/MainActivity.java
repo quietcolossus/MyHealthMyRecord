@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private String[] myDataset;
     private String[] myDate;
     private String[] myTime;
-
+public static boolean clicked=false;
 
     public boolean videosExist = false;
 
@@ -323,6 +323,7 @@ public class MainActivity extends AppCompatActivity {
             builder.setTitle("Who are you recording?")
                     .setPositiveButton("SELF", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            clicked=true;
                             dispatchTakeVideoIntent();
                         }
                     })
