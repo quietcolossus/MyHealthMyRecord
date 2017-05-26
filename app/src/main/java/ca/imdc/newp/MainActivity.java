@@ -103,7 +103,7 @@ public static boolean clicked=false;
                     }
                 });
 
-        //Floationg action button to create a dialogue
+        //Floating action button to create a dialogue
         FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab);
         myFab.setBackgroundColor(Color.RED);
         myFab.setOnClickListener(new View.OnClickListener() {
