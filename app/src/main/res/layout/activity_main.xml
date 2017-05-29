@@ -33,14 +33,6 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@android:drawable/ic_input_add" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:text="Test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="16dp"
-        android:id="@+id/CameraTestButton" />
-
 </android.support.design.widget.CoordinatorLayout>
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"

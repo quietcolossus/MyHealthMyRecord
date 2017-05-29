@@ -79,8 +79,15 @@ public class CameraApi extends AppCompatActivity {
     private CameraDevice.StateCallback mCameraDeviceStateCallback = new CameraDevice.StateCallback() {
         @Override
         public void onOpened(CameraDevice cameraDevice) {
+
+
+
+
             Toast.makeText(getApplicationContext(), "Camera connected", Toast.LENGTH_SHORT).show();
             mCameraDevice = cameraDevice;
+
+
+
             if(mIsRecording){
                 try {
                     createVideoFileName();
@@ -94,7 +101,7 @@ public class CameraApi extends AppCompatActivity {
                 mChronometer.start();
             }
             else {
-                startPreveiw();
+                startPreview();
             }
         }
 
@@ -113,7 +120,7 @@ public class CameraApi extends AppCompatActivity {
     private HandlerThread mBackgroundHandlerThread;
     private Handler mBackgroundHandler;
     private String mCameraId;
-    private Size mPreveiwSize;
+    private Size mPreviewSize;
     private CaptureRequest.Builder mCaptureRequestBuilder;
     private ImageButton mRecordImageButton;
     private boolean mIsRecording = false;
@@ -155,6 +162,7 @@ public class CameraApi extends AppCompatActivity {
 
         mRecordImageButton = (ImageButton) findViewById(R.id.videoOnlineImageButton);
         mFlipCamera = (ImageButton) findViewById(R.id.cameraFlipImageButton);
+
         mRecordImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -163,12 +171,12 @@ public class CameraApi extends AppCompatActivity {
                     mChronometer.setVisibility(View.INVISIBLE);
                     mIsRecording = false;
                     mRecordImageButton.setImageResource(R.mipmap.btn_video_online);
-                    startPreveiw();
+                    startPreview();
                     mMediaRecorder.stop();
                     mMediaRecorder.reset();
                 }
                 else{
-                    checkWriteStoragPermission();
+                    checkWriteStoragePermission();
                 }
             }
         });
@@ -212,7 +220,7 @@ public class CameraApi extends AppCompatActivity {
                 catch (IOException e) {
                     e.printStackTrace();
                 }
-                Toast.makeText(this,"Permission succesfully granted",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Permission successfully granted",Toast.LENGTH_SHORT).show();
             }
             else{
                 Toast.makeText(this,"Application needs to save video to run",Toast.LENGTH_SHORT).show();
@@ -245,6 +253,7 @@ public class CameraApi extends AppCompatActivity {
                 CameraCharacteristics cameraCharacteristics = cameraManager.getCameraCharacteristics(cameraId);
                 if (cameraCharacteristics.get(CameraCharacteristics.LENS_FACING) ==
                         CameraCharacteristics.LENS_FACING_FRONT) {
+
                     continue;
                     //setting up camera here
                 }
@@ -258,9 +267,17 @@ public class CameraApi extends AppCompatActivity {
                     rotatedWidth = height;
                     rotatedHeight = width;
                 }
-                mPreveiwSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class), rotatedWidth, rotatedHeight);
+                mPreviewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class), rotatedWidth, rotatedHeight);
                 mVideoSize = chooseOptimalSize(map.getOutputSizes(MediaRecorder.class), rotatedWidth, rotatedHeight);
-                mCameraId = cameraId;
+                if (MainActivity.clicked) {
+                    mCameraId = "1";
+                }
+                else{
+                    mCameraId=cameraId;
+                }
+
+
+
                 return;
             }
         } catch (CameraAccessException e) {
@@ -306,13 +323,13 @@ public class CameraApi extends AppCompatActivity {
         try {
             setUpMediaRecorder();
             SurfaceTexture surfaceTexture = mTextureView.getSurfaceTexture();
-            surfaceTexture.setDefaultBufferSize(mPreveiwSize.getWidth(), mPreveiwSize.getHeight());
-            Surface preveiwSurface = new Surface(surfaceTexture);
+            surfaceTexture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
+            Surface previewSurface = new Surface(surfaceTexture);
             Surface recordSurface = mMediaRecorder.getSurface();
             mCaptureRequestBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_RECORD);
-            mCaptureRequestBuilder.addTarget(preveiwSurface);
+            mCaptureRequestBuilder.addTarget(previewSurface);
             mCaptureRequestBuilder.addTarget(recordSurface);
-            mCameraDevice.createCaptureSession(Arrays.asList(preveiwSurface, recordSurface),new CameraCaptureSession.StateCallback() {
+            mCameraDevice.createCaptureSession(Arrays.asList(previewSurface, recordSurface),new CameraCaptureSession.StateCallback() {
                 @Override
                 public void onConfigured(CameraCaptureSession cameraCaptureSession) {
                     try {
@@ -333,16 +350,16 @@ public class CameraApi extends AppCompatActivity {
         }
     }
 
-    private void startPreveiw(){
+    private void startPreview(){
         SurfaceTexture surfaceTexture = mTextureView.getSurfaceTexture();
-        surfaceTexture.setDefaultBufferSize(mPreveiwSize.getWidth(), mPreveiwSize.getHeight());
+        surfaceTexture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
         Surface previewSurface = new Surface(surfaceTexture);
         try {
             mCaptureRequestBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
             mCaptureRequestBuilder.addTarget(previewSurface);
             mCameraDevice. createCaptureSession(Arrays.asList(previewSurface), new CameraCaptureSession.StateCallback() {
                 @Override
-                public void onConfigured(CameraCaptureSession cameraCaptureSession) { //method you enter when everything is succesful
+                public void onConfigured(CameraCaptureSession cameraCaptureSession) { //method you enter when everything is successful
                     try {
                         cameraCaptureSession.setRepeatingRequest(mCaptureRequestBuilder.build(),null, mBackgroundHandler);
                         //so it keeps updating the display for video (preview)
@@ -427,7 +444,7 @@ public class CameraApi extends AppCompatActivity {
     }
 
     //storage method #3
-    private void checkWriteStoragPermission(){
+    private void checkWriteStoragePermission(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
                 mIsRecording = true;
@@ -469,7 +486,7 @@ public class CameraApi extends AppCompatActivity {
     }
 
     private void setUpMediaRecorder()throws IOException {
-        //dont take these out of order
+        //don't take these out of order
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         mMediaRecorder.setOutputFile(mVideoFileName);

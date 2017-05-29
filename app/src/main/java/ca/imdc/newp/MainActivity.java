@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private String[] myDataset;
     private String[] myDate;
     private String[] myTime;
-
+public static boolean clicked=false;
 
     public boolean videosExist = false;
 
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-        //Floationg action button to create a dialogue
+        //Floating action button to create a dialogue
         FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab);
         myFab.setBackgroundColor(Color.RED);
         myFab.setOnClickListener(new View.OnClickListener() {
@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
         a = random.nextInt(70) + 1;
         Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         takeVideoIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        //File videoDir = new File(System.getProperty("user.dir") + "/Video/");
+        /*//File videoDir = new File(System.getProperty("user.dir") + "/Video/");
         File videoDir = new File(getExternalFilesDir(null).getAbsolutePath() + "/Video/");
         if (!videoDir.exists()) videoDir.mkdir();
         cfileName = videoDir.getAbsolutePath() + "/Untitled-" + a + ".mp4";
@@ -183,8 +183,9 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("EncFile Dir: " + encfileName);
         File cFileDir = new File(cfileName);
         takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile((new File(cfileName))));
-        if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
+        */if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(new Intent(MainActivity.this, CameraApi.class));
+
         }
 
     }
@@ -322,6 +323,7 @@ public class MainActivity extends AppCompatActivity {
             builder.setTitle("Who are you recording?")
                     .setPositiveButton("SELF", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            clicked=true;
                             dispatchTakeVideoIntent();
                         }
                     })
@@ -353,11 +355,11 @@ public class MainActivity extends AppCompatActivity {
                     .setNeutralButton("Agree", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
 
-                                    startActivity(new Intent(MainActivity.this, CameraApi.class));
 
 
-                            //dispatchTakeVideoIntent();
-                            //mAdapter.notifyDataSetChanged();
+
+                            dispatchTakeVideoIntent();
+                            mAdapter.notifyDataSetChanged();
                             // User cancelled the dialog
                         }
                     });
