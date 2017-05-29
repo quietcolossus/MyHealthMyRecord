@@ -128,9 +128,9 @@ public class CameraApi extends AppCompatActivity {
     private Size mVideoSize;
     private MediaRecorder mMediaRecorder;
     private Chronometer mChronometer;
-    //storage members
-    private File mVideoFolder;
-    private String mVideoFileName;
+    //storage variables
+    private File mVideoFolder; //stores a file to save video
+    private String mVideoFileName; //stores the file name for each video
 
     private int mTotalRotation;
     private static SparseIntArray ORIENTATIONS = new SparseIntArray();
@@ -176,6 +176,8 @@ public class CameraApi extends AppCompatActivity {
                     mMediaRecorder.reset();
                 }
                 else{
+                    mIsRecording = true;
+                    mRecordImageButton.setImageResource(R.mipmap.btn_video);
                     checkWriteStoragePermission();
                 }
             }
@@ -438,6 +440,7 @@ public class CameraApi extends AppCompatActivity {
 
     //storage method #1
     private void createVideoFolder(){
+        //finds the folder in the device where videos are normally stored
         File movieFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
         mVideoFolder = new File(movieFile, "CameraApiVideos");
         if(!mVideoFolder.exists()){
