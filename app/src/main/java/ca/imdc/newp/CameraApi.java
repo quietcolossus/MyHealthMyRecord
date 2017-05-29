@@ -270,11 +270,22 @@ public class CameraApi extends AppCompatActivity {
                 mPreviewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class), rotatedWidth, rotatedHeight);
                 mVideoSize = chooseOptimalSize(map.getOutputSizes(MediaRecorder.class), rotatedWidth, rotatedHeight);
                 if (MainActivity.clicked) {
-                    mCameraId = "1";
+                    MainActivity.clicked=false;
+                    closeCamera();
+                    stopBackgroundThread();
+
+                    startBackgroundThread();
+
+
+                        cameraId = cameraManager.getCameraIdList()[1];
+
+
+
                 }
-                else{
-                    mCameraId=cameraId;
-                }
+
+
+               mCameraId=cameraId;
+
 
 
 
