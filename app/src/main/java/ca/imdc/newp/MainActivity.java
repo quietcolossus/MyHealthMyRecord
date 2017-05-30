@@ -172,7 +172,7 @@ public static boolean clicked=false;
         a = random.nextInt(70) + 1;
         Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         takeVideoIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        //File videoDir = new File(System.getProperty("user.dir") + "/Video/");
+      /*  //File videoDir = new File(System.getProperty("user.dir") + "/Video/");
         File videoDir = new File(getExternalFilesDir(null).getAbsolutePath() + "/Video/");
         if (!videoDir.exists()) videoDir.mkdir();
         cfileName = videoDir.getAbsolutePath() + "/Untitled-" + a + ".mp4";
@@ -181,8 +181,8 @@ public static boolean clicked=false;
         System.out.println("Video Dir: " + videoDir.getAbsolutePath());
         System.out.println("CFile Dir: " + cfileName);
         System.out.println("EncFile Dir: " + encfileName);
-        File cFileDir = new File(cfileName);
-        takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile((new File(cfileName))));
+        File cFileDir = new File(cfileName); */
+        takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile((new File(CameraApi.mVideoFileName))));
         if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
             startActivity(new Intent(MainActivity.this, CameraApi.class));
 
