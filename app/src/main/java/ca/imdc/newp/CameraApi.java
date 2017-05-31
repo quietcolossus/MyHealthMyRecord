@@ -130,7 +130,7 @@ public class CameraApi extends AppCompatActivity {
     private Chronometer mChronometer;
     //storage members
     private File mVideoFolder;
-    public static String mVideoFileName;
+    private String mVideoFileName;
 
     private int mTotalRotation;
     private static SparseIntArray ORIENTATIONS = new SparseIntArray();
@@ -438,13 +438,12 @@ public class CameraApi extends AppCompatActivity {
 
     //storage method #1
     private void createVideoFolder(){
-       /* File movieFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
+        File movieFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
         mVideoFolder = new File(movieFile, "CameraApiVideos");
         if(!mVideoFolder.exists()){
             mVideoFolder.mkdirs();
-        }*/
-        mVideoFolder = new File(getExternalFilesDir(null).getAbsolutePath() + "/Video/");
-        if (!mVideoFolder.exists()) mVideoFolder.mkdir();
+        }
+
 
     }
 
@@ -455,6 +454,7 @@ public class CameraApi extends AppCompatActivity {
         File videoFile = File.createTempFile(prepend,".mp4",mVideoFolder);
         mVideoFileName = videoFile.getAbsolutePath();
         return videoFile;
+
 
     }
 
