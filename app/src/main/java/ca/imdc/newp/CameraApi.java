@@ -5,7 +5,11 @@ package ca.imdc.newp;
  */
 
 import android.Manifest;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
@@ -27,8 +31,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
+import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
@@ -45,6 +51,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+
+import static android.app.PendingIntent.getActivity;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class CameraApi extends AppCompatActivity {
@@ -169,8 +177,11 @@ public class CameraApi extends AppCompatActivity {
                     mRecordImageButton.setImageResource(R.mipmap.btn_video_online);
                     //startPreview();
                     mMediaRecorder.stop();
+                    Log.d("Debug msg", "Video recording stopped");
                     mMediaRecorder.reset();
                     startPreview();
+                    dialog3 whatNext = new dialog3();
+                    whatNext.show(getFragmentManager(), "dialog3");
                 }
                 else{
                     checkWriteStoragePermission();
@@ -183,6 +194,29 @@ public class CameraApi extends AppCompatActivity {
 
             }
         });
+    }
+
+    public class dialog3 extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstance) {
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
+            //LayoutInflater inflater = getActivity().getLayoutInflater();
+            builder.setTitle("Your video had been saved! " +
+                    "Would you like to make another video or go back to the home screen?")
+                    .setPositiveButton("Another video", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                        //stays on cameraapi
+                    })
+                    .setNeutralButton("Home", new DialogInterface.OnClickListener() {
+                        public void onClick (DialogInterface dialog, int id){
+                            finish();
+                      }
+                    });
+            return builder.create();
+        }
     }
 
     @Override
