@@ -6,7 +6,11 @@ android {
 
     defaultConfig {
         applicationId "ca.imdc.newp"
+<<<<<<< HEAD
         minSdkVersion 23
+=======
+        minSdkVersion 22
+>>>>>>> 03e306ae9fea4b0e4768b2bc9eebea2f02b3e89e
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -15,6 +19,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug{
+            debuggable true
         }
     }
 }

@@ -167,12 +167,21 @@ public static boolean clicked=false;
     }
 
     public void dispatchTakeVideoIntent() {
+<<<<<<< HEAD
         int a;
         Random random = new Random();
         a = random.nextInt(70) + 1;
         Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         takeVideoIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
        //File videoDir = new File(System.getProperty("user.dir") + "/Video/");
+=======
+        //int a;
+       // Random random = new Random();
+        //a = random.nextInt(70) + 1;
+        //Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        //takeVideoIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        /*//File videoDir = new File(System.getProperty("user.dir") + "/Video/");
+>>>>>>> 03e306ae9fea4b0e4768b2bc9eebea2f02b3e89e
         File videoDir = new File(getExternalFilesDir(null).getAbsolutePath() + "/Video/");
         if (!videoDir.exists()) videoDir.mkdir();
         cfileName = videoDir.getAbsolutePath() + "/Untitled-" + a + ".mp4";
@@ -183,10 +192,14 @@ public static boolean clicked=false;
         System.out.println("EncFile Dir: " + encfileName);
         File cFileDir = new File(cfileName);
         takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile((new File(cfileName))));
+<<<<<<< HEAD
         if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
+=======
+        *///if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
+>>>>>>> 03e306ae9fea4b0e4768b2bc9eebea2f02b3e89e
             startActivity(new Intent(MainActivity.this, CameraApi.class));
 
-        }
+        //}
 
     }
 
