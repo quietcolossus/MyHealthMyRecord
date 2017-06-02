@@ -253,11 +253,23 @@ public class CameraApi extends AppCompatActivity {
         try {
             for (String cameraId : cameraManager.getCameraIdList()) {
                 CameraCharacteristics cameraCharacteristics = cameraManager.getCameraCharacteristics(cameraId);
-                if (cameraCharacteristics.get(CameraCharacteristics.LENS_FACING) ==
-                        CameraCharacteristics.LENS_FACING_FRONT) {
 
-                    continue;
-                    //setting up camera here
+
+                if (MainActivity.clicked) {
+                    if (cameraCharacteristics.get(CameraCharacteristics.LENS_FACING) ==
+                            CameraCharacteristics.LENS_FACING_FRONT) {
+
+                        MainActivity.clicked = false;
+                        closeCamera();
+                        stopBackgroundThread();
+
+                        startBackgroundThread();
+
+
+                        cameraId = cameraManager.getCameraIdList()[1];
+                    } else {
+                        continue;
+                    }
                 }
                 StreamConfigurationMap map = cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
                 int deviceOrientation = getWindowManager().getDefaultDisplay().getRotation();
@@ -271,19 +283,7 @@ public class CameraApi extends AppCompatActivity {
                 }
                 mPreviewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class), rotatedWidth, rotatedHeight);
                 mVideoSize = chooseOptimalSize(map.getOutputSizes(MediaRecorder.class), rotatedWidth, rotatedHeight);
-                if (MainActivity.clicked) {
-                    MainActivity.clicked=false;
-                    closeCamera();
-                    stopBackgroundThread();
 
-                    startBackgroundThread();
-
-
-                        cameraId = cameraManager.getCameraIdList()[1];
-
-
-
-                }
 
 
                mCameraId=cameraId;
@@ -446,6 +446,8 @@ public class CameraApi extends AppCompatActivity {
         if(!mVideoFolder.exists()){
             mVideoFolder.mkdirs();
         }
+
+
     }
 
     //storage method #2
@@ -455,6 +457,8 @@ public class CameraApi extends AppCompatActivity {
         File videoFile = File.createTempFile(prepend,".mp4",mVideoFolder);
         mVideoFileName = videoFile.getAbsolutePath();
         return videoFile;
+
+
     }
 
     //storage method #3
