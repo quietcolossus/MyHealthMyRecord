@@ -5,7 +5,11 @@ package ca.imdc.newp;
  */
 
 import android.Manifest;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
@@ -27,8 +31,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
+import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
@@ -45,6 +51,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+
+import static android.app.PendingIntent.getActivity;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class CameraApi extends AppCompatActivity {
@@ -80,14 +88,9 @@ public class CameraApi extends AppCompatActivity {
         @Override
         public void onOpened(CameraDevice cameraDevice) {
 
-
-
-
             Toast.makeText(getApplicationContext(), "Camera connected", Toast.LENGTH_SHORT).show();
             mCameraDevice = cameraDevice;
-
-
-
+            //code below called only once when you first install on devices marshmallow or later
             if(mIsRecording){
                 try {
                     createVideoFileName();
@@ -153,16 +156,17 @@ public class CameraApi extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cameraapi);
-        //storage method call
+
+        //storage method call to create folder to save videos in
         createVideoFolder();
 
         mMediaRecorder = new MediaRecorder();
-        mChronometer = (Chronometer) findViewById(R.id.chronometer);
+        mChronometer = (Chronometer) findViewById(R.id.chronometer); //the timer
         mTextureView = (TextureView) findViewById(R.id.textureView);
 
-        mRecordImageButton = (ImageButton) findViewById(R.id.videoOnlineImageButton);
         mFlipCamera = (ImageButton) findViewById(R.id.cameraFlipImageButton);
-
+        mRecordImageButton = (ImageButton) findViewById(R.id.videoOnlineImageButton);
+        //onclicklistener when you stop recording
         mRecordImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -171,9 +175,13 @@ public class CameraApi extends AppCompatActivity {
                     mChronometer.setVisibility(View.INVISIBLE);
                     mIsRecording = false;
                     mRecordImageButton.setImageResource(R.mipmap.btn_video_online);
-                    startPreview();
+                    //startPreview();
                     mMediaRecorder.stop();
+                    Log.d("Debug msg", "Video recording stopped");
                     mMediaRecorder.reset();
+                    startPreview();
+                    dialog3 whatNext = new dialog3();
+                    whatNext.show(getFragmentManager(), "dialog3");
                 }
                 else{
                     mIsRecording = true;
@@ -188,6 +196,29 @@ public class CameraApi extends AppCompatActivity {
 
             }
         });
+    }
+
+    public class dialog3 extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstance) {
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
+            //LayoutInflater inflater = getActivity().getLayoutInflater();
+            builder.setTitle("Your video had been saved! " +
+                    "Would you like to make another video or go back to the home screen?")
+                    .setPositiveButton("Another video", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                        //stays on cameraapi
+                    })
+                    .setNeutralButton("Home", new DialogInterface.OnClickListener() {
+                        public void onClick (DialogInterface dialog, int id){
+                            finish();
+                      }
+                    });
+            return builder.create();
+        }
     }
 
     @Override
@@ -211,6 +242,10 @@ public class CameraApi extends AppCompatActivity {
             {
                 Toast.makeText(getApplicationContext(), "Without camera permissions application will not run", Toast.LENGTH_SHORT).show();
             }
+            if(grantResults[1] != PackageManager.PERMISSION_GRANTED ) //if something is wrong with the request
+            {
+                Toast.makeText(getApplicationContext(), "Without audio permissions application will not run", Toast.LENGTH_SHORT).show();
+            }
         }
         if(requestCode == REQUEST_EXTERNAL_STORAGE_PERMISSION_RESULT){
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
@@ -222,7 +257,7 @@ public class CameraApi extends AppCompatActivity {
                 catch (IOException e) {
                     e.printStackTrace();
                 }
-                Toast.makeText(this,"Permission successfully granted",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Storage permission successfully granted",Toast.LENGTH_SHORT).show();
             }
             else{
                 Toast.makeText(this,"Application needs to save video to run",Toast.LENGTH_SHORT).show();
@@ -282,13 +317,10 @@ public class CameraApi extends AppCompatActivity {
                     rotatedHeight = width;
                 }
                 mPreviewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class), rotatedWidth, rotatedHeight);
+                //sets up rotation and size for preview of camera
                 mVideoSize = chooseOptimalSize(map.getOutputSizes(MediaRecorder.class), rotatedWidth, rotatedHeight);
 
-
-
-               mCameraId=cameraId;
-
-
+                mCameraId=cameraId;
 
 
                 return;
@@ -317,7 +349,7 @@ public class CameraApi extends AppCompatActivity {
                     if(shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)){
                         Toast.makeText(this, "You must grant access to your camera,this video application requires it", Toast.LENGTH_SHORT).show();
                     }
-                    requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION_RESULT);
+                    requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO}, REQUEST_CAMERA_PERMISSION_RESULT);
                     //above line if you're starting up application for teh first time its getting camera permissions
                 }
 
@@ -438,24 +470,25 @@ public class CameraApi extends AppCompatActivity {
         }
     }
 
-    //storage method #1
+    //storage method #1 creates folder to save videos in
     private void createVideoFolder(){
         //finds the folder in the device where videos are normally stored
         File movieFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
-        mVideoFolder = new File(movieFile, "CameraApiVideos");
+        mVideoFolder = new File(movieFile, "CameraApiVideos"); //creates our folder in movies direcotry in device
         if(!mVideoFolder.exists()){
-            mVideoFolder.mkdirs();
+            mVideoFolder.mkdirs(); //only creates folder if it hasnt been already created
+            //dont need to create one every time we run it
         }
 
 
     }
 
-    //storage method #2
+    //storage method #2 creates unique file for each video
     private File createVideoFileName() throws IOException{
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String prepend = "VIDEO_" + timeStamp + "_";
-        File videoFile = File.createTempFile(prepend,".mp4",mVideoFolder);
-        mVideoFileName = videoFile.getAbsolutePath();
+        File videoFile = File.createTempFile(prepend,".mp4",mVideoFolder); //creates the actual file
+        mVideoFileName = videoFile.getAbsolutePath(); //name of file name is stored
         return videoFile;
 
 
@@ -463,6 +496,7 @@ public class CameraApi extends AppCompatActivity {
 
     //storage method #3
     private void checkWriteStoragePermission(){
+        //check to see for if permission granted for newer versions of android
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
                 mIsRecording = true;
@@ -475,7 +509,7 @@ public class CameraApi extends AppCompatActivity {
                 }
                 startRecord();
                 mMediaRecorder.start();
-                mChronometer.setBase(SystemClock.elapsedRealtime());
+                mChronometer.setBase(SystemClock.elapsedRealtime()); //gets real time
                 mChronometer.setVisibility(View.VISIBLE);
                 mChronometer.start();
             }
@@ -484,9 +518,10 @@ public class CameraApi extends AppCompatActivity {
                     Toast.makeText(this,"Application needs storage permissions to save videos",Toast.LENGTH_SHORT).show();
                 }
                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE_PERMISSION_RESULT );
+                //don't need to check first time you open app, just need to request permissions
             }
         }
-        else{
+        else{ //older versions of android, older than marshmallow
             mIsRecording = true;
             mRecordImageButton.setImageResource(R.mipmap.btn_video);
             try {
@@ -506,12 +541,14 @@ public class CameraApi extends AppCompatActivity {
     private void setUpMediaRecorder()throws IOException {
         //don't take these out of order
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
+        mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         mMediaRecorder.setOutputFile(mVideoFileName);
         mMediaRecorder.setVideoEncodingBitRate(1000000);
         mMediaRecorder.setVideoFrameRate(30);
         mMediaRecorder.setVideoSize(mVideoSize.getWidth(), mVideoSize.getHeight());
         mMediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
+        mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         mMediaRecorder.setOrientationHint(mTotalRotation);
         mMediaRecorder.prepare();
     }

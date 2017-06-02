@@ -21,6 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
@@ -167,12 +168,12 @@ public static boolean clicked=false;
     }
 
     public void dispatchTakeVideoIntent() {
-        int a;
-        Random random = new Random();
-        a = random.nextInt(70) + 1;
-        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        takeVideoIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-       //File videoDir = new File(System.getProperty("user.dir") + "/Video/");
+        //int a;
+       // Random random = new Random();
+        //a = random.nextInt(70) + 1;
+        //Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        //takeVideoIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        /*//File videoDir = new File(System.getProperty("user.dir") + "/Video/");
         File videoDir = new File(getExternalFilesDir(null).getAbsolutePath() + "/Video/");
         if (!videoDir.exists()) videoDir.mkdir();
         cfileName = videoDir.getAbsolutePath() + "/Untitled-" + a + ".mp4";
@@ -183,10 +184,9 @@ public static boolean clicked=false;
         System.out.println("EncFile Dir: " + encfileName);
         File cFileDir = new File(cfileName);
         takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile((new File(cfileName))));
-        if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
-            startActivity(new Intent(MainActivity.this, CameraApi.class));
-
-        }
+        *///if (takeVideoIntent.resolveActivity(getPackageManager()) != null)
+        //}
+        startActivity(new Intent(MainActivity.this, CameraApi.class));
 
     }
 
