@@ -168,12 +168,15 @@ public static boolean clicked=false;
     }
 
     public void dispatchTakeVideoIntent() {
-        startActivity(new Intent(MainActivity.this, CameraApi.class));
-        /*int a;
+        //startActivity(new Intent(MainActivity.this, CameraApi.class));
+        int a;
         Random random = new Random();
         a = random.nextInt(70) + 1;
-        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        takeVideoIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        Intent openCameraIntent = new Intent(MainActivity.this, CameraApi.class);
+
+       // Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+       // takeVideoIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        openCameraIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
        File videoDir = new File(System.getProperty("user.dir") + "/Video/");
 
 
@@ -185,22 +188,22 @@ public static boolean clicked=false;
         System.out.println("CFile Dir: " + cfileName);
         System.out.println("EncFile Dir: " + encfileName);
         File cFileDir = new File(cfileName);
-        takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile((new File(cfileName))));
-
-        if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
-
-
-            onActivityResult(REQUEST_VIDEO_CAPTURE, RESULT_OK, takeVideoIntent);
-
-        }*/
+        //takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile((new File(cfileName))));
+        openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile((new File(encfileName))));
+        //if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
+        if (openCameraIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(openCameraIntent, 1);
+        }
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
         //super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode != RESULT_CANCELED) {
-            if (requestCode == REQUEST_VIDEO_CAPTURE) {
+
+            if (requestCode == 1) {
+                if (resultCode != RESULT_CANCELED) {
                 cry();
                 deleteAllVids();
                 if (videosExist()) {
