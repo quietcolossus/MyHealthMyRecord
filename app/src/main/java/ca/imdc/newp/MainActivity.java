@@ -168,7 +168,7 @@ public static boolean clicked=false;
     }
 
     public void dispatchTakeVideoIntent() {
-
+        startActivity(new Intent(MainActivity.this, CameraApi.class));
         int a;
         Random random = new Random();
         a = random.nextInt(70) + 1;
@@ -188,14 +188,15 @@ public static boolean clicked=false;
         takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile((new File(cfileName))));
 
         if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
+            onActivityResult(REQUEST_VIDEO_CAPTURE, RESULT_OK, takeVideoIntent);
 
-            startActivity(new Intent(MainActivity.this, CameraApi.class));
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
+
         if (resultCode != RESULT_CANCELED) {
             if (requestCode == REQUEST_VIDEO_CAPTURE) {
                 cry();
