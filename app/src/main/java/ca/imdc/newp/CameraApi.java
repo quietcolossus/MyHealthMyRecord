@@ -325,13 +325,13 @@ public class CameraApi extends AppCompatActivity {
                mCameraId=cameraId;
 
 
-                //sets up rotation and size for recording of video
+                /*//sets up rotation and size for recording of video
                 if (MainActivity.clicked) {
                     mCameraId = "1";
                 }
                 else{
                     mCameraId=cameraId;
-                }
+                }*/
 
 
 
