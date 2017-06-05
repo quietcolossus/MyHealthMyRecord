@@ -65,6 +65,7 @@ public class CameraApi extends AppCompatActivity {
         public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i1) {
             setupCamera(i, i1);
             connectCamera();
+
         }
 
         @Override
@@ -164,7 +165,6 @@ public class CameraApi extends AppCompatActivity {
         mChronometer = (Chronometer) findViewById(R.id.chronometer); //the timer
         mTextureView = (TextureView) findViewById(R.id.textureView);
 
-        mFlipCamera = (ImageButton) findViewById(R.id.cameraFlipImageButton);
         mRecordImageButton = (ImageButton) findViewById(R.id.videoOnlineImageButton);
         //onclicklistener when you stop recording
         mRecordImageButton.setOnClickListener(new View.OnClickListener(){
@@ -190,9 +190,14 @@ public class CameraApi extends AppCompatActivity {
                 }
             }
         });
+
+        mFlipCamera = (ImageButton) findViewById(R.id.cameraFlipImageButton);
         mFlipCamera.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                MainActivity.clicked = true;
+                setupCamera(mTextureView.getWidth(),mTextureView.getHeight());
+                connectCamera();
 
             }
         });
@@ -203,7 +208,7 @@ public class CameraApi extends AppCompatActivity {
         public Dialog onCreateDialog(Bundle savedInstance) {
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
             //LayoutInflater inflater = getActivity().getLayoutInflater();
-            builder.setTitle("Your video had been saved! " +
+            builder.setTitle("Your video has been saved! " +
                     "Would you like to make another video or go back to the home screen?")
                     .setPositiveButton("Another video", new DialogInterface.OnClickListener() {
                         @Override
@@ -322,7 +327,7 @@ public class CameraApi extends AppCompatActivity {
 
 
 
-               mCameraId=cameraId;
+              // mCameraId=cameraId;
 
 
 
