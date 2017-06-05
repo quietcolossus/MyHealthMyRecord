@@ -168,7 +168,7 @@ public static boolean clicked=false;
     }
 
     public void dispatchTakeVideoIntent() {
-        startActivity(new Intent(MainActivity.this, CameraApi.class));
+
         int a;
         Random random = new Random();
         a = random.nextInt(70) + 1;
@@ -188,6 +188,8 @@ public static boolean clicked=false;
         takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile((new File(cfileName))));
 
         if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
+
+            startActivity(new Intent(MainActivity.this, CameraApi.class));
             onActivityResult(REQUEST_VIDEO_CAPTURE, RESULT_OK, takeVideoIntent);
 
         }
@@ -328,7 +330,9 @@ public static boolean clicked=false;
                     .setPositiveButton("SELF", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             clicked=true;
+
                             dispatchTakeVideoIntent();
+                            mAdapter.notifyDataSetChanged();
                         }
                     })
                     .setNeutralButton("OTHER", new DialogInterface.OnClickListener() {
