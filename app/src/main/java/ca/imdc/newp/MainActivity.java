@@ -173,8 +173,7 @@ public static boolean clicked=false;
         Random random = new Random();
         a = random.nextInt(70) + 1;
         Intent openCameraIntent = new Intent(MainActivity.this, CameraApi.class);
-
-       // Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        //Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
        // takeVideoIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         openCameraIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
        File videoDir = new File(System.getProperty("user.dir") + "/Video/");
@@ -189,7 +188,7 @@ public static boolean clicked=false;
         System.out.println("EncFile Dir: " + encfileName);
         File cFileDir = new File(cfileName);
         //takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile((new File(cfileName))));
-        openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile((new File(encfileName))));
+        openCameraIntent.putExtra(openCameraIntent.EXTRA_ORIGINATING_URI, Uri.fromFile((new File(cfileName))));
         //if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
         if (openCameraIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(openCameraIntent, 1);
