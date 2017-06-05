@@ -168,8 +168,8 @@ public static boolean clicked=false;
     }
 
     public void dispatchTakeVideoIntent() {
-
-        int a;
+        startActivity(new Intent(MainActivity.this, CameraApi.class));
+        /*int a;
         Random random = new Random();
         a = random.nextInt(70) + 1;
         Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
@@ -189,10 +189,10 @@ public static boolean clicked=false;
 
         if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
 
-            startActivity(new Intent(MainActivity.this, CameraApi.class));
+
             onActivityResult(REQUEST_VIDEO_CAPTURE, RESULT_OK, takeVideoIntent);
 
-        }
+        }*/
     }
 
     @Override
