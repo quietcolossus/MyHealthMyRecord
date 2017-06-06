@@ -114,6 +114,7 @@ public class CameraApi extends AppCompatActivity {
             if(mIsRecording){
                 try {
                     createVideoFileName();
+                    createEncVideoFileName();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -152,8 +153,10 @@ public class CameraApi extends AppCompatActivity {
     private MediaRecorder mMediaRecorder;
     private Chronometer mChronometer;
     //storage variables
-    private File mVideoFolder; //stores a file to save video
-    private String mVideoFileName; //stores the file name for each video
+    protected static File mVideoFolder; //stores a file to save video
+    //private String mVideoFileName; //stores the file name for each video
+    protected static String cfileName;
+    protected static String encfileName;
 
     private int mTotalRotation;
     private static SparseIntArray ORIENTATIONS = new SparseIntArray();
@@ -277,6 +280,7 @@ public class CameraApi extends AppCompatActivity {
                 mRecordImageButton.setImageResource(R.mipmap.btn_video);
                 try {
                     createVideoFileName();
+                    createEncVideoFileName();
                 }
                 catch (IOException e) {
                     e.printStackTrace();
@@ -508,8 +512,9 @@ public class CameraApi extends AppCompatActivity {
     //storage method #1 creates folder to save videos in
     private void createVideoFolder(){
         //finds the folder in the device where videos are normally stored
-        File movieFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
-        mVideoFolder = new File(movieFile, "CameraApiVideos"); //creates our folder in movies direcotry in device
+        //File movieFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
+        //mVideoFolder = new File(movieFile, "CameraApiVideos"); //creates our folder in movies direcotry in device
+        mVideoFolder = new File(getExternalFilesDir(null).getAbsolutePath() + "/Video/");
         if(!mVideoFolder.exists()){
             mVideoFolder.mkdirs(); //only creates folder if it hasnt been already created
             //dont need to create one every time we run it
@@ -523,8 +528,20 @@ public class CameraApi extends AppCompatActivity {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String prepend = "VIDEO_" + timeStamp + "_";
         File videoFile = File.createTempFile(prepend,".mp4",mVideoFolder); //creates the actual file
-        mVideoFileName = videoFile.getAbsolutePath(); //name of file name is stored
+        //cfileName = videoFile.getAbsolutePath(); //name of file name is stored
+        cfileName = mVideoFolder.getAbsolutePath() + prepend + ".mp4";
         return videoFile;
+
+
+    }
+
+    private File createEncVideoFileName() throws IOException{
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String prepend = "VIDEO_ENC_" + timeStamp + "_";
+        File  encvideoFile = File.createTempFile(prepend,"ENC.mp4",mVideoFolder); //creates the encrypted file
+        //encfileName = encvideoFile.getAbsolutePath(); //name of file name is stored
+        encfileName = getExternalFilesDir(null).getAbsolutePath() + prepend + ".mp4";
+        return encvideoFile;
 
 
     }
@@ -538,6 +555,7 @@ public class CameraApi extends AppCompatActivity {
                 mRecordImageButton.setImageResource(R.mipmap.btn_video);
                 try {
                     createVideoFileName();
+                    createEncVideoFileName();
                 }
                 catch (IOException e) {
                     e.printStackTrace();
@@ -561,6 +579,7 @@ public class CameraApi extends AppCompatActivity {
             mRecordImageButton.setImageResource(R.mipmap.btn_video);
             try {
                 createVideoFileName();
+                createEncVideoFileName();
             }
             catch (IOException e) {
                 e.printStackTrace();
@@ -578,7 +597,7 @@ public class CameraApi extends AppCompatActivity {
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
         mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
-        mMediaRecorder.setOutputFile(mVideoFileName);
+        mMediaRecorder.setOutputFile(cfileName);
         mMediaRecorder.setVideoEncodingBitRate(1000000);
         mMediaRecorder.setVideoFrameRate(30);
         mMediaRecorder.setVideoSize(mVideoSize.getWidth(), mVideoSize.getHeight());

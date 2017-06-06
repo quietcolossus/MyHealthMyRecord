@@ -37,8 +37,8 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     static final int REQUEST_VIDEO_CAPTURE = 1;
-    String cfileName;
-    String encfileName;
+    //String cfileName;
+    //String encfileName;
     TextView instr;
     ListView listView;
     Thread t = null;
@@ -169,29 +169,31 @@ public static boolean clicked=false;
 
     public void dispatchTakeVideoIntent() {
         //startActivity(new Intent(MainActivity.this, CameraApi.class));
-        int a;
-        Random random = new Random();
-        a = random.nextInt(70) + 1;
+        //int a;
+        //Random random = new Random();
+        //a = random.nextInt(70) + 1;
         Intent openCameraIntent = new Intent(MainActivity.this, CameraApi.class);
         //Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
        // takeVideoIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        openCameraIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-       File videoDir = new File(System.getProperty("user.dir") + "/Video/");
+        //openCameraIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        // File videoDir = new File(System.getProperty("user.dir") + "/Video/");
 
 
-        if (!videoDir.exists()) videoDir.mkdir();
-        cfileName = videoDir.getAbsolutePath() + "/Untitled-" + a + ".mp4";
+        //if (!videoDir.exists()) videoDir.mkdir();
+        //cfileName = videoDir.getAbsolutePath() + "/Untitled-" + a + ".mp4";
         //encfileName = new File(System.getProperty("user.dir") + "/Encrypted/").getAbsolutePath() + "/Untitled-" + a + ".mp4";
-        encfileName = getExternalFilesDir(null).getAbsolutePath() + "/Encrypted/Untitled-" + a + ".mp4";
-        System.out.println("Video Dir: " + videoDir.getAbsolutePath());
-        System.out.println("CFile Dir: " + cfileName);
-        System.out.println("EncFile Dir: " + encfileName);
-        File cFileDir = new File(cfileName);
+        //encfileName = getExternalFilesDir(null).getAbsolutePath() + "/Encrypted/Untitled-" + a + ".mp4";
+       // System.out.println("Video Dir: " + videoDir.getAbsolutePath());
+        //System.out.println("CFile Dir: " + cfileName);
+        //System.out.println("EncFile Dir: " + encfileName);
+               //File cFileDir = new File(cfileName);
         //takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile((new File(cfileName))));
-        openCameraIntent.putExtra(openCameraIntent.EXTRA_ORIGINATING_URI, Uri.fromFile((new File(cfileName))));
+        //openCameraIntent.putExtra(openCameraIntent.EXTRA_ORIGINATING_URI, Uri.fromFile((new File(cfileName))));
         //if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
         if (openCameraIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(openCameraIntent, 1);
+            startActivity(openCameraIntent);
+            onActivityResult(1, RESULT_OK, openCameraIntent);
         }
     }
 
@@ -204,7 +206,7 @@ public static boolean clicked=false;
             if (requestCode == 1) {
                 if (resultCode != RESULT_CANCELED) {
                 cry();
-                deleteAllVids();
+                //deleteAllVids();
                 if (videosExist()) {
                     myDataset = populateList("names");
                     myDate = populateList("date");
@@ -222,7 +224,7 @@ public static boolean clicked=false;
         try {
             String name = createfile("encrypt");
             final File encryptedFile = new File(name);
-            final File inputFile = new File(cfileName);
+            final File inputFile = new File(CameraApi.cfileName);
             t = new Thread(new Runnable() {
                 public void run() {
                     try {
@@ -241,6 +243,7 @@ public static boolean clicked=false;
 
     public void deleteAllVids() {
         File folder = new File(getExternalFilesDir(null).getAbsolutePath() + "/Video/");
+        //File folder = new File(getExternalFilesDir(null).getAbsolutePath() + "/Videos/CameraApiVideos");
         File[] listOfFiles = folder.listFiles();
         for (int i = 0; i < listOfFiles.length; i++) {
             if (listOfFiles[i].isFile()) {
@@ -306,9 +309,9 @@ public static boolean clicked=false;
     private String createfile(String type) {
         String fName = null;
         if (type == "decrypt") {
-            fName = cfileName;
+            fName = CameraApi.cfileName;
         } else if (type == "encrypt") {
-            fName = encfileName + ".encrypt";
+            fName = CameraApi.encfileName + ".encrypt";
         } else
             return fName;
         File file = new File(fName);
