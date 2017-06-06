@@ -154,6 +154,7 @@ public class CameraApi extends AppCompatActivity {
     private Chronometer mChronometer;
     //storage variables
     protected static File mVideoFolder; //stores a file to save video
+    protected static File mencVideoFolder;
     //private String mVideoFileName; //stores the file name for each video
     protected static String cfileName;
     protected static String encfileName;
@@ -512,11 +513,16 @@ public class CameraApi extends AppCompatActivity {
     //storage method #1 creates folder to save videos in
     private void createVideoFolder(){
         //finds the folder in the device where videos are normally stored
-        //File movieFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES);
-        //mVideoFolder = new File(movieFile, "CameraApiVideos"); //creates our folder in movies direcotry in device
-        mVideoFolder = new File(getExternalFilesDir(null).getAbsolutePath() + "/Video/");
+        File movieFile = new File(getExternalFilesDir(null).getAbsolutePath());
+        mVideoFolder = new File(movieFile, "Video"); //creates our folder in movies direcotry in device
+        mencVideoFolder = new File(movieFile, "Encrypted");
+        //mVideoFolder = new File(getExternalFilesDir(null).getAbsolutePath() + "/Video/");
         if(!mVideoFolder.exists()){
             mVideoFolder.mkdirs(); //only creates folder if it hasnt been already created
+            //dont need to create one every time we run it
+        }
+        if(!mencVideoFolder.exists()){
+            mencVideoFolder.mkdirs(); //only creates folder if it hasnt been already created
             //dont need to create one every time we run it
         }
 
@@ -529,7 +535,7 @@ public class CameraApi extends AppCompatActivity {
         String prepend = "VIDEO_" + timeStamp + "_";
         File videoFile = File.createTempFile(prepend,".mp4",mVideoFolder); //creates the actual file
         //cfileName = videoFile.getAbsolutePath(); //name of file name is stored
-        cfileName = mVideoFolder.getAbsolutePath() + prepend + ".mp4";
+        cfileName = videoFile.getAbsolutePath() + prepend + ".mp4";
         return videoFile;
 
 
@@ -538,9 +544,9 @@ public class CameraApi extends AppCompatActivity {
     private File createEncVideoFileName() throws IOException{
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String prepend = "VIDEO_ENC_" + timeStamp + "_";
-        File  encvideoFile = File.createTempFile(prepend,"ENC.mp4",mVideoFolder); //creates the encrypted file
+        File  encvideoFile = File.createTempFile(prepend,"ENC.mp4",mencVideoFolder); //creates the encrypted file
         //encfileName = encvideoFile.getAbsolutePath(); //name of file name is stored
-        encfileName = getExternalFilesDir(null).getAbsolutePath() + prepend + ".mp4";
+        encfileName = encvideoFile.getAbsolutePath() + prepend + ".mp4";
         return encvideoFile;
 
 

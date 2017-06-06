@@ -192,8 +192,9 @@ public static boolean clicked=false;
         //openCameraIntent.putExtra(openCameraIntent.EXTRA_ORIGINATING_URI, Uri.fromFile((new File(cfileName))));
         //if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
         if (openCameraIntent.resolveActivity(getPackageManager()) != null) {
-            startActivity(openCameraIntent);
-            onActivityResult(1, RESULT_OK, openCameraIntent);
+            startActivityForResult(openCameraIntent, REQUEST_VIDEO_CAPTURE);
+            //startActivity(openCameraIntent);
+            //onActivityResult(1, RESULT_OK, openCameraIntent);
         }
     }
 
@@ -204,7 +205,7 @@ public static boolean clicked=false;
 
 
             if (requestCode == 1) {
-                if (resultCode != RESULT_CANCELED) {
+                if (resultCode == RESULT_CANCELED) {
                 cry();
                 //deleteAllVids();
                 if (videosExist()) {
@@ -223,7 +224,7 @@ public static boolean clicked=false;
         final cryptoHash halo = new cryptoHash();
         try {
             String name = createfile("encrypt");
-            final File encryptedFile = new File(name);
+            final File encryptedFile = new File(CameraApi.encfileName);
             final File inputFile = new File(CameraApi.cfileName);
             t = new Thread(new Runnable() {
                 public void run() {
@@ -249,12 +250,14 @@ public static boolean clicked=false;
             if (listOfFiles[i].isFile()) {
                 System.out.println("File " + listOfFiles[i].getName());
                 listOfFiles[i].delete();
+                System.out.println("Deleted: " + listOfFiles[i].getName()); //its deleting them but its
+                // deleting the last videos not the video your are currently taking
             }
         }
     }
 
     public boolean videosExist() {
-        File folder = new File(getExternalFilesDir(null).getAbsolutePath() + "/Encrypted/");
+        File folder = new File(getExternalFilesDir(null).getAbsolutePath() + "/Video/");
         if (folder.exists() && (folder.list().length > 0)) return true;
         else if (folder.exists() && (folder.list().length == 0)) return false;
         else folder.mkdir();
