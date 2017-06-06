@@ -204,10 +204,11 @@ public static boolean clicked=false;
         //super.onActivityResult(requestCode, resultCode, data);
 
 
-            if (requestCode == 1) {
+            if (requestCode == REQUEST_VIDEO_CAPTURE) {
+
                 if (resultCode == RESULT_CANCELED) {
-                cry();
-                //deleteAllVids();
+                    cry();
+               // deleteAllVids();
                 if (videosExist()) {
                     myDataset = populateList("names");
                     myDate = populateList("date");
@@ -312,9 +313,9 @@ public static boolean clicked=false;
     private String createfile(String type) {
         String fName = null;
         if (type == "decrypt") {
-            fName = CameraApi.cfileName;
+            fName = CameraApi.encfileName;
         } else if (type == "encrypt") {
-            fName = CameraApi.encfileName + ".encrypt";
+            fName = CameraApi.cfileName + ".encrypt";
         } else
             return fName;
         File file = new File(fName);

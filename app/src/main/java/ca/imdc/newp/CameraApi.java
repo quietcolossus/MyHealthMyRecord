@@ -544,9 +544,9 @@ public class CameraApi extends AppCompatActivity {
     private File createEncVideoFileName() throws IOException{
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String prepend = "VIDEO_ENC_" + timeStamp + "_";
-        File  encvideoFile = File.createTempFile(prepend,"ENC.mp4",mencVideoFolder); //creates the encrypted file
+       File  encvideoFile = File.createTempFile(prepend,"ENC.mp4",mencVideoFolder); //creates the encrypted file
         //encfileName = encvideoFile.getAbsolutePath(); //name of file name is stored
-        encfileName = encvideoFile.getAbsolutePath() + prepend + ".mp4";
+        encfileName = encvideoFile.getAbsolutePath() + prepend + "ENC.mp4";
         return encvideoFile;
 
 
