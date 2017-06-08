@@ -215,7 +215,7 @@ public static boolean clicked=false;
                 }
                 mAdapter = new MyAdapter(myDataset, myDate, this);
                 mRecyclerView.setAdapter(mAdapter);
-
+                    deleteAllVids();
             }
         }
     }
