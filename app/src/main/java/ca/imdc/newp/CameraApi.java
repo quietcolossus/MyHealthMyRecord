@@ -218,10 +218,24 @@ public class CameraApi extends AppCompatActivity {
         mFlipCamera.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                MainActivity.clicked = true;
-                setupCamera(mTextureView.getWidth(),mTextureView.getHeight());
-                connectCamera();
+                closeCamera();
 
+
+              /*  if(MainActivity.clicked){
+                MainActivity.clicked=false;
+}               else if(!MainActivity.clicked)
+{                   MainActivity.clicked=true;}
+
+                setupCamera(mTextureView.getWidth(),mTextureView.getHeight());
+               connectCamera(); */
+              if(mCameraId=="0") {
+                  mCameraId="1";
+              }
+                else {
+                  mCameraId = "0";
+              }
+
+        connectCamera();
             }
         });
     }
@@ -323,10 +337,10 @@ public class CameraApi extends AppCompatActivity {
                     if (cameraCharacteristics.get(CameraCharacteristics.LENS_FACING) ==
                             CameraCharacteristics.LENS_FACING_FRONT) {
 
-                        MainActivity.clicked = false;
+
                         closeCamera();
                         stopBackgroundThread();
-
+                        MainActivity.clicked = false;
                         startBackgroundThread();
 
 
@@ -335,7 +349,9 @@ public class CameraApi extends AppCompatActivity {
                         continue;
                     }
                 }
-                StreamConfigurationMap map = cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+
+
+               StreamConfigurationMap map = cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
                 int deviceOrientation = getWindowManager().getDefaultDisplay().getRotation();
                 mTotalRotation = sensorToDeviceRotation(cameraCharacteristics, deviceOrientation);
                 boolean swapRotation = mTotalRotation == 90 || mTotalRotation == 270;
@@ -372,6 +388,7 @@ public class CameraApi extends AppCompatActivity {
 
     private void connectCamera() {
         CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+
         try {
             //checks to see if its marshmallow android version or later
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
