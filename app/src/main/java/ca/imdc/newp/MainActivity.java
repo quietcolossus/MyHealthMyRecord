@@ -208,14 +208,14 @@ public static boolean clicked=false;
 
                 if (resultCode == RESULT_CANCELED) {
                     cry();
-               // deleteAllVids();
+
                 if (videosExist()) {
                     myDataset = populateList("names");
                     myDate = populateList("date");
                 }
                 mAdapter = new MyAdapter(myDataset, myDate, this);
                 mRecyclerView.setAdapter(mAdapter);
-                    deleteAllVids();
+                   deleteAllVids();
             }
         }
     }
@@ -225,7 +225,7 @@ public static boolean clicked=false;
         final cryptoHash halo = new cryptoHash();
         try {
             String name = createfile("encrypt");
-            final File encryptedFile = new File(CameraApi.encfileName);
+            final File encryptedFile = new File(name);
             final File inputFile = new File(CameraApi.cfileName);
             t = new Thread(new Runnable() {
                 public void run() {
@@ -315,7 +315,7 @@ public static boolean clicked=false;
         if (type == "decrypt") {
             fName = CameraApi.encfileName;
         } else if (type == "encrypt") {
-            fName = CameraApi.cfileName + ".encrypt";
+            fName = CameraApi.encfileName + ".encrypt";
         } else
             return fName;
         File file = new File(fName);

@@ -112,12 +112,12 @@ public class CameraApi extends AppCompatActivity {
             mCameraDevice = cameraDevice;
             //code below called only once when you first install on devices marshmallow or later
             if(mIsRecording){
-                try {
+               /* try {
                     createVideoFileName();
                     createEncVideoFileName();
                 } catch (IOException e) {
                     e.printStackTrace();
-                }
+                }*/
                 startRecord();
                 mMediaRecorder.start();
                 mChronometer.setBase(SystemClock.elapsedRealtime());
@@ -221,21 +221,23 @@ public class CameraApi extends AppCompatActivity {
                 closeCamera();
 
 
-              /*  if(MainActivity.clicked){
+               if( mCameraId=="1"){
                 MainActivity.clicked=false;
-}               else if(!MainActivity.clicked)
+}               else if( mCameraId=="0")
 {                   MainActivity.clicked=true;}
 
-                setupCamera(mTextureView.getWidth(),mTextureView.getHeight());
-               connectCamera(); */
+                /*setupCamera(mTextureView.getWidth(),mTextureView.getHeight());
+               connectCamera();
               if(mCameraId=="0") {
                   mCameraId="1";
-              }
-                else {
-                  mCameraId = "0";
-              }
 
-        connectCamera();
+              }
+                else if(mCameraId=="1"){
+                  mCameraId = "0";
+
+              }*/
+                onResume();
+
             }
         });
     }
@@ -289,9 +291,9 @@ public class CameraApi extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Without audio permissions application will not run", Toast.LENGTH_SHORT).show();
             }
         }
-        if(requestCode == REQUEST_EXTERNAL_STORAGE_PERMISSION_RESULT){
+        else if(requestCode == REQUEST_EXTERNAL_STORAGE_PERMISSION_RESULT){
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                mIsRecording = true;
+                /*mIsRecording = true;
                 mRecordImageButton.setImageResource(R.mipmap.btn_video);
                 try {
                     createVideoFileName();
@@ -299,7 +301,7 @@ public class CameraApi extends AppCompatActivity {
                 }
                 catch (IOException e) {
                     e.printStackTrace();
-                }
+                }*/
                 Toast.makeText(this,"Storage permission successfully granted",Toast.LENGTH_SHORT).show();
             }
             else{
@@ -391,6 +393,7 @@ public class CameraApi extends AppCompatActivity {
 
         try {
             //checks to see if its marshmallow android version or later
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
@@ -407,6 +410,7 @@ public class CameraApi extends AppCompatActivity {
                         Toast.makeText(this, "You must grant access to your camera,this video application requires it", Toast.LENGTH_SHORT).show();
                     }
                     requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO}, REQUEST_CAMERA_PERMISSION_RESULT);
+                   requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE_PERMISSION_RESULT );
                     //above line if you're starting up application for teh first time its getting camera permissions
                 }
 
@@ -552,19 +556,18 @@ public class CameraApi extends AppCompatActivity {
         String prepend = "VIDEO_" + timeStamp + "_";
         File videoFile = File.createTempFile(prepend,".mp4",mVideoFolder); //creates the actual file
         //cfileName = videoFile.getAbsolutePath(); //name of file name is stored
-        cfileName = videoFile.getAbsolutePath() + prepend + ".mp4";
+        cfileName = videoFile.getAbsolutePath();
         return videoFile;
 
 
     }
 
-    private File createEncVideoFileName() throws IOException{
+    private void createEncVideoFileName() throws IOException{
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String prepend = "VIDEO_ENC_" + timeStamp + "_";
-       File  encvideoFile = File.createTempFile(prepend,"ENC.mp4",mencVideoFolder); //creates the encrypted file
+       //File  encvideoFile = File.createTempFile(prepend,"ENC.mp4.encrypt",mencVideoFolder); //creates the encrypted file
         //encfileName = encvideoFile.getAbsolutePath(); //name of file name is stored
-        encfileName = encvideoFile.getAbsolutePath() + prepend + "ENC.mp4";
-        return encvideoFile;
+        encfileName = mencVideoFolder.getAbsolutePath()+ "/" + prepend + "ENC.mp4";
 
 
     }
@@ -573,10 +576,12 @@ public class CameraApi extends AppCompatActivity {
     private void checkWriteStoragePermission(){
         //check to see for if permission granted for newer versions of android
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+
+
             if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
                 mIsRecording = true;
                 mRecordImageButton.setImageResource(R.mipmap.btn_video);
-                try {
+              try {
                     createVideoFileName();
                     createEncVideoFileName();
                 }
@@ -593,14 +598,14 @@ public class CameraApi extends AppCompatActivity {
                 if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)){
                     Toast.makeText(this,"Application needs storage permissions to save videos",Toast.LENGTH_SHORT).show();
                 }
-                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE_PERMISSION_RESULT );
+              requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE_PERMISSION_RESULT );
                 //don't need to check first time you open app, just need to request permissions
             }
         }
         else{ //older versions of android, older than marshmallow
             mIsRecording = true;
             mRecordImageButton.setImageResource(R.mipmap.btn_video);
-            try {
+           try {
                 createVideoFileName();
                 createEncVideoFileName();
             }
