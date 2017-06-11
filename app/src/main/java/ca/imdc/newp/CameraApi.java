@@ -223,8 +223,8 @@ public class CameraApi extends AppCompatActivity {
 
                if( mCameraId=="1"){
                 MainActivity.clicked=false;
-}               else if( mCameraId=="0")
-{                   MainActivity.clicked=true;}
+                }else if( mCameraId=="0")
+                {MainActivity.clicked=true;}
 
                 /*setupCamera(mTextureView.getWidth(),mTextureView.getHeight());
                connectCamera();
@@ -292,7 +292,7 @@ public class CameraApi extends AppCompatActivity {
             }
         }
         else if(requestCode == REQUEST_EXTERNAL_STORAGE_PERMISSION_RESULT){
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            if(grantResults[1] == PackageManager.PERMISSION_GRANTED){
                 /*mIsRecording = true;
                 mRecordImageButton.setImageResource(R.mipmap.btn_video);
                 try {
@@ -344,7 +344,7 @@ public class CameraApi extends AppCompatActivity {
                         stopBackgroundThread();
                         MainActivity.clicked = false;
                         startBackgroundThread();
-
+                        System.out.println("In front facing camera");
 
                         cameraId = cameraManager.getCameraIdList()[1];
                     } else {
