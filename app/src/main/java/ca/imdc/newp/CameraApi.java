@@ -30,6 +30,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Matrix;
+import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
@@ -83,6 +85,7 @@ public class CameraApi extends AppCompatActivity {
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i1) {
             setupCamera(i, i1);
+            transformImage(i, i1);
             connectCamera();
 
         }
@@ -226,8 +229,8 @@ public class CameraApi extends AppCompatActivity {
 
                if( mCameraId=="1"){
                 MainActivity.clicked=false;
-}               else if( mCameraId=="0")
-{                   MainActivity.clicked=true;}
+                }else if( mCameraId=="0")
+                {MainActivity.clicked=true;}
 
                 /*setupCamera(mTextureView.getWidth(),mTextureView.getHeight());
                connectCamera();
@@ -276,6 +279,7 @@ public class CameraApi extends AppCompatActivity {
 
         if (mTextureView.isAvailable()) {
             setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
+            transformImage(mTextureView.getWidth(), mTextureView.getHeight());
             connectCamera();
         } else {
             mTextureView.setSurfaceTextureListener(mSurfaceListener);
@@ -296,7 +300,7 @@ public class CameraApi extends AppCompatActivity {
             }
         }
         else if(requestCode == REQUEST_EXTERNAL_STORAGE_PERMISSION_RESULT){
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            if(grantResults[1] == PackageManager.PERMISSION_GRANTED){
                 /*mIsRecording = true;
                 mRecordImageButton.setImageResource(R.mipmap.btn_video);
                 try {
@@ -348,7 +352,7 @@ public class CameraApi extends AppCompatActivity {
                         stopBackgroundThread();
                         MainActivity.clicked = false;
                         startBackgroundThread();
-
+                        System.out.println("In front facing camera");
 
                         cameraId = cameraManager.getCameraIdList()[1];
                     } else {
@@ -390,6 +394,31 @@ public class CameraApi extends AppCompatActivity {
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    private void transformImage(int width, int height){
+       /* if (mPreviewSize == null || mTextureView == null);
+        {
+            return;
+        }*/
+
+        Matrix matrix = new Matrix ();
+        int rotation = getWindowManager().getDefaultDisplay().getRotation();
+        RectF textureRectF = new RectF(0, 0, width, height);
+        RectF previewRectF = new RectF(0, 0, mPreviewSize.getHeight(), mPreviewSize.getWidth());
+        float centerX = textureRectF.centerX();
+        float centerY = textureRectF.centerY();
+
+        if(rotation == Surface.ROTATION_90 || rotation == Surface.ROTATION_270){
+            previewRectF.offset(centerX - previewRectF.centerX(), centerY - previewRectF.centerY());
+            matrix.setRectToRect(textureRectF, previewRectF, Matrix.ScaleToFit.FILL);
+            float scale = Math.max(((float)width / mPreviewSize.getWidth()), ((float)height / mPreviewSize.getHeight()));
+            matrix.postScale(scale, scale, centerX, centerY);
+            matrix.postRotate(90 + (rotation - 2), centerX, centerY);
+        }
+
+        mTextureView.setTransform(matrix);
+
     }
 
     private void connectCamera() {
@@ -515,9 +544,18 @@ public class CameraApi extends AppCompatActivity {
     }
 
     private static int sensorToDeviceRotation(CameraCharacteristics cameraCharacteristics, int deviceOrientation){
+        int result;
         int sensorOrientation = cameraCharacteristics.get(cameraCharacteristics.SENSOR_ORIENTATION);
         deviceOrientation = ORIENTATIONS.get(deviceOrientation);
-        return (sensorOrientation + deviceOrientation + 360) % 360;
+        if (cameraCharacteristics.get(CameraCharacteristics.LENS_FACING) ==
+                CameraCharacteristics.LENS_FACING_FRONT){
+            result = (sensorOrientation + deviceOrientation) % 360;
+            result = (360 - result) % 360; //the mirror
+        } else {
+            result = (sensorOrientation + deviceOrientation + 360) % 360;
+        }
+
+        return result;
     }
 
     private static Size chooseOptimalSize(Size[] choices, int width, int height){
