@@ -209,9 +209,6 @@ public class CameraApi extends AppCompatActivity {
                     //startPreview();
                     mMediaRecorder.stop();
 
-                    //dialog3 whatNext = new dialog3();
-                    //whatNext.show(getFragmentManager(), "dialog3");
-                    //Log.d("Debug msg", "Video recording stopped");
 
                     mMediaRecorder.reset();
                     startPreview();
