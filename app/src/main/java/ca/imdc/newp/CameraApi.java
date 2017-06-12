@@ -561,13 +561,13 @@ public class CameraApi extends AppCompatActivity {
         int result;
         int sensorOrientation = cameraCharacteristics.get(cameraCharacteristics.SENSOR_ORIENTATION);
         deviceOrientation = ORIENTATIONS.get(deviceOrientation);
-        if (cameraCharacteristics.get(CameraCharacteristics.LENS_FACING) ==
+       /* if (cameraCharacteristics.get(CameraCharacteristics.LENS_FACING) ==
                 CameraCharacteristics.LENS_FACING_FRONT){
             result = (sensorOrientation + deviceOrientation) % 360;
             result = (360 - result) % 360; //the mirror
-        } else {
+        } else {*/
             result = (sensorOrientation + deviceOrientation + 360) % 360;
-        }
+       // }
 
         return result;
     }
