@@ -204,13 +204,12 @@ public class CameraApi extends AppCompatActivity {
                     mRecordImageButton.setImageResource(R.mipmap.btn_video_online);
                     //startPreview();
                     mMediaRecorder.stop();
-                    dialog3 whatNext = new dialog3();
-                    whatNext.show(getFragmentManager(), "dialog3");
+
                     Log.d("Debug msg", "Video recording stopped");
                     mMediaRecorder.reset();
-                   /* startPreview();
+                    startPreview();
                     dialog3 whatNext = new dialog3();
-                    whatNext.show(getFragmentManager(), "dialog3");*/
+                    whatNext.show(getFragmentManager(), "dialog3");
                 }
                 else{
                     mIsRecording = true;
