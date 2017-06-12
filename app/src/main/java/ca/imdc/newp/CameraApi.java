@@ -108,8 +108,9 @@ public class CameraApi extends AppCompatActivity {
         @Override
         public void onOpened(CameraDevice cameraDevice) {
 
-            Toast.makeText(getApplicationContext(), "Camera connected", Toast.LENGTH_SHORT).show();
+
             mCameraDevice = cameraDevice;
+            Toast.makeText(getApplicationContext(), "Camera connected", Toast.LENGTH_SHORT).show();
             //code below called only once when you first install on devices marshmallow or later
             if(mIsRecording){
                /* try {
@@ -200,11 +201,13 @@ public class CameraApi extends AppCompatActivity {
                     mRecordImageButton.setImageResource(R.mipmap.btn_video_online);
                     //startPreview();
                     mMediaRecorder.stop();
-                    Log.d("Debug msg", "Video recording stopped");
-                    mMediaRecorder.reset();
-                    startPreview();
                     dialog3 whatNext = new dialog3();
                     whatNext.show(getFragmentManager(), "dialog3");
+                    Log.d("Debug msg", "Video recording stopped");
+                    mMediaRecorder.reset();
+                   /* startPreview();
+                    dialog3 whatNext = new dialog3();
+                    whatNext.show(getFragmentManager(), "dialog3");*/
                 }
                 else{
                     mIsRecording = true;
@@ -252,6 +255,7 @@ public class CameraApi extends AppCompatActivity {
                     .setPositiveButton("Another video", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            
 
                         }
                         //stays on cameraapi
@@ -593,6 +597,7 @@ public class CameraApi extends AppCompatActivity {
                 mChronometer.setBase(SystemClock.elapsedRealtime()); //gets real time
                 mChronometer.setVisibility(View.VISIBLE);
                 mChronometer.start();
+
             }
             else{
                 if(shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)){
@@ -617,6 +622,7 @@ public class CameraApi extends AppCompatActivity {
             mChronometer.setBase(SystemClock.elapsedRealtime());
             mChronometer.setVisibility(View.VISIBLE);
             mChronometer.start();
+
         }
     }
 
