@@ -163,6 +163,8 @@ public class CameraApi extends AppCompatActivity {
     protected static String cfileName;
     protected static String encfileName;
 
+    public static int isAnother = 0;
+
     private int mTotalRotation;
     private static SparseIntArray ORIENTATIONS = new SparseIntArray();
 
@@ -204,13 +206,13 @@ public class CameraApi extends AppCompatActivity {
                     mRecordImageButton.setImageResource(R.mipmap.btn_video_online);
                     //startPreview();
                     mMediaRecorder.stop();
+                    //dialog3 whatNext = new dialog3();
+                    //whatNext.show(getFragmentManager(), "dialog3");
+                    //Log.d("Debug msg", "Video recording stopped");
+                    mMediaRecorder.reset();
+                    startPreview();
                     dialog3 whatNext = new dialog3();
                     whatNext.show(getFragmentManager(), "dialog3");
-                    Log.d("Debug msg", "Video recording stopped");
-                    mMediaRecorder.reset();
-                   /* startPreview();
-                    dialog3 whatNext = new dialog3();
-                    whatNext.show(getFragmentManager(), "dialog3");*/
                 }
                 else{
                     mIsRecording = true;
@@ -258,8 +260,8 @@ public class CameraApi extends AppCompatActivity {
                     .setPositiveButton("Another video", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            
-
+                        finish();
+                            isAnother = 1;
                         }
                         //stays on cameraapi
                     })
@@ -323,6 +325,10 @@ public class CameraApi extends AppCompatActivity {
         closeCamera();
         stopBackgroundThread();
         super.onPause();
+    }
+
+    protected void onStop(){
+        super.onStop();
     }
 
     @Override
