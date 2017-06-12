@@ -1,6 +1,8 @@
 package ca.imdc.newp;
+import android.Manifest;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.pm.PackageManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -50,9 +52,10 @@ public class MainActivity extends AppCompatActivity {
     private String[] myDataset;
     private String[] myDate;
     private String[] myTime;
-public static boolean clicked=false;
+public static boolean clicked= false;
 
-    public boolean videosExist = false;
+
+    public boolean videosExist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,17 +69,22 @@ public static boolean clicked=false;
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-
-
+        if (checkSelfPermission(Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO}, CameraApi.REQUEST_CAMERA_PERMISSION_RESULT);
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, CameraApi.REQUEST_EXTERNAL_STORAGE_PERMISSION_RESULT);
+        }
 
 
         // specify an adapter (see also next example)
         if (videosExist()) {
+
             myDataset = populateList("names");
             myDate = populateList("date");
         }
         mAdapter = new MyAdapter(myDataset, myDate, this);
         mRecyclerView.setAdapter(mAdapter);
+
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         //  mRecyclerView.setHasFixedSize(false);
@@ -173,6 +181,7 @@ public static boolean clicked=false;
         //Random random = new Random();
         //a = random.nextInt(70) + 1;
         Intent openCameraIntent = new Intent(MainActivity.this, CameraApi.class);
+
         //Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
        // takeVideoIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         //openCameraIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -192,11 +201,13 @@ public static boolean clicked=false;
         //openCameraIntent.putExtra(openCameraIntent.EXTRA_ORIGINATING_URI, Uri.fromFile((new File(cfileName))));
         //if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
         if (openCameraIntent.resolveActivity(getPackageManager()) != null) {
+
             startActivityForResult(openCameraIntent, REQUEST_VIDEO_CAPTURE);
             //startActivity(openCameraIntent);
             //onActivityResult(1, RESULT_OK, openCameraIntent);
         }
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)

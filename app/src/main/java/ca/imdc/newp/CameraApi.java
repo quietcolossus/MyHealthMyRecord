@@ -76,8 +76,8 @@ import static android.app.PendingIntent.getActivity;
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class CameraApi extends AppCompatActivity {
 
-    private static final int REQUEST_CAMERA_PERMISSION_RESULT = 0;
-    private static final int REQUEST_EXTERNAL_STORAGE_PERMISSION_RESULT = 1;
+    public static final int REQUEST_CAMERA_PERMISSION_RESULT = 0;
+    public static final int REQUEST_EXTERNAL_STORAGE_PERMISSION_RESULT = 1;
     private TextureView mTextureView;
     private TextureView.SurfaceTextureListener mSurfaceListener = new TextureView.SurfaceTextureListener() {
         @Override
@@ -124,8 +124,10 @@ public class CameraApi extends AppCompatActivity {
                 mChronometer.setBase(SystemClock.elapsedRealtime());
                 mChronometer.setVisibility(View.VISIBLE);
                 mChronometer.start();
+
             }
             else {
+
                 startPreview();
             }
         }
@@ -201,13 +203,11 @@ public class CameraApi extends AppCompatActivity {
                     mRecordImageButton.setImageResource(R.mipmap.btn_video_online);
                     //startPreview();
                     mMediaRecorder.stop();
-                    dialog3 whatNext = new dialog3();
-                    whatNext.show(getFragmentManager(), "dialog3");
                     Log.d("Debug msg", "Video recording stopped");
                     mMediaRecorder.reset();
-                   /* startPreview();
+                    startPreview();
                     dialog3 whatNext = new dialog3();
-                    whatNext.show(getFragmentManager(), "dialog3");*/
+                    whatNext.show(getFragmentManager(), "dialog3");
                 }
                 else{
                     mIsRecording = true;
@@ -255,7 +255,7 @@ public class CameraApi extends AppCompatActivity {
                     .setPositiveButton("Another video", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            
+
 
                         }
                         //stays on cameraapi
@@ -307,11 +307,16 @@ public class CameraApi extends AppCompatActivity {
                     e.printStackTrace();
                 }*/
                 Toast.makeText(this,"Storage permission successfully granted",Toast.LENGTH_SHORT).show();
+                //finish();
+
+
             }
             else{
                 Toast.makeText(this,"Application needs to save video to run",Toast.LENGTH_SHORT).show();
             }
+
         }
+
     }
 
     @Override
@@ -413,8 +418,8 @@ public class CameraApi extends AppCompatActivity {
                     if(shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)){
                         Toast.makeText(this, "You must grant access to your camera,this video application requires it", Toast.LENGTH_SHORT).show();
                     }
-                    requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO}, REQUEST_CAMERA_PERMISSION_RESULT);
-                   requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_EXTERNAL_STORAGE_PERMISSION_RESULT );
+
+
                     //above line if you're starting up application for teh first time its getting camera permissions
                 }
 
