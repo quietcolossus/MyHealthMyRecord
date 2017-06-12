@@ -52,7 +52,10 @@ public class MainActivity extends AppCompatActivity {
     private String[] myDataset;
     private String[] myDate;
     private String[] myTime;
-public static boolean clicked= false;
+
+public static boolean clicked=false;
+    public static boolean isOther = false;
+
 
 
     public boolean videosExist;
@@ -175,6 +178,7 @@ public static boolean clicked= false;
         return super.onOptionsItemSelected(item);
     }
 
+
     public void dispatchTakeVideoIntent() {
         //startActivity(new Intent(MainActivity.this, CameraApi.class));
         //int a;
@@ -202,23 +206,22 @@ public static boolean clicked= false;
         //if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
         if (openCameraIntent.resolveActivity(getPackageManager()) != null) {
 
+
             startActivityForResult(openCameraIntent, REQUEST_VIDEO_CAPTURE);
-            //startActivity(openCameraIntent);
-            //onActivityResult(1, RESULT_OK, openCameraIntent);
+
         }
     }
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
 
 
-            if (requestCode == REQUEST_VIDEO_CAPTURE) {
+        if (requestCode == REQUEST_VIDEO_CAPTURE) {
 
-                if (resultCode == RESULT_CANCELED) {
-                    cry();
+            if (resultCode == RESULT_CANCELED) {
+                cry();
 
                 if (videosExist()) {
                     myDataset = populateList("names");
@@ -226,8 +229,18 @@ public static boolean clicked= false;
                 }
                 mAdapter = new MyAdapter(myDataset, myDate, this);
                 mRecyclerView.setAdapter(mAdapter);
-                   deleteAllVids();
+                deleteAllVids();
             }
+            if (CameraApi.isAnother == 1) {
+                CameraApi.isAnother = 0;
+
+                if (clicked == false && isOther == false){
+                    clicked = true;
+                }
+
+                dispatchTakeVideoIntent();
+            }
+
         }
     }
 
@@ -357,6 +370,7 @@ public static boolean clicked= false;
                     })
                     .setNeutralButton("OTHER", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            MainActivity.isOther = true;
                             dialog2 myAlert2 = new dialog2();
                             myAlert2.show(getFragmentManager(), "dialog2");
                             // User cancelled the dialog
