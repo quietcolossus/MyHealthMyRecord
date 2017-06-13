@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
@@ -247,6 +248,12 @@ public static boolean clicked=false;
             }
 
         }
+    }
+
+    @Override
+    public void onConfigurationChanged (Configuration newConfig){
+        super.onConfigurationChanged(newConfig);
+        System.out.println("IN CONFIG IN MAIN");
     }
 
     private void cry() {

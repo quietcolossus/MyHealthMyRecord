@@ -30,6 +30,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
@@ -502,6 +503,13 @@ public class CameraApi extends AppCompatActivity {
                 public void onConfigureFailed(CameraCaptureSession cameraCaptureSession) {
 
                 }
+
+                /*@Override
+                public void onConfigurationChanged() {
+                    //onConfigurationChanged(newConfig);
+                    System.out.println("IN CONFIG IN CAM");
+                }*/
+
             }, null);
         } catch (Exception e) {
             e.printStackTrace();
