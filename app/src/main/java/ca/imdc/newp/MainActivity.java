@@ -90,7 +90,7 @@ public static boolean clicked=false;
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
-        //  mRecyclerView.setHasFixedSize(false);
+        mRecyclerView.setHasFixedSize(true);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         ActionBar supportActionBar = getSupportActionBar();

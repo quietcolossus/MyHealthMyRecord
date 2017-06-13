@@ -100,9 +100,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             public void onClick(View v) {
                 MainActivity mainact = new MainActivity();
                 ArrayList<String> list = new ArrayList<String>(Arrays.asList(mDataset));
-                list.remove(position);
+
+                list.remove(list.get(position));
+
                 mDataset = list.toArray(new String[list.size()]);
                 notifyItemRemoved(position);
+                notifyDataSetChanged();
                 System.out.println(holder.mTextView.getText());
                 String name = (String) holder.mTextView.getText();
                 mainact.deleteIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+name);
