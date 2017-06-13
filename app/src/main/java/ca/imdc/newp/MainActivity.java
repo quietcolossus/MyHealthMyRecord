@@ -223,7 +223,7 @@ public static boolean clicked=false;
             if (resultCode == RESULT_CANCELED) {
                 cry();
 
-                if (videosExist()) {
+               if (videosExist()) {
                     myDataset = populateList("names");
                     myDate = populateList("date");
                 }
@@ -287,7 +287,7 @@ public static boolean clicked=false;
     }
 
     public boolean videosExist() {
-        File folder = new File(getExternalFilesDir(null).getAbsolutePath() + "/Video/");
+        File folder = new File(getExternalFilesDir(null).getAbsolutePath() + "/Encrypted/");
         if (folder.exists() && (folder.list().length > 0)) return true;
         else if (folder.exists() && (folder.list().length == 0)) return false;
         else folder.mkdir();
