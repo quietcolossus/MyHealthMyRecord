@@ -234,8 +234,13 @@ public static boolean clicked=false;
             if (CameraApi.isAnother == 1) {
                 CameraApi.isAnother = 0;
 
-                if (clicked == false && isOther == false){
+                if (clicked == false && isOther == true){
                     clicked = true;
+                    isOther = false;
+                }
+                else if(clicked == false && isOther == false)
+                {
+                    //do nothing
                 }
 
                 dispatchTakeVideoIntent();
@@ -370,7 +375,7 @@ public static boolean clicked=false;
                     })
                     .setNeutralButton("OTHER", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            MainActivity.isOther = true;
+                            //MainActivity.isOther = true;
                             dialog2 myAlert2 = new dialog2();
                             myAlert2.show(getFragmentManager(), "dialog2");
                             // User cancelled the dialog

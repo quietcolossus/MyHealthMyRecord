@@ -232,8 +232,10 @@ public class CameraApi extends AppCompatActivity {
 
                if( mCameraId=="1"){
                 MainActivity.clicked=false;
+                   MainActivity.isOther=false;
                 }else if( mCameraId=="0")
-                {MainActivity.clicked=true;}
+                {MainActivity.clicked=true;
+                 MainActivity.isOther=false;}
 
                 /*setupCamera(mTextureView.getWidth(),mTextureView.getHeight());
                connectCamera();
@@ -365,11 +367,14 @@ public class CameraApi extends AppCompatActivity {
                         closeCamera();
                         stopBackgroundThread();
                         MainActivity.clicked = false;
+                        MainActivity.isOther = true;
                         startBackgroundThread();
                         System.out.println("In front facing camera");
 
                         cameraId = cameraManager.getCameraIdList()[1];
-                    } else {
+                    } else{
+                        //MainActivity.isOther=false;
+                       // MainActivity.clicked=false;
                         continue;
                     }
                 }
