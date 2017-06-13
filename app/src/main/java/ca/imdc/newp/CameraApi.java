@@ -85,7 +85,7 @@ public class CameraApi extends AppCompatActivity {
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i1) {
             setupCamera(i, i1);
-            //transformImage(i, i1);
+            transformImage(i, i1);
             connectCamera();
 
         }
@@ -286,7 +286,7 @@ public class CameraApi extends AppCompatActivity {
 
         if (mTextureView.isAvailable()) {
             setupCamera(mTextureView.getWidth(), mTextureView.getHeight());
-            //transformImage(mTextureView.getWidth(), mTextureView.getHeight());
+            transformImage(mTextureView.getWidth(), mTextureView.getHeight());
             connectCamera();
         } else {
             mTextureView.setSurfaceTextureListener(mSurfaceListener);
