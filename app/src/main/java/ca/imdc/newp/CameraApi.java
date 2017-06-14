@@ -359,7 +359,6 @@ public class CameraApi extends AppCompatActivity {
             for (String cameraId : cameraManager.getCameraIdList()) {
                 CameraCharacteristics cameraCharacteristics = cameraManager.getCameraCharacteristics(cameraId);
 
-
                 if (MainActivity.clicked) {
                     if (cameraCharacteristics.get(CameraCharacteristics.LENS_FACING) ==
                             CameraCharacteristics.LENS_FACING_FRONT) {
@@ -374,12 +373,9 @@ public class CameraApi extends AppCompatActivity {
 
                         cameraId = cameraManager.getCameraIdList()[1];
                     } else{
-                        //MainActivity.isOther=false;
-                       // MainActivity.clicked=false;
                         continue;
                     }
                 }
-
 
                StreamConfigurationMap map = cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
                 int deviceOrientation = getWindowManager().getDefaultDisplay().getRotation();

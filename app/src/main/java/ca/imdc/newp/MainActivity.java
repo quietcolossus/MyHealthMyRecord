@@ -250,11 +250,11 @@ public static boolean clicked=false;
         }
     }
 
-    @Override
+    /*@Override
     public void onConfigurationChanged (Configuration newConfig){
         super.onConfigurationChanged(newConfig);
         System.out.println("IN CONFIG IN MAIN");
-    }
+    }*/
 
     private void cry() {
         final String key = "1111111111111111";
