@@ -260,13 +260,33 @@ public class CameraApi extends AppCompatActivity {
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
             //LayoutInflater inflater = getActivity().getLayoutInflater();
             builder.setTitle("Your video has been saved! " +
-                    "Would you like to make another video or go back to the home screen?")
+                    " Would you like to share this video or make another one?")
                     .setPositiveButton("Another video", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
 
                         finish();
                             isAnother = 1;
+
+                        }
+                        //stays on cameraapi
+                    })
+                    .setPositiveButton("Another video", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            finish();
+                            isAnother = 1;
+
+                        }
+                        //stays on cameraapi
+                    })
+                    .setNegativeButton("Share", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            finish();
+                            //isAnother = 1;
 
                         }
                         //stays on cameraapi
