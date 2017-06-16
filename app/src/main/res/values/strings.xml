@@ -9,4 +9,8 @@
     <string name="login">Login</string>
     <string name="enter_password">Enter Password</string>
     <string name="register">Register</string>
+    <string-array name="spinnerData">
+        <item>User</item>
+    <item>Health Care Team</item>
+    <item>Family</item></string-array>
 </resources>
