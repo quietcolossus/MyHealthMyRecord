@@ -284,9 +284,9 @@ public class CameraApi extends AppCompatActivity {
                     .setNegativeButton("Share", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-
-                            finish();
-                            //isAnother = 1;
+                            
+                            MainActivity.dialog4 shareD = new MainActivity.dialog4();
+                            shareD.show(CameraApi.this.getFragmentManager(), "dialog4");
 
                         }
                         //stays on cameraapi

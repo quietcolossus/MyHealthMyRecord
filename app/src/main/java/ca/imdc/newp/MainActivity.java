@@ -364,6 +364,8 @@ public static boolean clicked=false;
     }
 
 
+
+
     public class dialog extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstance) {
@@ -421,4 +423,29 @@ public static boolean clicked=false;
 
         }
     }
+    public static class dialog4 extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstance) {
+
+            // Use the Builder class for convenient dialog construction
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            builder.setView(inflater.inflate(R.layout.share_dialog, null))
+                    .setTitle("Who would you like to share this video with?")
+                    .setPositiveButton("Share", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // share to userid inputted
+
+                        }
+                    })
+                    .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //finish();
+                        }
+                    });
+            return builder.create();
+
+        }
+    }
+
 }
