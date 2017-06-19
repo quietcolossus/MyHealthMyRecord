@@ -52,14 +52,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             time = (TextView) v.findViewById(R.id.time_text);
             date = (TextView) v.findViewById(R.id.date_text);
 //// TODO: 17/08/2016 Implement the above variables in the XML
-            /*ImageButton shareImageButton = (ImageButton) itemView.findViewById(R.id.share_image);
+            ImageButton shareImageButton = (ImageButton) itemView.findViewById(R.id.share_image);
             shareImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
                 public void onClick(View v) {
                             Snackbar.make(v, "Share Video",
                             Snackbar.LENGTH_LONG).show();
+                //MainActivity.dialog4 shareD = new MainActivity.dialog4();
+                //shareD.show(getFragmentManager(), "dialog4");
                 }
-            });*/
+            });
         }
     }
     // Provide a suitable constructor (depends on the kind of dataset)
