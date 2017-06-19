@@ -2,6 +2,7 @@ package ca.imdc.newp;
 import android.Manifest;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.pm.PackageManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -446,6 +447,11 @@ public static boolean clicked=false;
             return builder.create();
 
         }
+    }
+
+    public void displayDialog(){
+        dialog4 shareD = new dialog4();
+        shareD.show(getFragmentManager(), "dialog4");
     }
 
 }

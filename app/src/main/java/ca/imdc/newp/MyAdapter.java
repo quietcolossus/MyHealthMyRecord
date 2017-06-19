@@ -1,11 +1,14 @@
 package ca.imdc.newp;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.icu.util.RangeValueIterator;
 import android.media.Image;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.res.TypedArrayUtils;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static ca.imdc.newp.MainActivity.*;
+
 /**
  * Created by imdc on 16/08/2016.
  */
@@ -29,12 +34,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
 
     public Context mContext;
+    public FragmentManager manager;
     Thread t = null;
     private static final int LENGTH = 18;
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public TextView mTextView;
         public TextView date;
@@ -56,10 +62,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             shareImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
                 public void onClick(View v) {
-                            Snackbar.make(v, "Share Video",
-                            Snackbar.LENGTH_LONG).show();
-                //MainActivity.dialog4 shareD = new MainActivity.dialog4();
-                //shareD.show(getFragmentManager(), "dialog4");
+                            //Snackbar.make(v, "Share Video",
+                            //Snackbar.LENGTH_LONG).show();
+                final Dialog dialog = new Dialog(mContext);
+                dialog.setContentView(R.layout.share_dialog);
+                dialog.setTitle("Who would you like to share this video with?");
+                dialog.show();
+
                 }
             });
         }
