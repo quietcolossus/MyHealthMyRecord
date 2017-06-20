@@ -15,8 +15,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        final EditText mUsername= (EditText) findViewById(R.id.userNameTextF);
-        final EditText  mPassword=(EditText) findViewById(R.id.passwordTextF);
+        //final EditText mUsername= (EditText) findViewById(R.id.userNameTextF);
+        //final EditText  mPassword=(EditText) findViewById(R.id.passwordTextF);
         final TextView mRegisterLink = (TextView) findViewById(R.id.RegisterTV);
         final Button mLoginBtn= (Button) findViewById(R.id.LoginBTN);
 
@@ -30,8 +30,8 @@ public class LoginActivity extends AppCompatActivity {
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent loginIntent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(loginIntent);
+                Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(mainIntent);
             }
         });
 

@@ -67,7 +67,7 @@ public static boolean clicked=false;
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("");
+        toolbar.setTitle(RegisterActivity.username);
         toolbar.setLogo(R.drawable.logo);
         setSupportActionBar(toolbar);
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
