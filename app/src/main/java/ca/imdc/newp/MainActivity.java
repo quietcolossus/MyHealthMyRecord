@@ -2,6 +2,7 @@ package ca.imdc.newp;
 import android.Manifest;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.content.pm.PackageManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -250,11 +251,11 @@ public static boolean clicked=false;
         }
     }
 
-    @Override
+    /*@Override
     public void onConfigurationChanged (Configuration newConfig){
         super.onConfigurationChanged(newConfig);
         System.out.println("IN CONFIG IN MAIN");
-    }
+    }*/
 
     private void cry() {
         final String key = "1111111111111111";
@@ -364,6 +365,8 @@ public static boolean clicked=false;
     }
 
 
+
+
     public class dialog extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstance) {
@@ -421,4 +424,34 @@ public static boolean clicked=false;
 
         }
     }
+    public static class dialog4 extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstance) {
+
+            // Use the Builder class for convenient dialog construction
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            builder.setView(inflater.inflate(R.layout.share_dialog, null))
+                    .setTitle("Who would you like to share this video with?")
+                    .setPositiveButton("Share", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // share to userid inputted
+
+                        }
+                    })
+                    .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //finish();
+                        }
+                    });
+            return builder.create();
+
+        }
+    }
+
+    public void displayDialog(){
+        dialog4 shareD = new dialog4();
+        shareD.show(getFragmentManager(), "dialog4");
+    }
+
 }

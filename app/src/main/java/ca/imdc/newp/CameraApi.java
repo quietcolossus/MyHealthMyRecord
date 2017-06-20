@@ -260,13 +260,33 @@ public class CameraApi extends AppCompatActivity {
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
             //LayoutInflater inflater = getActivity().getLayoutInflater();
             builder.setTitle("Your video has been saved! " +
-                    "Would you like to make another video or go back to the home screen?")
+                    " Would you like to share this video or make another one?")
                     .setPositiveButton("Another video", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
 
                         finish();
                             isAnother = 1;
+
+                        }
+                        //stays on cameraapi
+                    })
+                    .setPositiveButton("Another video", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            finish();
+                            isAnother = 1;
+
+                        }
+                        //stays on cameraapi
+                    })
+                    .setNegativeButton("Share", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            MainActivity.dialog4 shareD = new MainActivity.dialog4();
+                            shareD.show(CameraApi.this.getFragmentManager(), "dialog4");
 
                         }
                         //stays on cameraapi
@@ -359,7 +379,6 @@ public class CameraApi extends AppCompatActivity {
             for (String cameraId : cameraManager.getCameraIdList()) {
                 CameraCharacteristics cameraCharacteristics = cameraManager.getCameraCharacteristics(cameraId);
 
-
                 if (MainActivity.clicked) {
                     if (cameraCharacteristics.get(CameraCharacteristics.LENS_FACING) ==
                             CameraCharacteristics.LENS_FACING_FRONT) {
@@ -374,12 +393,9 @@ public class CameraApi extends AppCompatActivity {
 
                         cameraId = cameraManager.getCameraIdList()[1];
                     } else{
-                        //MainActivity.isOther=false;
-                       // MainActivity.clicked=false;
                         continue;
                     }
                 }
-
 
                StreamConfigurationMap map = cameraCharacteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
                 int deviceOrientation = getWindowManager().getDefaultDisplay().getRotation();
