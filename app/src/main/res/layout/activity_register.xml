@@ -7,7 +7,7 @@
     tools:context="ca.imdc.newp.RegisterActivity">
 
     <EditText
-        android:id="@+id/userNameTextF"
+        android:id="@+id/usernameTF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -16,11 +16,11 @@
         tools:layout_editor_absoluteX="4dp"
         tools:layout_editor_absoluteY="54dp"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/passwordTextF"
+        android:layout_alignStart="@+id/passwordTF"
         android:layout_marginTop="36dp" />
 
     <EditText
-        android:id="@+id/passwordTextF"
+        android:id="@+id/passwordTF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
@@ -33,7 +33,7 @@
         app:layout_constraintRight_toRightOf="parent"
         tools:layout_editor_absoluteX="-20dp"
         tools:layout_editor_absoluteY="136dp"
-        android:layout_below="@+id/userNameTextF"
+        android:layout_below="@+id/usernameTF"
         android:layout_centerHorizontal="true" />
 
     <Button
@@ -64,18 +64,19 @@
         android:layout_alignStart="@+id/lastNameTextF"
         android:layout_below="@+id/lastNameTextF"
         android:ems="10"
-        android:inputType="textEmailAddress"
-        android:text="Emai Address" />
+        android:hint="Email"
+        android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/firstNameTextF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/passwordTextF"
-        android:layout_below="@+id/passwordTextF"
         android:ems="10"
+        android:hint="First Name"
         android:inputType="textNoSuggestions|textPersonName"
-        android:text="First Name" />
+        android:layout_below="@+id/usernameTF"
+        android:layout_alignStart="@+id/passwordTF"
+        android:layout_marginTop="42dp" />
 
     <EditText
         android:id="@+id/lastNameTextF"
@@ -84,7 +85,7 @@
         android:layout_alignStart="@+id/firstNameTextF"
         android:layout_below="@+id/firstNameTextF"
         android:ems="10"
-        android:inputType="textNoSuggestions|textPersonName"
-        android:text="Last Name" />
+        android:hint="Last Name"
+        android:inputType="textNoSuggestions|textPersonName" />
 
 </RelativeLayout>

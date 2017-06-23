@@ -31,6 +31,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import java.io.File;
@@ -66,9 +67,11 @@ public static boolean clicked=false;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        final EditText mUsername= (EditText) findViewById(R.id.usernameTextF);
+        Intent intent = getIntent();
+        String username = intent.getStringExtra("username");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(RegisterActivity.username);
+        toolbar.setTitle(username);
         toolbar.setLogo(R.drawable.logo);
         setSupportActionBar(toolbar);
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
