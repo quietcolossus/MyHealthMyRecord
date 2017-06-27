@@ -16,12 +16,13 @@ public class RegisterRequest extends StringRequest {
     public RegisterRequest(String fname, String lname, String email, String type, String username, String password, Response.Listener<String> listener) {
         super(Method.POST, REGISTER_REQUEST_URL, listener, null);
         user = new HashMap<>();
-        user.put("first name", fname);
-        user.put("last name", lname);
+        user.put("username", username);
+        user.put("firstname", fname);
+        user.put("password", password);
         user.put("email", email);
         user.put("type", type);
-        user.put("username", username);
-        user.put("password", password);
+        user.put("lastname", lname);
+
     }
 
     @Override
