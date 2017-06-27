@@ -108,12 +108,22 @@ public static boolean clicked=false;
                     // This method will trigger on item Click of navigation menu
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        // Set item in checked state
+                        int id = menuItem.getItemId();
+                        menuItem.setChecked(true);
+                        switch (id){
+                            case R.id.nav_myv:
+                                Intent myv = new Intent(MainActivity.this, MyVitalsActivity.class);
+                                startActivity(myv);
+                                mDrawerLayout.closeDrawers();
+                                break;
+                        }
+                       /* // Set item in checked state
                         menuItem.setChecked(true);
                         // TODO: handle navigation
                         // Closing drawer on item click
                         mDrawerLayout.closeDrawers();
-                        return true;
+                        System.out.println("Inside item onclick");*/
+                        return false;
                     }
                 });
 
@@ -172,9 +182,8 @@ public static boolean clicked=false;
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        } else if (id == android.R.id.home) {
+
+        if (id == android.R.id.home) {
             mDrawerLayout.openDrawer(GravityCompat.START);
         }
         return super.onOptionsItemSelected(item);
