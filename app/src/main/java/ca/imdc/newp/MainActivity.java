@@ -54,10 +54,11 @@ public class MainActivity extends AppCompatActivity {
     private String[] myDataset;
     private String[] myDate;
     private String[] myTime;
+    public Button cancel;
+    public Button share;
 
 public static boolean clicked=false;
     public static boolean isOther = false;
-
 
 
     public boolean videosExist;
@@ -66,6 +67,7 @@ public static boolean clicked=false;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("");
@@ -440,27 +442,11 @@ public static boolean clicked=false;
             // Use the Builder class for convenient dialog construction
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
             LayoutInflater inflater = getActivity().getLayoutInflater();
-            builder.setView(inflater.inflate(R.layout.share_dialog, null))
-                    .setTitle("Who would you like to share this video with?")
-                    .setPositiveButton("Share", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // share to userid inputted
+            builder.setView(inflater.inflate(R.layout.share_dialog, null));
 
-                        }
-                    })
-                    .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            //finish();
-                        }
-                    });
             return builder.create();
 
         }
-    }
-
-    public void displayDialog(){
-        dialog4 shareD = new dialog4();
-        shareD.show(getFragmentManager(), "dialog4");
     }
 
 }

@@ -60,6 +60,7 @@ import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -285,8 +286,26 @@ public class CameraApi extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
 
-                            MainActivity.dialog4 shareD = new MainActivity.dialog4();
-                            shareD.show(CameraApi.this.getFragmentManager(), "dialog4");
+                            /*MainActivity.dialog4 shareD = new MainActivity.dialog4();
+                            shareD.show(CameraApi.this.getFragmentManager(), "dialog4");*/
+                            final Dialog dialog = new Dialog(getContext());
+                            dialog.setContentView(R.layout.share_dialog);
+                            dialog.show();
+                            Button cancel = (Button) dialog.findViewById(R.id.cancel_button);
+                            cancel.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            Button shareb = (Button) dialog.findViewById(R.id.share_button);
+                            shareb.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialog.dismiss();
+                                }
+                            });
+
 
                         }
                         //stays on cameraapi

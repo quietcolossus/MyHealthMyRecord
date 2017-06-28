@@ -18,6 +18,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -89,8 +90,21 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                             //Snackbar.LENGTH_LONG).show();
                 final Dialog dialog = new Dialog(mContext);
                 dialog.setContentView(R.layout.share_dialog);
-                dialog.setTitle("Who would you like to share this video with?");
                 dialog.show();
+                Button cancel = (Button) dialog.findViewById(R.id.cancel_button);
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                Button shareb = (Button) dialog.findViewById(R.id.share_button);
+                shareb.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
 
                 }
             });
