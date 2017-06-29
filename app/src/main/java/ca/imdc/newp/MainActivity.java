@@ -55,10 +55,11 @@ public class MainActivity extends AppCompatActivity {
     private String[] myDataset;
     private String[] myDate;
     private String[] myTime;
+    public Button cancel;
+    public Button share;
 
 public static boolean clicked=false;
     public static boolean isOther = false;
-
 
 
     public boolean videosExist;
@@ -67,11 +68,10 @@ public static boolean clicked=false;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final EditText mUsername= (EditText) findViewById(R.id.usernameTextF);
-        Intent intent = getIntent();
-        String username = intent.getStringExtra("username");
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(username);
+        toolbar.setTitle("");
         toolbar.setLogo(R.drawable.logo);
         setSupportActionBar(toolbar);
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
@@ -81,6 +81,7 @@ public static boolean clicked=false;
                 != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO}, CameraApi.REQUEST_CAMERA_PERMISSION_RESULT);
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, CameraApi.REQUEST_EXTERNAL_STORAGE_PERMISSION_RESULT);
+            requestPermissions(new String[]{Manifest.permission.INTERNET}, CameraApi.REQUEST_INTERNET_RESULT);
         }
 
 
@@ -111,12 +112,10 @@ public static boolean clicked=false;
                     // This method will trigger on item Click of navigation menu
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        // Set item in checked state
+                        int id = menuItem.getItemId();
                         menuItem.setChecked(true);
-                        // TODO: handle navigation
-                        // Closing drawer on item click
-                        mDrawerLayout.closeDrawers();
-                        return true;
+
+                        return false;
                     }
                 });
 
@@ -175,9 +174,8 @@ public static boolean clicked=false;
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        } else if (id == android.R.id.home) {
+
+        if (id == android.R.id.home) {
             mDrawerLayout.openDrawer(GravityCompat.START);
         }
         return super.onOptionsItemSelected(item);
@@ -434,27 +432,11 @@ public static boolean clicked=false;
             // Use the Builder class for convenient dialog construction
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
             LayoutInflater inflater = getActivity().getLayoutInflater();
-            builder.setView(inflater.inflate(R.layout.share_dialog, null))
-                    .setTitle("Who would you like to share this video with?")
-                    .setPositiveButton("Share", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // share to userid inputted
+            builder.setView(inflater.inflate(R.layout.share_dialog, null));
 
-                        }
-                    })
-                    .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            //finish();
-                        }
-                    });
             return builder.create();
 
         }
-    }
-
-    public void displayDialog(){
-        dialog4 shareD = new dialog4();
-        shareD.show(getFragmentManager(), "dialog4");
     }
 
 }

@@ -8,14 +8,21 @@ import android.icu.util.RangeValueIterator;
 import android.media.Image;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
+import android.support.transition.Fade;
+import android.support.transition.Scene;
+import android.support.transition.TransitionManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.res.TypedArrayUtils;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import java.util.Arrays;
 import java.net.ConnectException;
@@ -23,7 +30,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static android.support.transition.Fade.IN;
 import static ca.imdc.newp.MainActivity.*;
+import static ca.imdc.newp.R.id.card_view;
+import static ca.imdc.newp.R.id.root;
+import static ca.imdc.newp.R.layout.item;
 
 /**
  * Created by imdc on 16/08/2016.
@@ -31,6 +42,12 @@ import static ca.imdc.newp.MainActivity.*;
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private String[] mDataset;
     private String[] mDate;
+    private int mExpandedPosition = -1;
+    private TextView mLabelText;
+    private Fade mFade;
+    private ViewGroup rootV;
+    private int iD = 1;
+
 
 
     public Context mContext;
@@ -48,6 +65,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         public ImageView delete;
         public ImageView share;
         public ImageView View;
+        public Switch user_switch;
+        public ImageView user_share;
 
         public ViewHolder(View v) {
             super(v);
@@ -57,6 +76,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             View = (ImageView) v.findViewById(R.id.view_image);
             time = (TextView) v.findViewById(R.id.time_text);
             date = (TextView) v.findViewById(R.id.date_text);
+            user_switch = (Switch) v.findViewById(R.id.user_switch);
+            user_share = (ImageView) v.findViewById(R.id.shareU_image);
+            rootV = (ViewGroup) v.findViewById(R.id.card_view);
+
+
 //// TODO: 17/08/2016 Implement the above variables in the XML
             ImageButton shareImageButton = (ImageButton) itemView.findViewById(R.id.share_image);
             shareImageButton.setOnClickListener(new View.OnClickListener(){
@@ -66,8 +90,21 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                             //Snackbar.LENGTH_LONG).show();
                 final Dialog dialog = new Dialog(mContext);
                 dialog.setContentView(R.layout.share_dialog);
-                dialog.setTitle("Who would you like to share this video with?");
                 dialog.show();
+                Button cancel = (Button) dialog.findViewById(R.id.cancel_button);
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                Button shareb = (Button) dialog.findViewById(R.id.share_button);
+                shareb.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
 
                 }
             });
@@ -82,7 +119,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     // Create new views (invoked by the layout manager)
     @Override
     public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(item, parent, false);
         // set the view's size, margins, paddings and layout parameters
         ViewHolder vh = new ViewHolder(v);
         return vh;
@@ -121,6 +158,18 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 String name = (String) holder.mTextView.getText();
                 mainact.deleteIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+name);
                 mainact.deleteIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Video/"+name.replace(".encrypt",""));
+            }
+
+        });
+        final boolean isExpanded = position==mExpandedPosition;
+        holder.user_switch.setVisibility(isExpanded?View.VISIBLE:View.GONE);
+        holder.itemView.setActivated(isExpanded);
+        holder.user_share.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                mExpandedPosition=isExpanded?-1:position;
+                TransitionManager.beginDelayedTransition(rootV);
+                notifyDataSetChanged();
             }
         });
 //// TODO: 17/08/2016  implement date and time datasets. We need to retrieve it directly from an array

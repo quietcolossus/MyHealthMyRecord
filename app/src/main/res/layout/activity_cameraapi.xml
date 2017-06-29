@@ -21,7 +21,9 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/videoOnlineImageButton"
         android:contentDescription="@string/video_button"
-        android:src="@mipmap/btn_video_online"/>
+        android:src="@drawable/ic_fiber_manual_record_black_24dp"
+        android:tint="#ff0000"
+        android:background="@null"/>
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -32,7 +34,8 @@
         android:layout_marginTop="17dp"
         android:id="@+id/cameraFlipImageButton"
         android:contentDescription="@string/camera_flip_button"
-        android:src="@mipmap/ic_camera_flip"/>
+        android:src="@drawable/ic_flip_to_front_black_48dp"
+        android:background="@null"/>
 
     <Chronometer
         android:layout_width="wrap_content"
