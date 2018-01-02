@@ -13,4 +13,8 @@
         <item>User</item>
     <item>Health Care Team</item>
     <item>Family</item></string-array>
+    <string-array name="spinnerContacts">
+        <item>Aa</item>
+        <item>Ab</item>
+        <item>Ba</item></string-array>
 </resources>

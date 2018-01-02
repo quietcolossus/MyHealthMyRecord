@@ -6,15 +6,18 @@
     android:padding="25dp">
 
 
-    <EditText
-        android:id="@+id/share_editText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/question_share"
+
+
+    <Spinner
+        android:id="@+id/share_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/share_button"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="44dp"
-        android:ems="10"
-        android:inputType="textPersonName" />
+        android:layout_marginBottom="13dp"
+        android:layout_alignTop="@+id/question_share"
+        android:layout_marginTop="46dp"
+        android:entries="@array/spinnerContacts"/>
 
     <TextView
         android:id="@+id/question_share"
@@ -32,8 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/question_share"
-        android:layout_below="@+id/share_editText"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="100dp"
         android:background="@android:color/white"
         android:text="Cancel"
         android:textColor="@color/colorAccent" />
@@ -48,5 +50,19 @@
         android:background="@android:color/white"
         android:text="Share"
         android:textColor="@color/colorAccent" />
+
+    <Button
+        android:id="@+id/add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/cancel_button"
+        android:layout_alignBottom="@+id/cancel_button"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/white"
+        android:text="Add Contact"
+        android:textColor="@color/colorAccent" />
+
+
+
 
 </RelativeLayout>
