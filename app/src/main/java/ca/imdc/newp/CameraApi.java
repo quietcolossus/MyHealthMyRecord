@@ -43,6 +43,7 @@ import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.MediaRecorder;
 import android.os.Build;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -63,6 +64,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.io.File;
@@ -160,6 +162,10 @@ public class CameraApi extends AppCompatActivity {
     private Size mVideoSize;
     private MediaRecorder mMediaRecorder;
     private Chronometer mChronometer;
+    private ProgressBar mProgress;
+    private int pValue;
+    private CountDownTimer count;
+    private Thread pThread;
     //storage variables
     protected static File mVideoFolder; //stores a file to save video
     protected static File mencVideoFolder;
@@ -197,6 +203,23 @@ public class CameraApi extends AppCompatActivity {
         mMediaRecorder = new MediaRecorder();
         mChronometer = (Chronometer) findViewById(R.id.chronometer); //the timer
         mTextureView = (TextureView) findViewById(R.id.textureView);
+        mProgress = (ProgressBar) findViewById(R.id.progressBar);
+
+        pValue = 0;
+        mProgress.setProgress(pValue);
+        count = new CountDownTimer(100000,1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                pValue++;
+                mProgress.setProgress((int)pValue*100/(100000/1000));
+            }
+
+            @Override
+            public void onFinish() {
+            pValue++;
+            mProgress.setProgress(60);
+            }
+        };
 
         mRecordImageButton = (ImageButton) findViewById(R.id.videoOnlineImageButton);
         //onclicklistener when you stop recording
@@ -220,8 +243,12 @@ public class CameraApi extends AppCompatActivity {
                 else{
                     mIsRecording = true;
                     mRecordImageButton.setImageResource(R.mipmap.btn_video);
+                    count.start();
                     checkWriteStoragePermission();
+                    //mProgress.setProgress((int) mChronometer.getBase(), true);
                 }
+
+
             }
         });
 
@@ -528,6 +555,7 @@ public class CameraApi extends AppCompatActivity {
                 public void onConfigured(CameraCaptureSession cameraCaptureSession) {
                     try {
                         cameraCaptureSession.setRepeatingRequest(mCaptureRequestBuilder.build(), null,null );
+
                     } catch (CameraAccessException e) {
                         e.printStackTrace();
                     }
@@ -544,7 +572,6 @@ public class CameraApi extends AppCompatActivity {
                     //onConfigurationChanged(newConfig);
                     System.out.println("IN CONFIG IN CAM");
                 }*/
-
             }, null);
         } catch (Exception e) {
             e.printStackTrace();
@@ -678,6 +705,7 @@ public class CameraApi extends AppCompatActivity {
 
     //storage method #3
     private void checkWriteStoragePermission(){
+
         //check to see for if permission granted for newer versions of android
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
 
@@ -697,6 +725,7 @@ public class CameraApi extends AppCompatActivity {
                 mChronometer.setBase(SystemClock.elapsedRealtime()); //gets real time
                 mChronometer.setVisibility(View.VISIBLE);
                 mChronometer.start();
+                //pThread.start();
 
             }
             else{
@@ -722,6 +751,7 @@ public class CameraApi extends AppCompatActivity {
             mChronometer.setBase(SystemClock.elapsedRealtime());
             mChronometer.setVisibility(View.VISIBLE);
             mChronometer.start();
+            //pThread.start();
 
         }
     }
