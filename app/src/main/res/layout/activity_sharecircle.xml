@@ -14,14 +14,12 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
     </android.support.design.widget.AppBarLayout>
-    <include layout="@layout/content_main"
-        android:id="@+id/include" />
 
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/contact1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:clickable="true"
@@ -60,8 +58,8 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/contact4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
         android:layout_alignStart="@+id/contact2"
         android:layout_centerVertical="true"
         android:clickable="true"
@@ -70,8 +68,8 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/contact5"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
         android:layout_above="@+id/contact4"
         android:layout_alignStart="@+id/contact4"
         android:layout_marginBottom="54dp"
@@ -81,8 +79,8 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/contact6"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
         android:layout_alignBottom="@+id/contact5"
         android:layout_alignStart="@+id/contact1"
         android:clickable="true"
@@ -91,8 +89,8 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/contact7"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
         android:layout_alignTop="@+id/contact6"
         android:layout_marginStart="56dp"
         android:layout_toEndOf="@+id/contact6"
@@ -102,8 +100,8 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/contact8"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
         android:layout_alignBottom="@+id/contact1"
         android:layout_alignStart="@+id/contact7"
         android:clickable="true"
