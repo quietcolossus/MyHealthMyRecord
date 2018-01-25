@@ -48,6 +48,16 @@
         android:textColor="#ff0000"
         android:textSize="25dp"/>
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/cameraFlipImageButton"
+        android:layout_marginBottom="15dp"
+        android:layout_toStartOf="@+id/cameraFlipImageButton"
+        android:max="60"
+        android:visibility="visible" />
 
 
 </RelativeLayout>
