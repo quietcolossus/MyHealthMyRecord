@@ -51,16 +51,7 @@
         android:text="Share"
         android:textColor="@color/colorAccent" />
 
-    <Button
-        android:id="@+id/add_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/cancel_button"
-        android:layout_alignBottom="@+id/cancel_button"
-        android:layout_centerHorizontal="true"
-        android:background="@android:color/white"
-        android:text="Add Contact"
-        android:textColor="@color/colorAccent" />
+
 
 
 

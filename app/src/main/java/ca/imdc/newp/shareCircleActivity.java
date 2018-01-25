@@ -7,19 +7,15 @@ package ca.imdc.newp;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import static android.widget.RelativeLayout.CENTER_HORIZONTAL;
-import static android.widget.RelativeLayout.CENTER_VERTICAL;
 
 
 public class shareCircleActivity extends AppCompatActivity {
@@ -27,39 +23,68 @@ public class shareCircleActivity extends AppCompatActivity {
     public static float y;
 public static Integer click;
     public static TextView tv1;
-    public static TextView tv2;
-    public static TextView tv3;
+
     public static TextView tv4;
     public static TextView tv5;
     public static TextView tv6;
     public static TextView tv7;
     public static TextView tv8;
     public static TextView tv9;
+    public static TextView tv2;
+    public static TextView tv3;
+    private String i;
+
+public SharedPreferences mPrefs;
+
+
+
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sharecircle);
+       final SharedPreferences mPrefs = getSharedPreferences("db", 0);
+        String back = mPrefs.getString("color",null);
+       /* if(back.equals("level1circle")){
+            tv2.setBackground(getDrawable(R.drawable.level1_circle));
+        }
+        if(back.equals("level2circle")){
+            tv2.setBackground(getDrawable(R.drawable.level2_circle));
+        }
+        if(back.equals("level3circle")){
+            tv2.setBackground(getDrawable(R.drawable.level3_circle));
+        } */
+
+
+
+
+
 tv1= new TextView(this);
-        tv2= new TextView(this);
-        tv3= new TextView(this);
+
         tv4= new TextView(this);
         tv5= new TextView(this);
         tv6= new TextView(this);
         tv7= new TextView(this);
         tv8= new TextView(this);
-        tv9= new TextView(this);
+
+       tv9= (TextView) findViewById(R.id.contact9);
+       tv2= (TextView) findViewById(R.id.contact2);
+        tv3= (TextView) findViewById(R.id.contact3);
+
         final FloatingActionButton c1 = (FloatingActionButton) findViewById(R.id.contact1);
-        final FloatingActionButton c2 = (FloatingActionButton) findViewById(R.id.contact2);
-        final FloatingActionButton c3 = (FloatingActionButton) findViewById(R.id.contact3);
+
         final FloatingActionButton c4 = (FloatingActionButton) findViewById(R.id.contact4);
         final FloatingActionButton c5 = (FloatingActionButton) findViewById(R.id.contact5);
         final FloatingActionButton c6 = (FloatingActionButton) findViewById(R.id.contact6);
         final FloatingActionButton c7 = (FloatingActionButton) findViewById(R.id.contact7);
         final FloatingActionButton c8 = (FloatingActionButton) findViewById(R.id.contact8);
-        final FloatingActionButton c9 = (FloatingActionButton) findViewById(R.id.contact9);
+
+
+
 
 
         final AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+
+
         c1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,20 +127,27 @@ tv1= new TextView(this);
                 alert11.show();
             }
         });
-        c2.setOnClickListener(new View.OnClickListener() {
+        tv2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent addCIntent = new Intent(shareCircleActivity.this, addContactActivity.class);
                 startActivity(addCIntent);
-                x=c2.getX();
-                y=c2.getY();
                 click=2;
-                c2.setVisibility(View.INVISIBLE);
-                RelativeLayout ll = (RelativeLayout) findViewById(R.id.sharecircle);
-                ll.addView(tv2);
+                if(tv2.getBackground()==getResources().getDrawable(R.drawable.level1_circle) ){
+                    i = "level1circle";
+                }
+                if(tv2.getBackground()==getResources().getDrawable(R.drawable.level2_circle)) {
+                    i = "level2circle";
+                }
+                if(tv2.getBackground()==getResources().getDrawable(R.drawable.level1_circle)) {
+                    i = "level3circle";
+                }
+                SharedPreferences.Editor edit = mPrefs.edit();
+                edit.putString("color",i);
+                edit.apply();
             }
         });
-        tv2.setOnClickListener(new View.OnClickListener() {
+        /*tv2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -136,28 +168,25 @@ tv1= new TextView(this);
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                                 tv2.setVisibility(View.INVISIBLE);
-                                c2.setVisibility(View.VISIBLE);
+                                tv2.setVisibility(View.VISIBLE);
                             }
                         });
 
                 AlertDialog alert11 = builder1.create();
                 alert11.show();
             }
-        });
-        c3.setOnClickListener(new View.OnClickListener() {
+        }); */
+        tv3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent addCIntent = new Intent(shareCircleActivity.this, addContactActivity.class);
                 startActivity(addCIntent);
-                x=c3.getX();
-                y=c3.getY();
+
                 click=3;
-                c3.setVisibility(View.INVISIBLE);
-                RelativeLayout ll = (RelativeLayout) findViewById(R.id.sharecircle);
-                ll.addView(tv3);
+
             }
         });
-        tv3.setOnClickListener(new View.OnClickListener() {
+       /* tv3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -178,14 +207,14 @@ tv1= new TextView(this);
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                                 tv3.setVisibility(View.INVISIBLE);
-                                c3.setVisibility(View.VISIBLE);
+                                tv3.setVisibility(View.VISIBLE);
                             }
                         });
 
                 AlertDialog alert11 = builder1.create();
                 alert11.show();
             }
-        });
+        }); */
         c4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -399,20 +428,15 @@ tv1= new TextView(this);
                 alert11.show();
             }
         });
-        c9.setOnClickListener(new View.OnClickListener() {
+        tv9.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent addCIntent = new Intent(shareCircleActivity.this, addContactActivity.class);
                 startActivity(addCIntent);
-                x=c9.getX();
-                y=c9.getY();
                 click=9;
-                c9.setVisibility(View.INVISIBLE);
-                RelativeLayout ll = (RelativeLayout) findViewById(R.id.sharecircle);
-                ll.addView(tv9);
             }
         });
-        tv9.setOnClickListener(new View.OnClickListener() {
+       /* tv9.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -433,14 +457,14 @@ tv1= new TextView(this);
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                                 tv9.setVisibility(View.INVISIBLE);
-                                c9.setVisibility(View.VISIBLE);
+                                tv9.setVisibility(View.VISIBLE);
                             }
                         });
 
                 AlertDialog alert11 = builder1.create();
                 alert11.show();
             }
-        });
+        }); */
 
     }
     }
