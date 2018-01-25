@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ca.imdc.newp.addContactActivity"
+    android:id="@+id/addContact">
+
+
+    <EditText
+        android:id="@+id/FnameTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="63dp"
+        android:ems="10"
+        android:hint="First Name"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/LnameTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/FnameTV"
+        android:layout_below="@+id/FnameTV"
+        android:layout_marginTop="11dp"
+        android:ems="10"
+        android:hint="Last Name"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/emailTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/LnameTV"
+        android:layout_below="@+id/LnameTV"
+        android:layout_marginTop="23dp"
+        android:ems="10"
+        android:hint="email"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/phoneTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/emailTV"
+        android:layout_below="@+id/emailTV"
+        android:layout_marginTop="22dp"
+        android:ems="10"
+        android:hint="phone"
+        android:inputType="phone" />
+
+    <Button
+        android:id="@+id/addContactBTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/phoneTV"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="31dp"
+        android:text="Add" />
+</RelativeLayout>

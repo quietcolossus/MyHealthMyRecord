@@ -7,7 +7,7 @@
     tools:context="ca.imdc.newp.RegisterActivity">
 
     <EditText
-        android:id="@+id/userNameTextF"
+        android:id="@+id/usernameTF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -15,19 +15,14 @@
         android:inputType="textPersonName"
         tools:layout_editor_absoluteX="4dp"
         tools:layout_editor_absoluteY="54dp"
-        android:layout_above="@+id/passwordTextF"
-        android:layout_alignStart="@+id/passwordTextF"
-        android:layout_marginBottom="19dp"
-        android:layout_alignEnd="@+id/passwordTextF" />
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/passwordTF"
+        android:layout_marginTop="36dp" />
 
     <EditText
-        android:id="@+id/passwordTextF"
+        android:id="@+id/passwordTF"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/userTypeSpinner"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="41dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:ems="10"
@@ -37,7 +32,9 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         tools:layout_editor_absoluteX="-20dp"
-        tools:layout_editor_absoluteY="136dp" />
+        tools:layout_editor_absoluteY="136dp"
+        android:layout_below="@+id/usernameTF"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:id="@+id/registerSubmitButton"
@@ -54,12 +51,41 @@
         android:id="@+id/userTypeSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/registerSubmitButton"
-        android:layout_alignParentEnd="true"
-        android:layout_alignStart="@+id/passwordTextF"
-        android:layout_marginBottom="41dp"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="259dp"
-        android:entries="@array/spinnerData"/>
+        android:entries="@array/spinnerData"
+        android:layout_above="@+id/registerSubmitButton"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/emailTextF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/lastNameTextF"
+        android:layout_below="@+id/lastNameTextF"
+        android:ems="10"
+        android:hint="Email"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/firstNameTextF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="First Name"
+        android:inputType="textNoSuggestions|textPersonName"
+        android:layout_below="@+id/usernameTF"
+        android:layout_alignStart="@+id/passwordTF"
+        android:layout_marginTop="42dp" />
+
+    <EditText
+        android:id="@+id/lastNameTextF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/firstNameTextF"
+        android:layout_below="@+id/firstNameTextF"
+        android:ems="10"
+        android:hint="Last Name"
+        android:inputType="textNoSuggestions|textPersonName" />
 
 </RelativeLayout>

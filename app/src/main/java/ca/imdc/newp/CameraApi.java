@@ -32,7 +32,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+
 import android.graphics.Color;
+import android.content.res.Resources;
 import android.graphics.Matrix;
 import android.graphics.PorterDuff;
 import android.graphics.RectF;
@@ -85,8 +87,10 @@ import static android.app.PendingIntent.getActivity;
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class CameraApi extends AppCompatActivity {
 
+
     public static final int REQUEST_CAMERA_PERMISSION_RESULT = 0;
     public static final int REQUEST_EXTERNAL_STORAGE_PERMISSION_RESULT = 1;
+    public static final int REQUEST_INTERNET_RESULT =1;
     private TextureView mTextureView;
     private TextureView.SurfaceTextureListener mSurfaceListener = new TextureView.SurfaceTextureListener() {
         @Override
@@ -309,16 +313,6 @@ public class CameraApi extends AppCompatActivity {
                         }
                         //stays on cameraapi
                     })
-                    .setPositiveButton("Another video", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                            finish();
-                            isAnother = 1;
-
-                        }
-                        //stays on cameraapi
-                    })
                     .setNegativeButton("Share", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -333,13 +327,24 @@ public class CameraApi extends AppCompatActivity {
                                 @Override
                                 public void onClick(View v) {
                                     dialog.dismiss();
+                                    finish();
                                 }
                             });
                             Button shareb = (Button) dialog.findViewById(R.id.share_button);
                             shareb.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    Toast.makeText(getApplicationContext(), "Video was shared!", Toast.LENGTH_SHORT).show();
                                     dialog.dismiss();
+                                }
+                            });
+                            Button addC = (Button) dialog.findViewById(R.id.add_button);
+                            addC.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialog.dismiss();
+                                    finish();
+
                                 }
                             });
 
@@ -577,10 +582,9 @@ public class CameraApi extends AppCompatActivity {
 
                 }
 
-                /*@Override
-                public void onConfigurationChanged() {
-                    //onConfigurationChanged(newConfig);
-                    System.out.println("IN CONFIG IN CAM");
+               /* @Override
+                public void onConfigurationChanged(Configuration newConfig) {
+                    onConfigurationChanged(newConfig);
                 }*/
             }, null);
         } catch (Exception e) {

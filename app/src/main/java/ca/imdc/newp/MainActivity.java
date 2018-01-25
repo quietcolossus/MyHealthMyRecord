@@ -1,10 +1,11 @@
 package ca.imdc.newp;
 import android.Manifest;
-import android.app.Dialog;
-import android.app.DialogFragment;
+
 import android.app.FragmentManager;
 import android.content.pm.PackageManager;
 import android.content.Context;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -31,6 +32,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import java.io.File;
@@ -80,6 +82,7 @@ public static boolean clicked=false;
                 != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO}, CameraApi.REQUEST_CAMERA_PERMISSION_RESULT);
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, CameraApi.REQUEST_EXTERNAL_STORAGE_PERMISSION_RESULT);
+            requestPermissions(new String[]{Manifest.permission.INTERNET}, CameraApi.REQUEST_INTERNET_RESULT);
         }
 
 
@@ -112,20 +115,21 @@ public static boolean clicked=false;
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         int id = menuItem.getItemId();
                         menuItem.setChecked(true);
-                        switch (id){
-                            case R.id.nav_myv:
-                                Intent myv = new Intent(MainActivity.this, MyVitalsActivity.class);
-                                startActivity(myv);
-                                mDrawerLayout.closeDrawers();
-                                break;
+
+                        if (id == R.id.nav_share) {
+                            Intent shareIntent = new Intent(MainActivity.this, shareCircleActivity.class);
+                            startActivity(shareIntent);
                         }
-                       /* // Set item in checked state
-                        menuItem.setChecked(true);
-                        // TODO: handle navigation
-                        // Closing drawer on item click
-                        mDrawerLayout.closeDrawers();
-                        System.out.println("Inside item onclick");*/
-                        return false;
+                    else if (id == R.id.nav_myv) {
+
+                    } else if (id == R.id.nav_settings) {
+
+                        }
+
+
+
+                        mDrawerLayout.closeDrawer(GravityCompat.START);
+                        return true;
                     }
                 });
 
@@ -188,6 +192,7 @@ public static boolean clicked=false;
         if (id == android.R.id.home) {
             mDrawerLayout.openDrawer(GravityCompat.START);
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -397,6 +402,7 @@ public static boolean clicked=false;
                     .setNeutralButton("OTHER", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             //MainActivity.isOther = true;
+                            clicked= false;
                             dialog2 myAlert2 = new dialog2();
                             myAlert2.show(getFragmentManager(), "dialog2");
                             // User cancelled the dialog
