@@ -30,9 +30,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
+
+import android.graphics.Color;
 import android.content.res.Resources;
 import android.graphics.Matrix;
+import android.graphics.PorterDuff;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
@@ -215,14 +219,21 @@ public class CameraApi extends AppCompatActivity {
             public void onTick(long millisUntilFinished) {
                 pValue++;
                 mProgress.setProgress((int)pValue*100/(100000/1000));
+                if(pValue > 60) {
+                    mProgress.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
+                }
             }
 
             @Override
             public void onFinish() {
             pValue++;
             mProgress.setProgress(60);
+
             }
+
         };
+
+
 
         mRecordImageButton = (ImageButton) findViewById(R.id.videoOnlineImageButton);
         //onclicklistener when you stop recording
