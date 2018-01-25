@@ -40,7 +40,7 @@
         android:clickable="true"
         android:gravity="center"
         android:text="@string/TV2"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorAccent"
         android:textSize="30dp"
         android:visibility="visible" />
 
@@ -54,7 +54,7 @@
         android:clickable="true"
         android:gravity="center"
         android:text="@string/TV3"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorAccent"
         android:textSize="30dp"
         android:visibility="visible" />
 
@@ -120,7 +120,7 @@
         android:clickable="true"
         android:gravity="center"
         android:text="@string/TV1"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorAccent"
         android:textSize="30dp"
         android:visibility="visible" />
 </RelativeLayout>
