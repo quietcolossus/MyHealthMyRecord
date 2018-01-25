@@ -45,6 +45,7 @@
         <activity android:name=".shareCircleActivity"></activity>
         <activity android:name=".addContactActivity"></activity>
 
+
     </application>
 
 </manifest>

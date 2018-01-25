@@ -52,12 +52,39 @@
         android:hint="phone"
         android:inputType="phone" />
 
+
+
     <Button
         android:id="@+id/addContactBTN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/phoneTV"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="31dp"
+        android:layout_marginBottom="46dp"
         android:text="Add" />
+
+    <RadioButton
+        android:id="@+id/level1rb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/addContactBTN"
+        android:layout_alignParentStart="true"
+        android:text="RadioButton" />
+
+    <RadioButton
+        android:id="@+id/level2rb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/addContactBTN"
+        android:layout_alignEnd="@+id/addContactBTN"
+        android:text="RadioButton" />
+
+    <RadioButton
+        android:id="@+id/level3rb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/addContactBTN"
+        android:layout_marginStart="13dp"
+        android:layout_toEndOf="@+id/addContactBTN"
+        android:text="RadioButton" />
 </RelativeLayout>

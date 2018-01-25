@@ -9,12 +9,19 @@
     <string name="login">Login</string>
     <string name="enter_password">Enter Password</string>
     <string name="register">Register</string>
+    <string name="TV1">SS</string>
+    <string name="TV2">LW</string>
+    <string name="TV3">PK</string>
     <string-array name="spinnerData">
         <item>User</item>
     <item>Health Care Team</item>
     <item>Family</item></string-array>
     <string-array name="spinnerContacts">
-        <item>Aa</item>
-        <item>Ab</item>
-        <item>Ba</item></string-array>
+        <item>SS</item>
+        <item>LW</item>
+        <item>PK</item></string-array>
+    <string-array name="spinnerLevel">
+        <item>Trust</item>
+        <item>Medium</item>
+        <item>Don't Trust</item></string-array>
 </resources>

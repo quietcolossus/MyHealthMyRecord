@@ -300,15 +300,7 @@ public class CameraApi extends AppCompatActivity {
                                     dialog.dismiss();
                                 }
                             });
-                            Button addC = (Button) dialog.findViewById(R.id.add_button);
-                            addC.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    dialog.dismiss();
-                                    finish();
 
-                                }
-                            });
 
 
                         }
