@@ -43,14 +43,14 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final String username;
                 final String password;
-                final String fname;
-                final String lname;
+                final String fName;
+                final String lName;
                 final String email;
                 final String type;
                 username = mUsernameTF.getText().toString();
                 password = mPasswordTF.getText().toString();
-                fname = mFirstName.getText().toString();
-                lname = mLastName.getText().toString();
+                fName = mFirstName.getText().toString();
+                lName = mLastName.getText().toString();
                 email = mEmail.getText().toString();
                 type = mUserType.getSelectedItem().toString();
 
@@ -78,7 +78,7 @@ public class RegisterActivity extends AppCompatActivity {
                     }
 
                 };
-                    RegisterRequest registerRequest = new RegisterRequest(username, fname, password, email, type, lname, responseListener);
+                    RegisterRequest registerRequest = new RegisterRequest(username, fName, password, email, type, lName, responseListener);
                     RequestQueue queue = Volley.newRequestQueue(RegisterActivity.this);
                 queue.add(registerRequest);
 

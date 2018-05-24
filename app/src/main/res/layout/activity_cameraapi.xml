@@ -38,15 +38,15 @@
         android:background="@null"/>
 
     <Chronometer
+        android:id="@+id/chronometer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/videoOnlineImageButton"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="29dp"
-        android:id="@+id/chronometer"
-        android:visibility="invisible"
         android:textColor="#ff0000"
-        android:textSize="25dp"/>
+        android:textSize="25dp"
+        android:visibility="invisible" />
 
 
 
