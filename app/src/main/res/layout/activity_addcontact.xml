@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/addContact"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ca.imdc.newp.addContactActivity">
+
+
+    <EditText
+        android:id="@+id/FnameTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="63dp"
+        android:ems="10"
+        android:hint="First Name"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/LnameTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/FnameTV"
+        android:layout_below="@+id/FnameTV"
+        android:layout_marginTop="11dp"
+        android:ems="10"
+        android:hint="Last Name"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/emailTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/LnameTV"
+        android:layout_below="@+id/LnameTV"
+        android:layout_marginTop="23dp"
+        android:ems="10"
+        android:hint="email"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/phoneTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/emailTV"
+        android:layout_below="@+id/emailTV"
+        android:layout_marginTop="22dp"
+        android:ems="10"
+        android:hint="phone"
+        android:inputType="phone" />
+
+
+    <Button
+        android:id="@+id/addContactBTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/level2rb"
+        android:layout_toStartOf="@+id/level3rb"
+        android:text="Add" />
+
+    <RadioButton
+        android:id="@+id/level1rb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/level2rb"
+        android:layout_alignBottom="@+id/level2rb"
+        android:layout_toStartOf="@+id/level2rb"
+        android:text="Trust Level 1" />
+
+    <RadioButton
+        android:id="@+id/level2rb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/level3rb"
+        android:layout_alignBottom="@+id/level3rb"
+        android:layout_centerHorizontal="true"
+        android:text="Trust Level 2" />
+
+    <RadioButton
+        android:id="@+id/level3rb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/phoneTV"
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@+id/level2rb"
+        android:text="Trust Level 3" />
+</RelativeLayout>

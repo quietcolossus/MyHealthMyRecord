@@ -1,10 +1,11 @@
 package ca.imdc.newp;
 import android.Manifest;
-import android.app.Dialog;
-import android.app.DialogFragment;
+
 import android.app.FragmentManager;
 import android.content.pm.PackageManager;
 import android.content.Context;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -115,7 +116,20 @@ public static boolean clicked=false;
                         int id = menuItem.getItemId();
                         menuItem.setChecked(true);
 
-                        return false;
+                        if (id == R.id.nav_share) {
+                            Intent shareIntent = new Intent(MainActivity.this, shareCircleActivity.class);
+                            startActivity(shareIntent);
+                        }
+                    else if (id == R.id.nav_myv) {
+
+                    } else if (id == R.id.nav_settings) {
+
+                        }
+
+
+
+                        mDrawerLayout.closeDrawer(GravityCompat.START);
+                        return true;
                     }
                 });
 
@@ -178,6 +192,7 @@ public static boolean clicked=false;
         if (id == android.R.id.home) {
             mDrawerLayout.openDrawer(GravityCompat.START);
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -387,6 +402,7 @@ public static boolean clicked=false;
                     .setNeutralButton("OTHER", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             //MainActivity.isOther = true;
+                            clicked= false;
                             dialog2 myAlert2 = new dialog2();
                             myAlert2.show(getFragmentManager(), "dialog2");
                             // User cancelled the dialog
