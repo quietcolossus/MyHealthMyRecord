@@ -220,7 +220,24 @@ public class CameraApi extends AppCompatActivity {
                 pValue++;
                 mProgress.setProgress((int)pValue*100/(100000/1000));
                 if(pValue > 60) {
-                    mProgress.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
+                    if(mIsRecording) {
+                        mProgress.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
+                        mChronometer.stop();
+                        mChronometer.setVisibility(View.INVISIBLE);
+                        mProgress.setVisibility(View.INVISIBLE);
+                        mIsRecording = false;
+                        mRecordImageButton.setImageResource(R.mipmap.btn_video);
+                        //startPreview();
+                        mMediaRecorder.stop();
+
+
+                        mMediaRecorder.reset();
+
+                        startPreview();
+                        dialog3 whatNext = new dialog3();
+                        whatNext.show(getFragmentManager(), "dialog3");
+                    }
+
                 }
             }
 
@@ -243,6 +260,7 @@ public class CameraApi extends AppCompatActivity {
                 if(mIsRecording){
                     mChronometer.stop();
                     mChronometer.setVisibility(View.INVISIBLE);
+                    mProgress.setVisibility(View.INVISIBLE);
                     mIsRecording = false;
                     mRecordImageButton.setImageResource(R.mipmap.btn_video_online);
                     //startPreview();
@@ -250,6 +268,7 @@ public class CameraApi extends AppCompatActivity {
 
 
                     mMediaRecorder.reset();
+
                     startPreview();
                     dialog3 whatNext = new dialog3();
                     whatNext.show(getFragmentManager(), "dialog3");
@@ -258,6 +277,7 @@ public class CameraApi extends AppCompatActivity {
                     mIsRecording = true;
                     mRecordImageButton.setImageResource(R.mipmap.btn_video);
                     count.start();
+                    mProgress.setVisibility(View.VISIBLE);
                     checkWriteStoragePermission();
                     //mProgress.setProgress((int) mChronometer.getBase(), true);
                 }
@@ -336,6 +356,7 @@ public class CameraApi extends AppCompatActivity {
                                 public void onClick(View v) {
                                     Toast.makeText(getApplicationContext(), "Video was shared!", Toast.LENGTH_SHORT).show();
                                     dialog.dismiss();
+                                    finish();
                                 }
                             });
 
