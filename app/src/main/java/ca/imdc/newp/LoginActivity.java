@@ -10,6 +10,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -36,9 +40,39 @@ public class LoginActivity extends AppCompatActivity {
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                /*Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
                 mainIntent.putExtra("username", username);
-                startActivity(mainIntent);
+                startActivity(mainIntent);*/
+
+
+                    Connection c = null;
+                    Statement stmt = null;
+                    try {
+                        Class.forName("org.postgresql.Driver");
+                        c = DriverManager
+                                .getConnection("jdbc:postgresql://localhost:5432/mhmr",
+                                        "postgres", "1mdCu53R");
+                        c.setAutoCommit(false);
+                        System.out.println("Opened database successfully");
+
+                        stmt = c.createStatement();
+                        ResultSet rs = stmt.executeQuery( "SELECT * FROM USERINFO;" );
+                        while ( rs.next() ) {
+                            int id = rs.getInt("UserId");
+                            String  name = rs.getString("UserName");
+                            System.out.println( "ID = " + id );
+                            System.out.println( "NAME = " + name );
+                            System.out.println();
+                        }
+                        rs.close();
+                        stmt.close();
+                        c.close();
+                    } catch ( Exception e ) {
+                        System.err.println( e.getClass().getName()+": "+ e.getMessage() );
+                        System.exit(0);
+                    }
+                    System.out.println("Operation done successfully");
+
              /*  String username=mUsername.getText().toString();
                 String password=mPassword.getText().toString();
 if(RegisterActivity.users.size()==0)
