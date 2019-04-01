@@ -4,6 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion '26.0.2'
 
+
     defaultConfig {
         applicationId "ca.imdc.newp"
         minSdkVersion 23
@@ -14,7 +15,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
@@ -31,5 +32,6 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.volley:volley:1.0.0'
     testCompile 'junit:junit:4.12'
-    implementation files('postgresql-42.2.3.jar')
+    compile group: 'postgresql', name: 'postgresql', version: '9.0-801.jdbc4'
+
 }

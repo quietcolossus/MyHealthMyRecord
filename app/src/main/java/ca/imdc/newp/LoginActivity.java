@@ -29,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
         final Button mLoginBtn= (Button) findViewById(R.id.LoginBTN);
 
  final String username = mUsername.getText().toString();
+ final String password =mPassword.getText().toString();
         mRegisterLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,77 +44,44 @@ public class LoginActivity extends AppCompatActivity {
                 /*Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
                 mainIntent.putExtra("username", username);
                 startActivity(mainIntent);*/
+                int check = sqlConn();
 
 
-                    Connection c = null;
-                    Statement stmt = null;
-                    try {
-                        Class.forName("org.postgresql.Driver");
-                        c = DriverManager
-                                .getConnection("jdbc:postgresql://localhost:5432/mhmr",
-                                        "postgres", "1mdCu53R");
-                        c.setAutoCommit(false);
-                        System.out.println("Opened database successfully");
-
-                        stmt = c.createStatement();
-                        ResultSet rs = stmt.executeQuery( "SELECT * FROM USERINFO;" );
-                        while ( rs.next() ) {
-                            int id = rs.getInt("UserId");
-                            String  name = rs.getString("UserName");
-                            System.out.println( "ID = " + id );
-                            System.out.println( "NAME = " + name );
-                            System.out.println();
-                        }
-                        rs.close();
-                        stmt.close();
-                        c.close();
-                    } catch ( Exception e ) {
-                        System.err.println( e.getClass().getName()+": "+ e.getMessage() );
-                        System.exit(0);
-                    }
-                    System.out.println("Operation done successfully");
-
-             /*  String username=mUsername.getText().toString();
-                String password=mPassword.getText().toString();
-if(RegisterActivity.users.size()==0)
-{
-    Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
-    startActivity(registerIntent);
-
-}
-else {
-
-
-    String uPass=RegisterActivity.users.get(username);
-            if (password.equals(uPass)) {
-                Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(mainIntent);
+                if (check == 1) {
+                    Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                    mainIntent.putExtra("username", username);
+                    startActivity(mainIntent);
+                }
             }
-            else{
-                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                builder.setMessage("Login Failed")
-                        .setNegativeButton("Retry", null)
-                        .create()
-                        .show();
-            }
+        });}
+public int sqlConn(){
+        Connection c = null;
+        Statement stmt = null;
+        try {
+            Class.forName("org.postgresql.Driver");
+            c = DriverManager
+                    .getConnection("jdbc:postgresql://141.117.145.178:5432/mhmr?currentSchema=UserAccount",
+                            "postgres", "1mdCu53R");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
 
-        else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-            builder.setMessage("Login Failed")
-                    .setNegativeButton("Retry", null)
-                    .create()
-                    .show();
+            stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery( "SELECT * FROM USERINFO;" );
+            while ( rs.next() ) {
+                int id = rs.getInt("UserId");
+                String  name = rs.getString("UserName");
+                System.out.println( "ID = " + id );
+                System.out.println( "NAME = " + name );
+                System.out.println();
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+        } catch ( Exception e ) {
+            System.err.println( e.getClass().getName()+": "+ e.getMessage() );
         }
-
-}
-for(int i=0; i<user.size()-1; i++ ) {
-    User u=user.get(i);
-
-    if (username.equals("s") &&password.equals("t"))
-        startActivity(mainIntent);
-    }*/
-            }
-        });
-
+        System.out.println("Operation done successfully");
+    return 1;
 }
 }
+
