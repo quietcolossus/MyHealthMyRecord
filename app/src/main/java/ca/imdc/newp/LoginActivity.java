@@ -55,32 +55,38 @@ public class LoginActivity extends AppCompatActivity {
             }
         });}
     public int sqlConn(){
-        Connection c = null;
-        Statement stmt = null;
-        try {
-            Class.forName("org.postgresql.Driver");
-            c = DriverManager
-                    .getConnection("jdbc:postgresql://141.117.145.178:5432/mhmr?currentSchema=UserAccount",
-                            "postgres", "1mdCu53R");
-            c.setAutoCommit(false);
-            System.out.println("Opened database successfully");
+        final Connection[] c = {null};
+        final Statement[] stmt = {null};
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    Class.forName("org.postgresql.Driver");
+                    c[0] = DriverManager
+                            .getConnection("jdbc:postgresql://141.117.145.178:5432/mhmr?currentSchema=UserAccount",
+                                    "postgres", "1mdCu53R");
+                    c[0].setAutoCommit(false);
+                    System.out.println("*\n**********************************\n***************************************Opened database successfully***********\n*************************************\n**************************");
 
-            stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery( "SELECT * FROM USERINFO;" );
-            while ( rs.next() ) {
-                int id = rs.getInt("UserId");
-                String  name = rs.getString("UserName");
-                System.out.println( "ID = " + id );
-                System.out.println( "NAME = " + name );
-                System.out.println();
+                    stmt[0] = c[0].createStatement();
+                    ResultSet rs = stmt[0].executeQuery( "SELECT * FROM \"UserAccount\".\"UserInfo\";" );
+                    while ( rs.next() ) {
+                        int id = rs.getInt("UserId");
+                        String  name = rs.getString("UserName");
+                        System.out.println( "ID = " + id );
+                        System.out.println( "NAME = " + name );
+                        System.out.println();
+                    }
+                    rs.close();
+                    stmt[0].close();
+                    c[0].close();
+                } catch ( Exception e ) {
+                    System.err.println( e.getClass().getName()+": "+ e.getMessage() );
+                }
+
             }
-            rs.close();
-            stmt.close();
-            c.close();
-        } catch ( Exception e ) {
-            System.err.println( e.getClass().getName()+": "+ e.getMessage() );
-        }
-        System.out.println("Operation done successfully");
+        }).start();
+
+        System.out.println("*************************************Operation done successfully*************************************");
         return 1;
     }
 }
