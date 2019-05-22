@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="25dp">
+
+
+
+
+    <Spinner
+        android:id="@+id/share_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/share_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="13dp"
+        android:layout_alignTop="@+id/question_share"
+        android:layout_marginTop="46dp"
+        android:entries="@array/spinnerContacts"/>
+
+    <TextView
+        android:id="@+id/question_share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="17dp"
+        android:text="Who would you like to share this video with?"
+        android:textColor="@android:color/black"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/question_share"
+        android:layout_marginTop="100dp"
+        android:background="@android:color/white"
+        android:text="Cancel"
+        android:textColor="@color/colorAccent" />
+
+    <Button
+        android:id="@+id/share_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/cancel_button"
+        android:layout_alignBottom="@+id/cancel_button"
+        android:layout_alignEnd="@+id/question_share"
+        android:background="@android:color/white"
+        android:text="Share"
+        android:textColor="@color/colorAccent" />
+
+
+
+
+
+
+</RelativeLayout>

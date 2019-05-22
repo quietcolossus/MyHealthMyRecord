@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ca.imdc.newp.CameraApi">
+
+
+    <TextureView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textureView"
+        android:layout_alignParentEnd="true" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/videoOnlineImageButton"
+        android:contentDescription="@string/video_button"
+        android:src="@drawable/ic_fiber_manual_record_black_24dp"
+        android:tint="#ff0000"
+        android:background="@null"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="13dp"
+        android:layout_marginTop="17dp"
+        android:id="@+id/cameraFlipImageButton"
+        android:contentDescription="@string/camera_flip_button"
+        android:src="@drawable/ic_flip_to_front_black_48dp"
+        android:background="@null"/>
+
+    <Chronometer
+        android:id="@+id/chronometer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/videoOnlineImageButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="29dp"
+        android:textColor="#ff0000"
+        android:textSize="25dp"
+        android:visibility="invisible" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/videoOnlineImageButton"
+        android:layout_alignParentStart="true"
+        android:max="60"
+        android:progressTint="#ff0000"
+        android:visibility="visible" />
+
+
+
+</RelativeLayout>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ca.imdc.newp.RegisterActivity">
+
+    <EditText
+        android:id="@+id/usernameTF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/enter_username"
+        android:inputType="textPersonName"
+        tools:layout_editor_absoluteX="4dp"
+        tools:layout_editor_absoluteY="54dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/passwordTF"
+        android:layout_marginTop="36dp" />
+
+    <EditText
+        android:id="@+id/passwordTF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:ems="10"
+        android:hint="@string/enter_password"
+        android:inputType="textPassword"
+        app:layout_constraintHorizontal_bias="0.513"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_editor_absoluteX="-20dp"
+        tools:layout_editor_absoluteY="136dp"
+        android:layout_below="@+id/usernameTF"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/registerSubmitButton"
+        android:layout_width="88dp"
+        android:layout_height="48dp"
+        android:text="@string/register"
+        tools:layout_editor_absoluteX="280dp"
+        tools:layout_editor_absoluteY="364dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="115dp" />
+
+    <Spinner
+        android:id="@+id/userTypeSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="259dp"
+        android:entries="@array/spinnerData"
+        android:layout_above="@+id/registerSubmitButton"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/emailTextF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/lastNameTextF"
+        android:layout_below="@+id/lastNameTextF"
+        android:ems="10"
+        android:hint="Email"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/firstNameTextF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="First Name"
+        android:inputType="textNoSuggestions|textPersonName"
+        android:layout_below="@+id/usernameTF"
+        android:layout_alignStart="@+id/passwordTF"
+        android:layout_marginTop="42dp" />
+
+    <EditText
+        android:id="@+id/lastNameTextF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/firstNameTextF"
+        android:layout_below="@+id/firstNameTextF"
+        android:ems="10"
+        android:hint="Last Name"
+        android:inputType="textNoSuggestions|textPersonName" />
+
+</RelativeLayout>
