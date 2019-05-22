@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     public Button cancel;
     public Button share;
 
-public static boolean clicked=false;
+    public static boolean clicked=false;
     public static boolean isOther = false;
 
 

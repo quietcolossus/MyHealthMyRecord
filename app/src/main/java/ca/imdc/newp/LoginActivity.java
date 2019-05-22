@@ -1,19 +1,19 @@
 package ca.imdc.newp;
 
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.content.Intent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+        import android.support.v7.app.AlertDialog;
+        import android.support.v7.app.AppCompatActivity;
+        import android.os.Bundle;
+        import android.content.Intent;
+        import android.view.View;
+        import android.widget.Button;
+        import android.widget.EditText;
+        import android.widget.TextView;
+        import java.util.HashMap;
+        import java.util.ArrayList;
+        import java.sql.Connection;
+        import java.sql.DriverManager;
+        import java.sql.ResultSet;
+        import java.sql.Statement;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -28,15 +28,15 @@ public class LoginActivity extends AppCompatActivity {
         final TextView mRegisterLink = (TextView) findViewById(R.id.RegisterTV);
         final Button mLoginBtn= (Button) findViewById(R.id.LoginBTN);
 
- final String username = mUsername.getText().toString();
- final String password =mPassword.getText().toString();
+        final String username = mUsername.getText().toString();
+        final String password = mPassword.getText().toString();
         mRegisterLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(registerIntent);
             }
-    });
+        });
 
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });}
-public int sqlConn(){
+    public int sqlConn(){
         Connection c = null;
         Statement stmt = null;
         try {
@@ -81,7 +81,7 @@ public int sqlConn(){
             System.err.println( e.getClass().getName()+": "+ e.getMessage() );
         }
         System.out.println("Operation done successfully");
-    return 1;
-}
+        return 1;
+    }
 }
 

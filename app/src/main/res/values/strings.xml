@@ -23,5 +23,5 @@
     <string-array name="spinnerLevel">
         <item>Trust</item>
         <item>Medium</item>
-        <item>Don't Trust</item></string-array>
+        <item>Dont Trust</item></string-array>
 </resources>
