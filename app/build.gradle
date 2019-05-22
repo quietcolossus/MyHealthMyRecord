@@ -1,9 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+<<<<<<< HEAD
     compileSdkVersion 25
     buildToolsVersion '26.0.2'
 
+=======
+    compileSdkVersion 24
+    buildToolsVersion '25.0.0'
+>>>>>>> 5645644dad9a5c3d1b9638f150e4165437a65515
 
     defaultConfig {
         applicationId "ca.imdc.newp"
