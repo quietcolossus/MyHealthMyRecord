@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     Class.forName("org.postgresql.Driver");
                     c[0] = DriverManager
-                            .getConnection("jdbc:postgresql://141.117.145.178:5432/mhmr?currentSchema=UserAccount",
+                            .getConnection("jdbc:postgresql://141.117.145.178:5432/mhmr?currentSchema=UserAccount?sslmode=require",
                                     "postgres", "1mdCu53R");
                     c[0].setAutoCommit(false);
                     System.out.println("*\n**********************************\n***************************************Opened database successfully***********\n*************************************\n**************************");
