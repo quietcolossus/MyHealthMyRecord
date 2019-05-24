@@ -24,6 +24,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.Arrays;
 import java.net.ConnectException;
 import java.util.ArrayList;
@@ -57,7 +59,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder{
         // each data item is just a string in this case
         public TextView mTextView;
         public TextView date;
@@ -108,6 +110,22 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
                 }
             });
+            mTextView.findViewById(R.id.my_text_view).setOnClickListener(new View.OnClickListener()  {
+                @Override
+                public void onClick(android.view.View view) {
+
+                    //Toast.makeText(view.getContext(), "works",Toast.LENGTH_LONG).show();
+                }
+
+            });
+            mTextView.findViewById(R.id.my_text_view).setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(android.view.View view) {
+                    Toast.makeText(view.getContext(), "works",Toast.LENGTH_LONG).show();
+                    return true;
+                }
+            });
+
         }
     }
     // Provide a suitable constructor (depends on the kind of dataset)
@@ -143,6 +161,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 mContext.startActivity(intent);
             }
         });
+
+
         holder.delete.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {

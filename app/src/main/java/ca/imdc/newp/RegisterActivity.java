@@ -16,6 +16,10 @@ package ca.imdc.newp;
         import org.json.JSONObject;
         import android.widget.Spinner;
 
+        import java.sql.Connection;
+        import java.sql.DriverManager;
+        import java.sql.ResultSet;
+        import java.sql.Statement;
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -90,6 +94,44 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     }
+
+
+    /*public int sqlConn(String username, String firstname, String lastname, String password ){
+        final Connection[] c = {null};
+        final Statement[] stmt = {null};
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    Class.forName("org.postgresql.Driver");
+                    c[0] = DriverManager
+                            .getConnection("jdbc:postgresql://141.117.145.178:5432/mhmr?currentSchema=UserAccount?sslmode=require",
+                                    "postgres", "1mdCu53R");
+                    c[0].setAutoCommit(false);
+                    System.out.println("*\n**********************************\n***************************************Opened database successfully***********\n*************************************\n**************************");
+
+                    stmt[0] = c[0].createStatement();
+                    ResultSet rs = stmt[0].executeQuery( "INSERT INTO \"UserInfo\" values ()" );
+                    while ( rs.next() ) {
+                        int id = rs.getInt("UserId");
+                        String  name = rs.getString("UserName");
+                        System.out.println( "ID = " + id );
+                        System.out.println( "NAME = " + name );
+                        System.out.println();
+                    }
+                    rs.close();
+                    stmt[0].close();
+                    c[0].close();
+                } catch ( Exception e ) {
+                    System.err.println( e.getClass().getName()+": "+ e.getMessage() );
+                }
+
+            }
+        }).start();
+
+        System.out.println("*************************************Operation done successfully*************************************");
+        return 1;
+    }*/
+
 }
 
 

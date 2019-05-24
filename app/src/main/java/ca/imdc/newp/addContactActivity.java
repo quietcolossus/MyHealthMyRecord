@@ -58,7 +58,7 @@ public class addContactActivity extends Activity {
         final TextView tv2 = shareCircleActivity.tv2;
         final TextView tv3 = shareCircleActivity.tv3;
         rb1 = (RadioButton) findViewById(R.id.level1rb);
-     rb2 = (RadioButton) findViewById(R.id.level2rb);
+        rb2 = (RadioButton) findViewById(R.id.level2rb);
         rb3 = (RadioButton) findViewById(R.id.level3rb);
 
       /*If certain TextView clicked sets integer click to position number, based on which TV clicked creates a new circle resource in that position */
