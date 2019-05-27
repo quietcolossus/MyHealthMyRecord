@@ -1,5 +1,6 @@
 package ca.imdc.newp;
 
+        import android.os.StrictMode;
         import android.support.v7.app.AlertDialog;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
@@ -57,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
     public int sqlConn(){
         Connection c = null;
         Statement stmt = null;
+
         try {
             Class.forName("org.postgresql.Driver");
             c = DriverManager

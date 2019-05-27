@@ -92,6 +92,7 @@ public class CameraApi extends AppCompatActivity {
     public static final int REQUEST_EXTERNAL_STORAGE_PERMISSION_RESULT = 1;
     public static final int REQUEST_INTERNET_RESULT =1;
     private TextureView mTextureView;
+
     private TextureView.SurfaceTextureListener mSurfaceListener = new TextureView.SurfaceTextureListener() {
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i1) {
@@ -359,17 +360,15 @@ public class CameraApi extends AppCompatActivity {
                                     finish();
                                 }
                             });
-
-
-
                         }
                         //stays on cameraapi
                     })
-                    .setNeutralButton("Home", new DialogInterface.OnClickListener() {
+                    .setNeutralButton("Home (fix)", new DialogInterface.OnClickListener() {
                         public void onClick (DialogInterface dialog, int id){
                             finish();
                       }
                     });
+
             return builder.create();
         }
     }
@@ -716,8 +715,6 @@ public class CameraApi extends AppCompatActivity {
         //cfileName = videoFile.getAbsolutePath(); //name of file name is stored
         cfileName = videoFile.getAbsolutePath();
         return videoFile;
-
-
     }
 
     private void createEncVideoFileName() throws IOException{

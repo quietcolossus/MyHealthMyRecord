@@ -324,6 +324,13 @@ public class MainActivity extends AppCompatActivity {
             folder.delete();
     }
 
+    public void renameIt(String path, String replacer) {
+        File folder = new File(path);
+        File folder2 = new File(replacer);
+        if (folder.exists())
+            folder.renameTo(folder2);
+    }
+
 
     public String decrypt(String name) {
         final String key = "1111111111111111";
@@ -429,16 +436,12 @@ public class MainActivity extends AppCompatActivity {
                     .setNeutralButton("Agree", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
 
-
-
-
                             dispatchTakeVideoIntent();
                             mAdapter.notifyDataSetChanged();
                             // User cancelled the dialog
                         }
                     });
             return builder.create();
-
         }
     }
     public static class dialog4 extends DialogFragment {
@@ -451,7 +454,6 @@ public class MainActivity extends AppCompatActivity {
             builder.setView(inflater.inflate(R.layout.share_dialog, null));
 
             return builder.create();
-
         }
     }
 

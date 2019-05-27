@@ -39,7 +39,7 @@ public String getFileName()
         return encfileName;
     }
 
-    private  void cry()
+    private void cry()
     {
         final String key = "1111111111111111";
         final cryptoHash halo = new cryptoHash();

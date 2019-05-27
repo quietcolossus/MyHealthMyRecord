@@ -19,11 +19,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.Arrays;
 import java.net.ConnectException;
 import java.util.ArrayList;
@@ -129,6 +132,34 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         holder.mTextView.setText(mDataset[position]);
         holder.time.setText(mDate[position % mDate.length]);
      //   holder.date.setText(mDate[position % mDate.length]);
+        holder.mTextView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                final Dialog dialog2 = new Dialog(mContext);
+                dialog2.setContentView(R.layout.curate_video);
+                dialog2.show();
+                Button cancel = (Button) dialog2.findViewById(R.id.renamebutton);
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MainActivity mainact = new MainActivity();
+                        EditText edit = (EditText) dialog2.findViewById(R.id.nameentry);
+                        String replacer = edit.getText().toString();
+                        String name = (String) holder.mTextView.getText();
+
+                        ArrayList<String> list = new ArrayList<String>(Arrays.asList(mDataset));
+                        list.set(position, replacer);
+                        mDataset = list.toArray(new String[list.size()]);
+                        notifyDataSetChanged();
+
+                        mainact.renameIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+name,  mContext.getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+replacer);
+                        mainact.renameIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Video/"+name.replace(".encrypt",""), mContext.getExternalFilesDir(null).getAbsolutePath()+"/Video/"+replacer.replace(".encrypt",""));
+                        dialog2.dismiss();
+                    }
+                });
+                return true;
+            }
+        });
         holder.View.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -148,19 +179,20 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             public void onClick(View v) {
                 MainActivity mainact = new MainActivity();
                 ArrayList<String> list = new ArrayList<String>(Arrays.asList(mDataset));
-
                 list.remove(list.get(position));
 
                 mDataset = list.toArray(new String[list.size()]);
                 notifyItemRemoved(position);
                 notifyDataSetChanged();
-                System.out.println(holder.mTextView.getText());
+
                 String name = (String) holder.mTextView.getText();
                 mainact.deleteIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+name);
                 mainact.deleteIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Video/"+name.replace(".encrypt",""));
+
             }
 
         });
+
         final boolean isExpanded = position==mExpandedPosition;
         holder.user_switch.setVisibility(isExpanded?View.VISIBLE:View.GONE);
         holder.itemView.setActivated(isExpanded);
