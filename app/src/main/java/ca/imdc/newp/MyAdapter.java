@@ -115,6 +115,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 public void onClick(android.view.View view) {
 
                     //Toast.makeText(view.getContext(), "works",Toast.LENGTH_LONG).show();
+
                 }
 
             });

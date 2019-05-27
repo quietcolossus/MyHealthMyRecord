@@ -239,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_VIDEO_CAPTURE) {
 
             if (resultCode == RESULT_CANCELED) {
-                cry();
+                crypto();
 
                if (videosExist()) {
                     myDataset = populateList("names");
@@ -273,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("IN CONFIG IN MAIN");
     }*/
 
-    private void cry() {
+    private void crypto() {
         final String key = "1111111111111111";
         final cryptoHash halo = new cryptoHash();
         try {

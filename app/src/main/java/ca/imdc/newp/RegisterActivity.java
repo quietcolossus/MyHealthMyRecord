@@ -58,6 +58,8 @@ public class RegisterActivity extends AppCompatActivity {
                 email = mEmail.getText().toString();
                 type = mUserType.getSelectedItem().toString();
 
+                register(username, password, fName, lName, email,type);
+/*
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -81,10 +83,10 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     }
 
-                };
-                    RegisterRequest registerRequest = new RegisterRequest(username, fName, password, email, type, lName, responseListener);
-                    RequestQueue queue = Volley.newRequestQueue(RegisterActivity.this);
-                queue.add(registerRequest);
+                };*/
+                    //RegisterRequest registerRequest = new RegisterRequest(username, fName, password, email, type, lName, responseListener);
+                    //RequestQueue queue = Volley.newRequestQueue(RegisterActivity.this);
+                //queue.add(registerRequest);
 
             }
 
@@ -96,9 +98,16 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-    /*public int sqlConn(String username, String firstname, String lastname, String password ){
+    public int register(String username, String firstname, String lastname, String password, String email, String type){
         final Connection[] c = {null};
         final Statement[] stmt = {null};
+        final String usernameR = username;
+        final String passwordR = password;
+        final String firstnameR = firstname;
+        final String lastnameR = lastname;
+        final String emailR = email;
+        final String typeR = type;
+
         new Thread(new Runnable() {
             public void run() {
                 try {
@@ -106,19 +115,14 @@ public class RegisterActivity extends AppCompatActivity {
                     c[0] = DriverManager
                             .getConnection("jdbc:postgresql://141.117.145.178:5432/mhmr?currentSchema=UserAccount?sslmode=require",
                                     "postgres", "1mdCu53R");
-                    c[0].setAutoCommit(false);
-                    System.out.println("*\n**********************************\n***************************************Opened database successfully***********\n*************************************\n**************************");
+                    c[0].setAutoCommit(true);
+                    System.out.println("Database opened and ready to register user.");
 
                     stmt[0] = c[0].createStatement();
-                    ResultSet rs = stmt[0].executeQuery( "INSERT INTO \"UserInfo\" values ()" );
-                    while ( rs.next() ) {
-                        int id = rs.getInt("UserId");
-                        String  name = rs.getString("UserName");
-                        System.out.println( "ID = " + id );
-                        System.out.println( "NAME = " + name );
-                        System.out.println();
-                    }
-                    rs.close();
+                    stmt[0].executeUpdate(String.format
+                            ("INSERT INTO \"UserAccount\".\"UserInfo\"  (  \"UserName\", \"Password\", \"FirstName\", \"LastName\", \"AccountType\") VALUES( '%s', '%s' , '%s' , '%s' , '%s');", usernameR, passwordR, firstnameR, lastnameR, typeR));
+                    System.out.println("User, " + usernameR +  " has been registered successfully.");
+
                     stmt[0].close();
                     c[0].close();
                 } catch ( Exception e ) {
@@ -130,7 +134,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         System.out.println("*************************************Operation done successfully*************************************");
         return 1;
-    }*/
+    }
 
 }
 
