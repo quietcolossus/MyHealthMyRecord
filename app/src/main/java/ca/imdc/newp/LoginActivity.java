@@ -44,10 +44,10 @@ public class LoginActivity extends AppCompatActivity {
                 /*Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
                 mainIntent.putExtra("username", username);
                 startActivity(mainIntent);*/
-                int check = sqlConn();
+                boolean check = verifyLogin(mUsername, mPassword);
 
 
-                if (check == 1) {
+                if (check == true) {
                     Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
                     mainIntent.putExtra("username", username);
                     startActivity(mainIntent);
@@ -88,6 +88,46 @@ public class LoginActivity extends AppCompatActivity {
 
         System.out.println("*************************************Operation done successfully*************************************");
         return 1;
+    }
+
+    public boolean verifyLogin(final EditText username, final EditText password){
+        final Connection[] c = {null};
+        final Statement[] stmt = {null};
+        final boolean[] verified = {false};
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    Class.forName("org.postgresql.Driver");
+                    c[0] = DriverManager
+                            .getConnection("jdbc:postgresql://141.117.145.178:5432/mhmr?currentSchema=UserAccount?sslmode=require",
+                                    "postgres", "1mdCu53R");
+                    c[0].setAutoCommit(false);
+                    System.out.println("Successfully connected to database and ready to verify login attempt.");
+                    stmt[0] = c[0].createStatement();
+                    ResultSet rs = stmt[0].executeQuery( "SELECT * FROM \"UserAccount\".\"UserInfo\";" );
+                    while ( rs.next() ) {
+                        int id = rs.getInt("UserId");
+                        String  name = rs.getString("UserName");
+                        System.out.println( "NAME = " + name );
+                        System.out.println();
+                        String  name1 = rs.getString("UserName");
+                        String  password1 = rs.getString("Password");
+                        if(username.getText().toString().equals(name1) && password.getText().toString().equals(password1)){
+                            System.out.println("Username and Password Verified.");
+                            verified[0] = true;
+                        }
+                    }
+
+                    stmt[0].close();
+                    c[0].close();
+                } catch ( Exception e ) {
+                    System.err.println( e.getClass().getName()+": "+ e.getMessage() );
+                }
+
+            }
+        }).start();
+        System.out.print(verified[0]);
+        return verified[0];
     }
 }
 

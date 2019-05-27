@@ -15,6 +15,7 @@ package ca.imdc.newp;
         import org.json.JSONException;
         import org.json.JSONObject;
         import android.widget.Spinner;
+        import android.widget.Toast;
 
         import java.sql.Connection;
         import java.sql.DriverManager;
@@ -51,6 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
                 final String lName;
                 final String email;
                 final String type;
+                final int check;
                 username = mUsernameTF.getText().toString();
                 password = mPasswordTF.getText().toString();
                 fName = mFirstName.getText().toString();
@@ -58,35 +60,19 @@ public class RegisterActivity extends AppCompatActivity {
                 email = mEmail.getText().toString();
                 type = mUserType.getSelectedItem().toString();
 
-                register(username, password, fName, lName, email,type);
-/*
-                Response.Listener<String> responseListener = new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonResponse = new JSONObject(response);
-                            boolean success = jsonResponse.getBoolean("success");
-
-
-                            if (success) {
-                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                                startActivity(intent);
-                            } else {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                                builder.setMessage("Register Failed")
-                                        .setNegativeButton("Retry", null)
-                                        .create()
-                                        .show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                if (username.equals("") | password.equals("") | fName.equals("") | lName.equals("") | email.equals("") | type.equals("")){
+                    Toast.makeText(v.getContext(), "You must fill out all of the required fields.",Toast.LENGTH_LONG).show();
+                }
+                else{
+                    check = register(username, fName, lName, password, email,type);
+                    if (check == 1) {
+                        Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
+                        mainIntent.putExtra("username", username);
+                        startActivity(mainIntent);
                     }
+                }
 
-                };*/
-                    //RegisterRequest registerRequest = new RegisterRequest(username, fName, password, email, type, lName, responseListener);
-                    //RequestQueue queue = Volley.newRequestQueue(RegisterActivity.this);
-                //queue.add(registerRequest);
+
 
             }
 
