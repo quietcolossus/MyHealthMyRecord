@@ -4,12 +4,19 @@ package ca.imdc.newp;
         import android.content.Intent;
         import android.os.Bundle;
         import android.support.v7.app.AppCompatActivity;
+        import android.util.Log;
         import android.view.View;
         import android.widget.Button;
         import android.widget.EditText;
         import android.app.AlertDialog;
+
+        import com.android.volley.Request;
         import com.android.volley.RequestQueue;
         import com.android.volley.Response;
+        import com.android.volley.VolleyError;
+        import com.android.volley.VolleyLog;
+        import com.android.volley.toolbox.JsonObjectRequest;
+        import com.android.volley.toolbox.StringRequest;
         import com.android.volley.toolbox.Volley;
 
         import org.json.JSONException;
@@ -17,10 +24,13 @@ package ca.imdc.newp;
         import android.widget.Spinner;
         import android.widget.Toast;
 
+        import java.lang.reflect.Method;
         import java.sql.Connection;
         import java.sql.DriverManager;
         import java.sql.ResultSet;
         import java.sql.Statement;
+        import java.util.HashMap;
+        import java.util.Map;
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -65,6 +75,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 else{
                     check = register(username, fName, lName, password, email,type);
+                    register(username, fName, lName, password, email,type);
                     if (check == 1) {
                         Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
                         mainIntent.putExtra("username", username);
@@ -85,41 +96,70 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     public int register(String username, String firstname, String lastname, String password, String email, String type){
-        final Connection[] c = {null};
-        final Statement[] stmt = {null};
+
         final String usernameR = username;
         final String passwordR = password;
         final String firstnameR = firstname;
         final String lastnameR = lastname;
         final String emailR = email;
         final String typeR = type;
+        final String URL = "http://141.117.145.178:3000/users/";
 
+        final RequestQueue requestQueue = Volley.newRequestQueue(this);
+        final Response.Listener<JSONObject> listener = new Response.Listener() {
+            @Override
+            public void onResponse(Object response) {
+
+            }
+        };
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    Class.forName("org.postgresql.Driver");
-                    c[0] = DriverManager
-                            .getConnection("jdbc:postgresql://141.117.145.178:5432/mhmr?currentSchema=UserAccount?sslmode=require",
-                                    "postgres", "1mdCu53R");
-                    c[0].setAutoCommit(true);
-                    System.out.println("Database opened and ready to register user.");
+                    StringRequest postRequest = new StringRequest(Request.Method.POST, URL,
+                            new Response.Listener<String>()
+                            {
+                                @Override
+                                public void onResponse(String response) {
+                                    // response
+                                    Log.d("Response", response);
+                                }
+                            },
+                            new Response.ErrorListener()
+                            {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    // error
+                                }
+                            }
+                    ) {
+                        @Override
+                        protected Map<String, String> getParams()
+                        {
+                            final HashMap<String, String> params = new HashMap<String, String>();
+                            params.put("UserName",usernameR);
+                            params.put("Password", passwordR);
+                            params.put("FirstName", firstnameR);
+                            params.put("LastName", lastnameR);
+                            params.put("Email", emailR);
+                            params.put("AccountType",typeR);
 
-                    stmt[0] = c[0].createStatement();
-                    stmt[0].executeUpdate(String.format
-                            ("INSERT INTO \"UserAccount\".\"UserInfo\"  (  \"UserName\", \"Password\", \"FirstName\", \"LastName\", \"AccountType\") VALUES( '%s', '%s' , '%s' , '%s' , '%s');", usernameR, passwordR, firstnameR, lastnameR, typeR));
-                    System.out.println("User, " + usernameR +  " has been registered successfully.");
+                            return params;
+                        }
+                    };
 
-                    stmt[0].close();
-                    c[0].close();
+                    requestQueue.add(postRequest);
+
                 } catch ( Exception e ) {
                     System.err.println( e.getClass().getName()+": "+ e.getMessage() );
                 }
 
             }
+
+
         }).start();
 
         System.out.println("*************************************Operation done successfully*************************************");
-        return 1;
+        return 0;
     }
 
 }

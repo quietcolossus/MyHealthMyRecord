@@ -1,22 +1,39 @@
 package ca.imdc.newp;
 
+        import android.app.ProgressDialog;
+
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
         import android.content.Intent;
+        import android.util.Log;
         import android.view.View;
         import android.widget.Button;
         import android.widget.EditText;
         import android.widget.TextView;
 
+        import com.android.volley.Request;
+        import com.android.volley.RequestQueue;
+        import com.android.volley.Response;
+        import com.android.volley.VolleyError;
+        import com.android.volley.toolbox.JsonArrayRequest;
+
+        import com.android.volley.toolbox.Volley;
+
+        import org.json.JSONArray;
+        import org.json.JSONException;
+        import org.json.JSONObject;
+
+
         import java.sql.Connection;
         import java.sql.DriverManager;
         import java.sql.ResultSet;
         import java.sql.Statement;
-        import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class LoginActivity extends AppCompatActivity{
-
+    Button btnHit;
+    TextView txtJson;
+    ProgressDialog pd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +46,11 @@ public class LoginActivity extends AppCompatActivity{
 
         final String username = mUsername.getText().toString();
         final String password = mPassword.getText().toString();
+
+
+
+
+
 
 
 
@@ -45,120 +67,74 @@ public class LoginActivity extends AppCompatActivity{
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-                //mainIntent.putExtra("username", username);
-                //startActivity(mainIntent);
-
-                int check = verifyLogin(new Listener<Boolean>() {
+                loginVolley(new VolleyCallback() {
                     @Override
-                    public void on(Boolean arg) {
+                    public void onSuccess(JSONArray result) {
+                        System.out.println(result);
                         System.out.println("--------------------------------SUCCESS----------");
                         Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
                         mainIntent.putExtra("username", username);
                         startActivity(mainIntent);
                     }
                 }, mUsername, mPassword);
+
+
+
                 System.out.println("Password entered---------------------->"+ mPassword.getText().toString());
 
-                if (check == 1) {
-                    System.out.println("--------------------------------SUCCESS----------");
-                    Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-                    mainIntent.putExtra("username", username);
-                    startActivity(mainIntent);
-                }
             }
         });}
-    public int sqlConn(){
-        final Connection[] c = {null};
-        final Statement[] stmt = {null};
-        new Thread(new Runnable() {
-            public void run() {
-                try {
-                    Class.forName("org.postgresql.Driver");
-                    c[0] = DriverManager
-                            .getConnection("jdbc:postgresql://141.117.145.178:5432/mhmr?currentSchema=UserAccount?sslmode=require",
-                                    "postgres", "1mdCu53R");
-                    c[0].setAutoCommit(false);
-                    System.out.println("*\n**********************************\n***************************************Opened database successfully***********\n*************************************\n**************************");
+    public interface VolleyCallback{
+        void onSuccess(JSONArray result);
+    }
+    public int loginVolley(final VolleyCallback callback, final EditText username, final EditText password){
+        final String url = "http://141.117.145.178:3000/users";
+        final RequestQueue requestQueue = Volley.newRequestQueue(this);
+        final JsonArrayRequest jsonObjReq = new JsonArrayRequest(Request.Method.GET,
+                url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
 
-                    stmt[0] = c[0].createStatement();
-                    ResultSet rs = stmt[0].executeQuery( "SELECT * FROM \"UserAccount\".\"UserInfo\";" );
-                    while ( rs.next() ) {
-                        int id = rs.getInt("UserId");
-                        String  name = rs.getString("UserName");
-                        System.out.println( "ID = " + id );
-                        System.out.println( "NAME = " + name );
-                        System.out.println();
+                        try{
+                            // Loop through the array elements
+                            for(int i=0;i<response.length();i++){
+                                // Get current json object
+                                JSONObject user = response.getJSONObject(i);
+
+
+                                String firstName = user.getString("FirstName");
+                                String lastName = user.getString("LastName");
+                                String userName = user.getString("UserName");
+                                String passWord = user.getString("Password");
+
+                                if(userName.equals(username.getText().toString()) && passWord.equals(password.getText().toString())){
+                                    System.out.println("Verified through volley request.");
+                                    callback.onSuccess(response);
+                                }
+
+
+                            }
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                        }
                     }
-                    rs.close();
-                    stmt[0].close();
-                    c[0].close();
-                } catch ( Exception e ) {
-                    System.err.println( e.getClass().getName()+": "+ e.getMessage() );
-                }
 
-            }
-        }).start();
 
-        System.out.println("*************************************Operation done successfully*************************************");
-        return 1;
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //Failure Callback
+                        Log.e("ERROR", "Error occurred ", error);
+                    }
+                });
+        requestQueue.add(jsonObjReq);
+        return 0;
     }
 
 
-    public interface Listener<T> {
-        void on(T arg);
-    }
 
-    public int verifyLogin(final Listener<Boolean> onCompleteListener, final EditText username, final EditText password) {
-
-
-        final Connection[] c = {null};
-        final Statement[] stmt = {null};
-        //final LoginActivity.VerifiedCheck verify = new LoginActivity.VerifiedCheck();
-        final int[] value = new  int[1];
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-
-                    Class.forName("org.postgresql.Driver");
-                    c[0] = DriverManager
-                            .getConnection("jdbc:postgresql://141.117.145.178:5432/mhmr?currentSchema=UserAccount?sslmode=require",
-                                    "postgres", "1mdCu53R");
-                    c[0].setAutoCommit(false);
-                    System.out.println("Successfully connected to database and ready to verify login attempt.");
-                    stmt[0] = c[0].createStatement();
-                    ResultSet rs = stmt[0].executeQuery( "SELECT * FROM \"UserAccount\".\"UserInfo\";" );
-                    String name1 = null;
-                    String password1 = null;
-                    while ( rs.next() ) {
-                        int id = rs.getInt("UserId");
-                        name1 = rs.getString("UserName");
-                        password1 = rs.getString("Password");
-                        System.out.println( "NAME = " + name1 );
-                        System.out.println();
-
-                    }
-
-                    if(username.getText().toString().equals(name1) && password.getText().toString().equals(password1)){
-                        onCompleteListener.on(true);
-                        System.out.println("Username and Password Verified.");
-                        value[0]=  1;
-                        //verify.verified.set(true);
-                    }
-
-                    stmt[0].close();
-                    c[0].close();
-                } catch ( Exception e ) {
-                    System.err.println( e.getClass().getName()+": "+ e.getMessage() );
-                }
-
-            }
-        }).start();
-
-        System.out.println(value[0]);
-        return value[0];
-    }
 
 
 }
