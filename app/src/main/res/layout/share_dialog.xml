@@ -5,9 +5,6 @@
     android:orientation="vertical"
     android:padding="25dp">
 
-
-
-
     <Spinner
         android:id="@+id/share_spinner"
         android:layout_width="match_parent"
@@ -50,10 +47,5 @@
         android:background="@android:color/white"
         android:text="Share"
         android:textColor="@color/colorAccent" />
-
-
-
-
-
 
 </RelativeLayout>

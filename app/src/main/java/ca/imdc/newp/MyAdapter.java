@@ -1,4 +1,5 @@
 package ca.imdc.newp;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -19,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -49,6 +51,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private Fade mFade;
     private ViewGroup rootV;
     private int iD = 1;
+    private String globalName;
+    private int globalPos;
+
 
 
 
@@ -59,7 +64,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         public TextView mTextView;
         public TextView date;
@@ -67,24 +72,28 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         public ImageView delete;
         public ImageView share;
         public ImageView View;
+        public ImageView menu;
         public Switch user_switch;
+        public Switch second_switch;
         public ImageView user_share;
 
         public ViewHolder(View v) {
             super(v);
-            mTextView = v.findViewById(R.id.my_text_view);
-            delete  = v.findViewById(R.id.delete_image);
-            share = v.findViewById(R.id.share_image);
-            View = v.findViewById(R.id.view_image);
-            time = v.findViewById(R.id.time_text);
-            date = v.findViewById(R.id.date_text);
-            user_switch = v.findViewById(R.id.user_switch);
-            user_share = v.findViewById(R.id.shareU_image);
-            rootV = v.findViewById(R.id.card_view);
+            mTextView = (TextView) v.findViewById(R.id.my_text_view);
+            delete  =  (ImageView) v.findViewById(R.id.delete_image);
+            share = (ImageView) v.findViewById(R.id.share_image);
+            View = (ImageView) v.findViewById(R.id.view_image);
+            time = (TextView) v.findViewById(R.id.time_text);
+            date = (TextView) v.findViewById(R.id.date_text);
+//            user_switch = (Switch) v.findViewById(R.id.user_switch);
+//            second_switch = (Switch) v.findViewById(R.id.second_switch);
+//            user_share = (ImageView) v.findViewById(R.id.shareU_image);
+            menu = (ImageView) v.findViewById(R.id.menu_image);
+            rootV = (ViewGroup) v.findViewById(R.id.card_view);
 
 
 //// TODO: 17/08/2016 Implement the above variables in the XML
-            ImageButton shareImageButton = itemView.findViewById(R.id.share_image);
+            ImageButton shareImageButton = (ImageButton) itemView.findViewById(R.id.share_image);
             shareImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
                 public void onClick(View v) {
@@ -93,14 +102,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 final Dialog dialog = new Dialog(mContext);
                 dialog.setContentView(R.layout.share_dialog);
                 dialog.show();
-                Button cancel = dialog.findViewById(R.id.cancel_button);
+                Button cancel = (Button) dialog.findViewById(R.id.cancel_button);
                 cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
                     }
                 });
-                Button shareb = dialog.findViewById(R.id.share_button);
+                Button shareb = (Button) dialog.findViewById(R.id.share_button);
                 shareb.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -110,27 +119,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
                 }
             });
-            mTextView.findViewById(R.id.my_text_view).setOnClickListener(new View.OnClickListener()  {
-                @Override
-                public void onClick(android.view.View view) {
-
-                    //Toast.makeText(view.getContext(), "works",Toast.LENGTH_LONG).show();
-
-                }
-
-            });
-            mTextView.findViewById(R.id.my_text_view).setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(android.view.View view) {
-                    Toast.makeText(view.getContext(), "works",Toast.LENGTH_LONG).show();
-                    return true;
-                }
-            });
-
         }
     }
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter(String[] myDataset, String[] myDate, Context context) {
+    MyAdapter(String[] myDataset, String[] myDate, Context context) {
         mDataset = myDataset;
         mDate = myDate;
         this.mContext = context;
@@ -143,11 +135,59 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent resultIntent) {
+        // Check which request we're responding to
+        if (requestCode == 1) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                MainActivity mainact = new MainActivity();
+                String replacer = resultIntent.getStringExtra("result");
+
+//                String name = (String) mTextView.getText();
+//
+                ArrayList<String> list = new ArrayList<String>(Arrays.asList(mDataset));
+                list.set(globalPos, replacer);
+                mDataset = list.toArray(new String[list.size()]);
+                notifyDataSetChanged();
+////
+                mainact.renameIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+globalName,  mContext.getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+replacer);
+                mainact.renameIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Video/"+globalName.replace(".encrypt",""), mContext.getExternalFilesDir(null).getAbsolutePath()+"/Video/"+replacer.replace(".encrypt",""));
+                // The user picked a contact.
+                // The Intent's data Uri identifies which contact was selected.
+
+                // Do something with the contact here (bigger example below)
+            }
+        }
+    }
+
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.mTextView.setText(mDataset[position]);
         holder.time.setText(mDate[position % mDate.length]);
+
      //   holder.date.setText(mDate[position % mDate.length]);
+        holder.mTextView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Intent shareIntent = new Intent(mContext, CurateVideo.class);
+                System.out.println(position);
+                shareIntent.putExtra("position", position);
+                shareIntent.putExtra("name", holder.mTextView.getText());
+                ((Activity) mContext).startActivityForResult(shareIntent, 2);
+
+//                MainActivity mainact = new MainActivity();
+//
+//                ArrayList<String> list = new ArrayList<String>(Arrays.asList(mDataset));
+//                list.set(position, replacer);
+//                mDataset = list.toArray(new String[list.size()]);
+//                notifyDataSetChanged();
+//                mainact.renameIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+name,  mContext.getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+replacer);
+//                mainact.renameIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Video/"+name.replace(".encrypt",""), mContext.getExternalFilesDir(null).getAbsolutePath()+"/Video/"+replacer.replace(".encrypt",""));
+                return true;
+            }
+        });
+
         holder.View.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -162,30 +202,30 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 mContext.startActivity(intent);
             }
         });
-
-
         holder.delete.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 MainActivity mainact = new MainActivity();
                 ArrayList<String> list = new ArrayList<String>(Arrays.asList(mDataset));
-
                 list.remove(list.get(position));
 
                 mDataset = list.toArray(new String[list.size()]);
                 notifyItemRemoved(position);
                 notifyDataSetChanged();
-                System.out.println(holder.mTextView.getText());
+                System.out.println(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/");
                 String name = (String) holder.mTextView.getText();
                 mainact.deleteIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+name);
                 mainact.deleteIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Video/"+name.replace(".encrypt",""));
+
             }
 
         });
+
         final boolean isExpanded = position==mExpandedPosition;
-        holder.user_switch.setVisibility(isExpanded?View.VISIBLE:View.GONE);
+        holder.share.setVisibility(isExpanded?View.VISIBLE:View.GONE);
+        holder.delete.setVisibility(isExpanded?View.VISIBLE:View.GONE);
         holder.itemView.setActivated(isExpanded);
-        holder.user_share.setOnClickListener(new View.OnClickListener(){
+        holder.menu.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 mExpandedPosition=isExpanded?-1:position;
@@ -201,4 +241,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         if(mDataset==null) return 0;
         else return mDataset.length;
     }
+
+
 }
+//

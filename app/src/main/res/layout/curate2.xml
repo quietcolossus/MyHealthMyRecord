@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginEnd="16dp"
+    android:layout_marginStart="16dp"
+    android:weightSum="16"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <Space
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"/>
+    <EditText
+        android:id="@+id/nameentry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Video title"
+        android:imeOptions="actionDone"
+        android:textSize="20sp"/>
+    <Space
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Rate your feelings from negative to positive:"
+        android:textSize="20sp"/>
+    <Space
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"/>
+    <SeekBar
+        android:id="@+id/valence_bar"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:progress="50"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Rate your energy level from low to high:"
+        android:textSize="20sp"/>
+    <Space
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"/>
+    <SeekBar
+        android:id="@+id/arousal_bar"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:progress="50"/>
+    <!--<LinearLayout android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!--xmlns:android="http://schemas.android.com/apk/res/android">-->
+
+        <!--<CheckBox-->
+            <!--android:id="@+id/happy_check"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Happy"-->
+            <!--android:textSize="20dp"/>-->
+        <!--<Space-->
+            <!--android:layout_weight="0.5"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_width="wrap_content"/>-->
+        <!--<CheckBox-->
+            <!--android:id="@+id/sad_check"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Sad"-->
+            <!--android:textSize="20dp"/>-->
+        <!--<Space-->
+            <!--android:layout_weight="0.5"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_width="wrap_content"/>-->
+    <!--</LinearLayout>-->
+    <!--<LinearLayout android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!--xmlns:android="http://schemas.android.com/apk/res/android">-->
+
+        <!--<CheckBox-->
+            <!--android:id="@+id/angry_check"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Angry"-->
+            <!--android:textSize="20dp"/>-->
+        <!--<Space-->
+            <!--android:layout_weight="0.5"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_width="wrap_content"/>-->
+        <!--<CheckBox-->
+            <!--android:id="@+id/neutral_check"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Neutral"-->
+            <!--android:textSize="20dp"/>-->
+        <!--<Space-->
+            <!--android:layout_weight="0.5"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_width="wrap_content"/>-->
+
+    <!--</LinearLayout>-->
+    <Space
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Location"
+        android:textSize="20sp"/>
+    <Space
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"/>
+
+    <LinearLayout android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <CheckBox
+            android:id="@+id/home_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Home"
+            android:textSize="20dp"/>
+        <Space
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+        <CheckBox
+            android:id="@+id/workplace_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Workplace"
+            android:textSize="20dp"/>
+        <Space
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+    </LinearLayout>
+    <LinearLayout android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <CheckBox
+            android:id="@+id/outdoors_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Outdoors"
+            android:textSize="20dp"/>
+        <Space
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+        <CheckBox
+            android:id="@+id/institution_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Institution"
+            android:textSize="20dp"/>
+        <Space
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+
+    </LinearLayout>
+
+    <Space
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Activities"
+        android:textSize="20sp"/>
+    <Space
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"/>
+
+    <LinearLayout android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <CheckBox
+            android:id="@+id/leisure_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Leisure"
+            android:textSize="20dp"/>
+        <Space
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+        <CheckBox
+            android:id="@+id/working_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Working"
+            android:textSize="20dp"/>
+        <Space
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+    </LinearLayout>
+    <LinearLayout android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <CheckBox
+            android:id="@+id/travel_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Travel"
+            android:textSize="20dp"/>
+        <Space
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+        <CheckBox
+            android:id="@+id/exercise_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Exercise"
+            android:textSize="20dp"/>
+        <Space
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+
+    </LinearLayout>
+    <Space
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Share With"
+        android:textSize="20sp"/>
+    <Space
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"/>
+
+    <LinearLayout android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <CheckBox
+            android:id="@+id/family_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Family"
+            android:textSize="20dp"/>
+        <Space
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+        <CheckBox
+            android:id="@+id/friends_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Friends"
+            android:textSize="20dp"/>
+        <Space
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+    </LinearLayout>
+    <LinearLayout android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <CheckBox
+            android:id="@+id/medical_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Medical"
+            android:textSize="20dp"/>
+        <Space
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+        <CheckBox
+            android:id="@+id/everyone_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Everyone"
+            android:textSize="20dp"/>
+        <Space
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/submit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Submit"/>
+
+    </LinearLayout>
+
+</LinearLayout></ScrollView>

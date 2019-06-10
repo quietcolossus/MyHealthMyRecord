@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="25dp">
+
+    <EditText
+        android:id="@+id/nameentry"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:hint="Video title:"
+        android:textColor="@android:color/black"
+        android:textSize="20sp" />
+        android:text="Title" />
+
+
+    <Button
+        android:id="@+id/renamebutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@id/nameentry"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="16dp"
+        android:background="@android:color/white"
+        android:text="Update"
+        android:textColor="@color/colorAccent" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nameentry"
+        android:layout_alignStart="@+id/nameentry"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="32dp"
+        android:text="Feelings"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/happy_button"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView4"
+        android:layout_alignStart="@+id/nameentry"
+        android:layout_marginStart="0dp"
+        android:layout_marginRight="64dp"
+        android:layout_marginTop="32dp"
+        android:text="Happy" />
+
+    <Button
+        android:id="@+id/sad_button"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/happy_button"
+        android:layout_marginStart="57dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/happy_button"
+        android:text="Sad" />
+
+    <Button
+        android:id="@+id/neutral_button"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/happy_button"
+        android:layout_marginStart="57dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/sad_button"
+        android:text="Neutral" />
+
+    <Button
+        android:id="@+id/feelings_button"
+        android:layout_width="46dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/neutral_button"
+        android:layout_alignEnd="@+id/nameentry"
+        android:layout_marginStart="57dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="4dp"
+        android:layout_toEndOf="@+id/neutral_button"
+        android:text="..." />
+
+    <TextView
+    android:id="@+id/textView5"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/happy_button"
+    android:layout_alignStart="@+id/nameentry"
+    android:layout_marginStart="0dp"
+    android:layout_marginTop="32dp"
+    android:text="Activities"
+    android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/play_button"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView5"
+        android:layout_alignStart="@+id/nameentry"
+        android:layout_marginStart="0dp"
+        android:layout_marginRight="64dp"
+        android:layout_marginTop="32dp"
+        android:text="Play" />
+
+    <Button
+        android:id="@+id/work_button"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/play_button"
+        android:layout_marginStart="57dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/play_button"
+        android:text="Work" />
+
+    <Button
+        android:id="@+id/travel_button"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/play_button"
+
+        android:layout_marginStart="57dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/work_button"
+        android:text="Travel" />
+
+    <Button
+        android:id="@+id/activity_button"
+        android:layout_width="46dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/travel_button"
+        android:layout_alignEnd="@+id/nameentry"
+        android:layout_marginStart="57dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="4dp"
+        android:layout_toEndOf="@+id/travel_button"
+        android:text="..." />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/play_button"
+        android:layout_alignStart="@+id/nameentry"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="32dp"
+        android:text="Location"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/home_button"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView6"
+        android:layout_alignStart="@+id/nameentry"
+        android:layout_marginStart="0dp"
+        android:layout_marginRight="64dp"
+        android:layout_marginTop="32dp"
+        android:text="Play" />
+
+    <Button
+        android:id="@+id/workplace_button"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/home_button"
+        android:layout_marginStart="57dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/home_button"
+        android:text="Work" />
+
+    <Button
+        android:id="@+id/institution_button"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/home_button"
+
+        android:layout_marginStart="57dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/workplace_button"
+        android:text="Travel" />
+
+    <Button
+        android:id="@+id/location_button"
+        android:layout_width="46dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/institution_button"
+        android:layout_alignEnd="@+id/nameentry"
+        android:layout_marginStart="57dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="4dp"
+        android:layout_toEndOf="@+id/travel_button"
+        android:text="..." />
+
+
+
+</RelativeLayout>

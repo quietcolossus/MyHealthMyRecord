@@ -1,6 +1,7 @@
 package ca.imdc.newp;
 import android.Manifest;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.pm.PackageManager;
 import android.content.Context;
@@ -38,7 +39,10 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -58,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
     private String[] myTime;
     public Button cancel;
     public Button share;
+    public String globName;
+    public String[] lastDataset;
+    public HashMap<String, HashMap<String, ArrayList<String>>> tagRecord = new HashMap<>();
 
     public static boolean clicked=false;
     public static boolean isOther = false;
@@ -125,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
                     } else if (id == R.id.nav_settings) {
 
                         }
-
 
 
                         mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -202,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
         //int a;
         //Random random = new Random();
         //a = random.nextInt(70) + 1;
+
         Intent openCameraIntent = new Intent(MainActivity.this, CameraApi.class);
 
         //Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
@@ -223,8 +230,6 @@ public class MainActivity extends AppCompatActivity {
         //openCameraIntent.putExtra(openCameraIntent.EXTRA_ORIGINATING_URI, Uri.fromFile((new File(cfileName))));
         //if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
         if (openCameraIntent.resolveActivity(getPackageManager()) != null) {
-
-
             startActivityForResult(openCameraIntent, REQUEST_VIDEO_CAPTURE);
 
         }
@@ -233,8 +238,38 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
+//        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 2) {
+            String replacer = data.getStringExtra("result");
+            String name = data.getStringExtra("name");
+            int position = data.getIntExtra("position", -1);
+            HashMap<String, ArrayList<String>> tags = (HashMap<String, ArrayList<String>>) data.getSerializableExtra("tags");
 
+            ArrayList<String> list = new ArrayList<>(Arrays.asList(myDataset));
+            if (position != -1) {
+                list.set(position, replacer);
+            } else {
+                System.out.println("Hello");
+            }
+            myDataset = list.toArray(new String[list.size()]);
+            mAdapter.notifyDataSetChanged();
+
+            mAdapter = new MyAdapter(myDataset, myDate, this);
+            mRecyclerView.setAdapter(mAdapter);
+            if (tagRecord.containsKey(name)) {tagRecord.remove(name);}
+            tagRecord.put(replacer, tags);
+            for (String keyName: tagRecord.keySet()){
+                String key = keyName;
+                HashMap<String, ArrayList<String>> value = tagRecord.get(keyName);
+                System.out.println(key + " " + value);
+            }
+
+////
+            renameIt(getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+name,  getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+replacer);
+            renameIt(getExternalFilesDir(null).getAbsolutePath()+"/Video/"+name.replace(".encrypt",""), getExternalFilesDir(null).getAbsolutePath()+"/Video/"+replacer.replace(".encrypt",""));
+            System.out.println("myDataset" + Arrays.toString(myDataset));
+
+        }
 
         if (requestCode == REQUEST_VIDEO_CAPTURE) {
 
@@ -243,10 +278,21 @@ public class MainActivity extends AppCompatActivity {
 
                if (videosExist()) {
                     myDataset = populateList("names");
+                    System.out.println("myDataset" + Arrays.toString(myDataset));
                     myDate = populateList("date");
+                   System.out.println("nyDate" + Arrays.toString(myDate));
                 }
                 mAdapter = new MyAdapter(myDataset, myDate, this);
                 mRecyclerView.setAdapter(mAdapter);
+                System.out.println("hwllo");
+                System.out.println("hwllo" + globName.replaceAll(".+/", ""));
+
+                Intent intent = new Intent(MainActivity.this, CurateVideo.class);
+                int position = 0;
+                for (int i = 0 ; i < myDataset.length; i++) { if (myDataset[i].equals(globName)) { position = i;}}
+                intent.putExtra("position", position);
+                intent.putExtra("name", globName);
+                startActivityForResult(intent, 2);
                 deleteAllVids();
             }
             if (CameraApi.isAnother == 1) {
@@ -263,7 +309,7 @@ public class MainActivity extends AppCompatActivity {
 
                 dispatchTakeVideoIntent();
             }
-
+//
         }
     }
 
@@ -278,6 +324,8 @@ public class MainActivity extends AppCompatActivity {
         final cryptoHash halo = new cryptoHash();
         try {
             String name = createfile("encrypt");
+            globName = name.replaceAll(".+/", "");
+            System.out.println("ENCRYPTED NAME:::::::::::::::: " + name);
             final File encryptedFile = new File(name);
             final File inputFile = new File(CameraApi.cfileName);
             t = new Thread(new Runnable() {
@@ -320,10 +368,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void deleteIt(String path) {
         File folder = new File(path);
+        tagRecord.remove(path.replaceAll(".+/", ""));
         if (folder.exists())
             folder.delete();
     }
 
+    public void renameIt(String path, String replacer) {
+        File folder = new File(path);
+        File folder2 = new File(replacer);
+        if (folder.exists())
+            folder.renameTo(folder2);
+    }
 
     public String decrypt(String name) {
         final String key = "1111111111111111";
@@ -430,16 +485,12 @@ public class MainActivity extends AppCompatActivity {
                     .setNeutralButton("Agree", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
 
-
-
-
                             dispatchTakeVideoIntent();
                             mAdapter.notifyDataSetChanged();
                             // User cancelled the dialog
                         }
                     });
             return builder.create();
-
         }
     }
     public static class dialog4 extends DialogFragment {
@@ -452,7 +503,6 @@ public class MainActivity extends AppCompatActivity {
             builder.setView(inflater.inflate(R.layout.share_dialog, null));
 
             return builder.create();
-
         }
     }
 

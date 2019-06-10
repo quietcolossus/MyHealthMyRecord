@@ -66,17 +66,16 @@ tv1= new TextView(this);
         tv7= new TextView(this);
         tv8= new TextView(this);
 
-       tv9= findViewById(R.id.contact9);
-       tv2= findViewById(R.id.contact2);
-        tv3= findViewById(R.id.contact3);
+       tv9= (TextView) findViewById(R.id.contact9);
+       tv2= (TextView) findViewById(R.id.contact2);
+        tv3= (TextView) findViewById(R.id.contact3);
 
-        final FloatingActionButton c1 = findViewById(R.id.contact1);
-
-        final FloatingActionButton c4 = findViewById(R.id.contact4);
-        final FloatingActionButton c5 = findViewById(R.id.contact5);
-        final FloatingActionButton c6 = findViewById(R.id.contact6);
-        final FloatingActionButton c7 = findViewById(R.id.contact7);
-        final FloatingActionButton c8 = findViewById(R.id.contact8);
+        final FloatingActionButton c1 = (FloatingActionButton) findViewById(R.id.contact1);
+        final FloatingActionButton c4 = (FloatingActionButton) findViewById(R.id.contact4);
+        final FloatingActionButton c5 = (FloatingActionButton) findViewById(R.id.contact5);
+        final FloatingActionButton c6 = (FloatingActionButton) findViewById(R.id.contact6);
+        final FloatingActionButton c7 = (FloatingActionButton) findViewById(R.id.contact7);
+        final FloatingActionButton c8 = (FloatingActionButton) findViewById(R.id.contact8);
 
 
 
@@ -94,7 +93,7 @@ tv1= new TextView(this);
                 y=c1.getY();
               click=1;
                 c1.setVisibility(View.INVISIBLE);
-                RelativeLayout ll = findViewById(R.id.sharecircle);
+                RelativeLayout ll = (RelativeLayout) findViewById(R.id.sharecircle);
                 ll.addView(tv1);
             }
         });
@@ -224,7 +223,7 @@ tv1= new TextView(this);
                 y=c4.getY();
                 click=4;
                 c4.setVisibility(View.INVISIBLE);
-                RelativeLayout ll = findViewById(R.id.sharecircle);
+                RelativeLayout ll = (RelativeLayout) findViewById(R.id.sharecircle);
                 ll.addView(tv4);
             }
         });
@@ -267,7 +266,7 @@ tv1= new TextView(this);
                 y=c5.getY();
                 click=5;
                 c5.setVisibility(View.INVISIBLE);
-                RelativeLayout ll = findViewById(R.id.sharecircle);
+                RelativeLayout ll = (RelativeLayout) findViewById(R.id.sharecircle);
                 ll.addView(tv5);
             }
         });
@@ -309,7 +308,7 @@ tv1= new TextView(this);
                 y=c6.getY();
                 click=6;
                 c6.setVisibility(View.INVISIBLE);
-                RelativeLayout ll = findViewById(R.id.sharecircle);
+                RelativeLayout ll = (RelativeLayout) findViewById(R.id.sharecircle);
                 ll.addView(tv6);
             }
         });
@@ -353,7 +352,7 @@ tv1= new TextView(this);
                 y=c7.getY();
                 click=7;
                 c7.setVisibility(View.INVISIBLE);
-                RelativeLayout ll = findViewById(R.id.sharecircle);
+                RelativeLayout ll = (RelativeLayout) findViewById(R.id.sharecircle);
                 ll.addView(tv7);
             }
         });
@@ -395,7 +394,7 @@ tv1= new TextView(this);
                 y=c8.getY();
                 click=8;
                 c8.setVisibility(View.INVISIBLE);
-                RelativeLayout ll = findViewById(R.id.sharecircle);
+                RelativeLayout ll = (RelativeLayout) findViewById(R.id.sharecircle);
                 ll.addView(tv8);
             }
         });
