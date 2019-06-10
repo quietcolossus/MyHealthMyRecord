@@ -24,6 +24,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginStart="72dp"
+            android:layout_toStartOf="@+id/menu_image"
             android:text="Untitled Video"
             android:textAppearance="?attr/textAppearanceListItem"
             android:textSize="20sp" />
@@ -45,26 +46,27 @@
             android:text="Time" />
 
         <ImageButton
-            android:id="@+id/delete_image"
+            android:id="@+id/menu_image"
             style="?android:attr/borderlessButtonStyle"
-            android:layout_width="48dp"
+            android:layout_width="47dp"
             android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/view_image"
+            android:layout_alignBottom="@+id/view_image"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="23dp"
-            android:src="@drawable/ic_delete_black_24dp2"
+            android:layout_marginEnd="24dp"
+            android:src="@drawable/ic_menu_black_24dp"
             android:tint="@color/colorPrimaryDark" />
 
-        <ImageButton
-            android:id="@+id/share_image"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="48dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="40dp"
-            android:layout_toStartOf="@+id/delete_image"
-            android:src="@drawable/ic_share_black_24dp"
-            android:tint="@color/colorPrimaryDark" />
+        <!--<ImageButton-->
+            <!--android:id="@+id/edit_image"-->
+            <!--style="?android:attr/borderlessButtonStyle"-->
+            <!--android:layout_width="48dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentTop="true"-->
+            <!--android:layout_marginEnd="37dp"-->
+            <!--android:layout_toStartOf="@+id/share_image"-->
+            <!--android:src="@drawable/ic_remove_red_eye_black_24dp"-->
+            <!--android:tint="@color/colorPrimaryDark" />-->
 
         <ImageButton
             android:id="@+id/view_image"
@@ -72,34 +74,53 @@
             android:layout_width="48dp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginEnd="37dp"
-            android:layout_toStartOf="@+id/share_image"
+            android:layout_marginEnd="11dp"
+            android:layout_toStartOf="@+id/date_text"
             android:src="@drawable/ic_remove_red_eye_black_24dp"
             android:tint="@color/colorPrimaryDark" />
 
+        <!--<Switch-->
+            <!--android:id="@+id/second_switch"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignEnd="@+id/user_switch"-->
+            <!--android:layout_alignStart="@+id/user_switch"-->
+            <!--android:layout_below="@+id/user_switch"-->
+            <!--android:layout_marginBottom="15dp"-->
+            <!--android:layout_marginTop="12dp"-->
+            <!--android:text="User2 currently has access to this video"-->
+            <!--android:textSize="16sp"-->
+            <!--android:visibility="invisible" />-->
+
         <ImageButton
-            android:id="@+id/shareU_image"
+            android:id="@+id/delete_image"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="48dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_below="@+id/time_text"
             android:layout_marginEnd="11dp"
             android:layout_toStartOf="@+id/date_text"
-            android:src="@drawable/ic_people_black_48dp"
-            android:tint="@color/colorPrimaryDark" />
+            android:src="@drawable/ic_delete_black_24dp2"
+            android:tint="@color/colorPrimaryDark"
+            android:visibility="invisible"/>
 
-        <Switch
-            android:id="@+id/user_switch"
-            android:layout_width="wrap_content"
+        <ImageButton
+            android:id="@+id/share_image"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="48dp"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/delete_image"
-            android:layout_alignStart="@+id/shareU_image"
+            android:layout_marginEnd="11dp"
             android:layout_below="@+id/delete_image"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="12dp"
-            android:text="User1 currently has access to this video"
-            android:textSize="16sp"
-            android:visibility="invisible" />
+            android:layout_toStartOf="@+id/date_text"
+            android:src="@drawable/ic_share_black_24dp"
+            android:tint="@color/colorPrimaryDark"
+            android:visibility="invisible"/>
+            <!--android:visibility="invisible" -->
+
+
+
+
+
 
     </RelativeLayout>
 

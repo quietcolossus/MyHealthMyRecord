@@ -41,6 +41,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".RegisterActivity"></activity>
+        <activity
+            android:name=".CurateVideo"
+            android:label="CurateVideo"
+            ></activity>
         <activity android:name=".MyVitalsActivity"></activity>
         <activity android:name=".shareCircleActivity"></activity>
         <activity android:name=".addContactActivity"></activity>

@@ -71,7 +71,6 @@ tv1= new TextView(this);
         tv3= (TextView) findViewById(R.id.contact3);
 
         final FloatingActionButton c1 = (FloatingActionButton) findViewById(R.id.contact1);
-
         final FloatingActionButton c4 = (FloatingActionButton) findViewById(R.id.contact4);
         final FloatingActionButton c5 = (FloatingActionButton) findViewById(R.id.contact5);
         final FloatingActionButton c6 = (FloatingActionButton) findViewById(R.id.contact6);

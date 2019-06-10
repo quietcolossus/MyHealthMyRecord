@@ -1,4 +1,5 @@
 package ca.imdc.newp;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -50,6 +51,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private Fade mFade;
     private ViewGroup rootV;
     private int iD = 1;
+    private String globalName;
+    private int globalPos;
+
 
 
 
@@ -68,7 +72,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         public ImageView delete;
         public ImageView share;
         public ImageView View;
+        public ImageView menu;
         public Switch user_switch;
+        public Switch second_switch;
         public ImageView user_share;
 
         public ViewHolder(View v) {
@@ -79,8 +85,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             View = (ImageView) v.findViewById(R.id.view_image);
             time = (TextView) v.findViewById(R.id.time_text);
             date = (TextView) v.findViewById(R.id.date_text);
-            user_switch = (Switch) v.findViewById(R.id.user_switch);
-            user_share = (ImageView) v.findViewById(R.id.shareU_image);
+//            user_switch = (Switch) v.findViewById(R.id.user_switch);
+//            second_switch = (Switch) v.findViewById(R.id.second_switch);
+//            user_share = (ImageView) v.findViewById(R.id.shareU_image);
+            menu = (ImageView) v.findViewById(R.id.menu_image);
             rootV = (ViewGroup) v.findViewById(R.id.card_view);
 
 
@@ -114,7 +122,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         }
     }
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter(String[] myDataset, String[] myDate, Context context) {
+    MyAdapter(String[] myDataset, String[] myDate, Context context) {
         mDataset = myDataset;
         mDate = myDate;
         this.mContext = context;
@@ -127,39 +135,59 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent resultIntent) {
+        // Check which request we're responding to
+        if (requestCode == 1) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                MainActivity mainact = new MainActivity();
+                String replacer = resultIntent.getStringExtra("result");
+
+//                String name = (String) mTextView.getText();
+//
+                ArrayList<String> list = new ArrayList<String>(Arrays.asList(mDataset));
+                list.set(globalPos, replacer);
+                mDataset = list.toArray(new String[list.size()]);
+                notifyDataSetChanged();
+////
+                mainact.renameIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+globalName,  mContext.getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+replacer);
+                mainact.renameIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Video/"+globalName.replace(".encrypt",""), mContext.getExternalFilesDir(null).getAbsolutePath()+"/Video/"+replacer.replace(".encrypt",""));
+                // The user picked a contact.
+                // The Intent's data Uri identifies which contact was selected.
+
+                // Do something with the contact here (bigger example below)
+            }
+        }
+    }
+
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.mTextView.setText(mDataset[position]);
         holder.time.setText(mDate[position % mDate.length]);
+
      //   holder.date.setText(mDate[position % mDate.length]);
         holder.mTextView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                final Dialog dialog2 = new Dialog(mContext);
-                dialog2.setContentView(R.layout.curate_video);
-                dialog2.show();
-                Button cancel = (Button) dialog2.findViewById(R.id.renamebutton);
-                cancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        MainActivity mainact = new MainActivity();
-                        EditText edit = (EditText) dialog2.findViewById(R.id.nameentry);
-                        String replacer = edit.getText().toString();
-                        String name = (String) holder.mTextView.getText();
+                Intent shareIntent = new Intent(mContext, CurateVideo.class);
+                System.out.println(position);
+                shareIntent.putExtra("position", position);
+                shareIntent.putExtra("name", holder.mTextView.getText());
+                ((Activity) mContext).startActivityForResult(shareIntent, 2);
 
-                        ArrayList<String> list = new ArrayList<String>(Arrays.asList(mDataset));
-                        list.set(position, replacer);
-                        mDataset = list.toArray(new String[list.size()]);
-                        notifyDataSetChanged();
-
-                        mainact.renameIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+name,  mContext.getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+replacer);
-                        mainact.renameIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Video/"+name.replace(".encrypt",""), mContext.getExternalFilesDir(null).getAbsolutePath()+"/Video/"+replacer.replace(".encrypt",""));
-                        dialog2.dismiss();
-                    }
-                });
+//                MainActivity mainact = new MainActivity();
+//
+//                ArrayList<String> list = new ArrayList<String>(Arrays.asList(mDataset));
+//                list.set(position, replacer);
+//                mDataset = list.toArray(new String[list.size()]);
+//                notifyDataSetChanged();
+//                mainact.renameIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+name,  mContext.getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+replacer);
+//                mainact.renameIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Video/"+name.replace(".encrypt",""), mContext.getExternalFilesDir(null).getAbsolutePath()+"/Video/"+replacer.replace(".encrypt",""));
                 return true;
             }
         });
+
         holder.View.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -184,7 +212,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 mDataset = list.toArray(new String[list.size()]);
                 notifyItemRemoved(position);
                 notifyDataSetChanged();
-
+                System.out.println(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/");
                 String name = (String) holder.mTextView.getText();
                 mainact.deleteIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+name);
                 mainact.deleteIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Video/"+name.replace(".encrypt",""));
@@ -194,9 +222,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         });
 
         final boolean isExpanded = position==mExpandedPosition;
-        holder.user_switch.setVisibility(isExpanded?View.VISIBLE:View.GONE);
+        holder.share.setVisibility(isExpanded?View.VISIBLE:View.GONE);
+        holder.delete.setVisibility(isExpanded?View.VISIBLE:View.GONE);
         holder.itemView.setActivated(isExpanded);
-        holder.user_share.setOnClickListener(new View.OnClickListener(){
+        holder.menu.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 mExpandedPosition=isExpanded?-1:position;
@@ -212,4 +241,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         if(mDataset==null) return 0;
         else return mDataset.length;
     }
+
+
 }
+//

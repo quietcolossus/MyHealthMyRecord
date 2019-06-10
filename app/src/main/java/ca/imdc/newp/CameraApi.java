@@ -363,7 +363,7 @@ public class CameraApi extends AppCompatActivity {
                         }
                         //stays on cameraapi
                     })
-                    .setNeutralButton("Home (fix)", new DialogInterface.OnClickListener() {
+                    .setNeutralButton("Home", new DialogInterface.OnClickListener() {
                         public void onClick (DialogInterface dialog, int id){
                             finish();
                       }
