@@ -19,6 +19,7 @@ package ca.imdc.newp;
         import com.android.volley.toolbox.StringRequest;
         import com.android.volley.toolbox.Volley;
 
+        import org.json.JSONArray;
         import org.json.JSONException;
         import org.json.JSONObject;
         import android.widget.Spinner;
@@ -42,14 +43,14 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        final EditText mUsernameTF= (EditText) findViewById(R.id.usernameTF);
-        final EditText  mPasswordTF=(EditText) findViewById(R.id.passwordTF);
-        final EditText mFirstName= (EditText) findViewById(R.id.firstNameTextF);
-        final EditText  mLastName=(EditText) findViewById(R.id.lastNameTextF);
-        final EditText mEmail= (EditText) findViewById(R.id.emailTextF);
-        final Spinner mUserType= (Spinner) findViewById(R.id.userTypeSpinner);
+        final EditText mUsernameTF= findViewById(R.id.usernameTF);
+        final EditText  mPasswordTF= findViewById(R.id.passwordTF);
+        final EditText mFirstName= findViewById(R.id.firstNameTextF);
+        final EditText  mLastName= findViewById(R.id.lastNameTextF);
+        final EditText mEmail= findViewById(R.id.emailTextF);
+        final Spinner mUserType= findViewById(R.id.userTypeSpinner);
 
-        final Button mregisterBtn= (Button) findViewById(R.id.registerSubmitButton);
+        final Button mregisterBtn= findViewById(R.id.registerSubmitButton);
 
 
 
@@ -74,13 +75,15 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(v.getContext(), "You must fill out all of the required fields.",Toast.LENGTH_LONG).show();
                 }
                 else{
-                    check = register(username, fName, lName, password, email,type);
-                    register(username, fName, lName, password, email,type);
-                    if (check == 1) {
-                        Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
-                        mainIntent.putExtra("username", username);
-                        startActivity(mainIntent);
-                    }
+                    register(new VolleyCallback() {
+                        @Override
+                        public void onSuccess(String result) {
+                            System.out.println("--------------------------------SUCCESS----------");
+                            Intent mainIntent = new Intent(RegisterActivity.this, LoginActivity.class);
+                            mainIntent.putExtra("username", username);
+                            startActivity(mainIntent);
+                        }
+                    }, username, fName,lName, password, email, type);
                 }
 
 
@@ -93,9 +96,11 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     }
+    public interface VolleyCallback{
+        void onSuccess(String result);
+    }
 
-
-    public int register(String username, String firstname, String lastname, String password, String email, String type){
+    public int register(final VolleyCallback callback, String username, String firstname, String lastname, String password, String email, String type){
 
         final String usernameR = username;
         final String passwordR = password;
@@ -106,12 +111,7 @@ public class RegisterActivity extends AppCompatActivity {
         final String URL = "http://141.117.145.178:3000/users/";
 
         final RequestQueue requestQueue = Volley.newRequestQueue(this);
-        final Response.Listener<JSONObject> listener = new Response.Listener() {
-            @Override
-            public void onResponse(Object response) {
 
-            }
-        };
         new Thread(new Runnable() {
             public void run() {
                 try {
@@ -122,6 +122,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 public void onResponse(String response) {
                                     // response
                                     Log.d("Response", response);
+                                    callback.onSuccess(response);
                                 }
                             },
                             new Response.ErrorListener()
@@ -148,6 +149,7 @@ public class RegisterActivity extends AppCompatActivity {
                     };
 
                     requestQueue.add(postRequest);
+
 
                 } catch ( Exception e ) {
                     System.err.println( e.getClass().getName()+": "+ e.getMessage() );

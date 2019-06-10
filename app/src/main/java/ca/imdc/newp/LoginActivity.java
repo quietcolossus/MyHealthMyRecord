@@ -10,6 +10,7 @@ package ca.imdc.newp;
         import android.widget.Button;
         import android.widget.EditText;
         import android.widget.TextView;
+        import android.widget.Toast;
 
         import com.android.volley.Request;
         import com.android.volley.RequestQueue;
@@ -18,38 +19,85 @@ package ca.imdc.newp;
         import com.android.volley.toolbox.JsonArrayRequest;
 
         import com.android.volley.toolbox.Volley;
+        import com.google.android.gms.auth.api.Auth;
+        import com.google.android.gms.auth.api.signin.GoogleSignIn;
+        import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+        import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+        import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+        import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+        import com.google.android.gms.auth.api.signin.SignInAccount;
+        import com.google.android.gms.common.SignInButton;
+        import com.google.android.gms.common.api.ApiException;
+        import com.google.android.gms.tasks.Task;
 
         import org.json.JSONArray;
         import org.json.JSONException;
         import org.json.JSONObject;
 
-
-        import java.sql.Connection;
-        import java.sql.DriverManager;
-        import java.sql.ResultSet;
-        import java.sql.Statement;
+        import static android.widget.Toast.*;
 
 
 public class LoginActivity extends AppCompatActivity{
-    Button btnHit;
-    TextView txtJson;
-    ProgressDialog pd;
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == 1) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+        }
+    }
+
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+
+            // Signed in successfully, show authenticated UI.
+            //updateUI(account);
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w("ERROR:", "signInResult:failed code=" + e.getStatusCode());
+            updateUI(null);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        //final ArrayList<User> user= RegisterActivity.users;
-        final EditText mUsername= (EditText) findViewById(R.id.usernameTextF);
-        final EditText  mPassword=(EditText) findViewById(R.id.passwordTextF);
-        final TextView mRegisterLink = (TextView) findViewById(R.id.RegisterTV);
-        final Button mLoginBtn= (Button) findViewById(R.id.LoginBTN);
+
+        final EditText mUsername= findViewById(R.id.usernameTextF);
+        final EditText  mPassword= findViewById(R.id.passwordTextF);
+        final TextView mRegisterLink = findViewById(R.id.RegisterTV);
+        final Button mLoginBtn= findViewById(R.id.LoginBTN);
+        final SignInButton googleButton= findViewById(R.id.google_signin);
 
         final String username = mUsername.getText().toString();
         final String password = mPassword.getText().toString();
+        final GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        //updateUI(account);
 
+        //Requests user's informations
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .requestIdToken("91115775985-7thudski6t1mhj1a1aj9lufkugsu0elr.apps.googleusercontent.com")
+                .build();
 
+        // Build a GoogleSignInClient with the options specified by gso.
+        final GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
+        googleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+                startActivityForResult(signInIntent, 1);
+            }
 
+        });
 
 
 
@@ -66,7 +114,7 @@ public class LoginActivity extends AppCompatActivity{
 
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 loginVolley(new VolleyCallback() {
                     @Override
                     public void onSuccess(JSONArray result) {
@@ -76,6 +124,17 @@ public class LoginActivity extends AppCompatActivity{
                         mainIntent.putExtra("username", username);
                         startActivity(mainIntent);
                     }
+                    public void onFailure(){
+                        if(mUsername.getText().toString().isEmpty() || mPassword.getText().toString().isEmpty()){
+                            Toast toast = makeText(v.getContext(), "Username and/or password has not been entered.", LENGTH_SHORT);
+                            toast.show();
+                        }
+                        else{
+                            Toast toast = makeText(v.getContext(), "Username and/or password is incorrect.", LENGTH_SHORT);
+                            toast.show();
+                        }
+                    }
+
                 }, mUsername, mPassword);
 
 
@@ -84,8 +143,15 @@ public class LoginActivity extends AppCompatActivity{
 
             }
         });}
+
+    public void updateUI(GoogleSignInAccount account){
+        Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+
+        startActivity(mainIntent);
+    }
     public interface VolleyCallback{
         void onSuccess(JSONArray result);
+        void onFailure();
     }
     public int loginVolley(final VolleyCallback callback, final EditText username, final EditText password){
         final String url = "http://141.117.145.178:3000/users";
@@ -112,6 +178,9 @@ public class LoginActivity extends AppCompatActivity{
                                     System.out.println("Verified through volley request.");
                                     callback.onSuccess(response);
                                 }
+                                else{
+                                    callback.onFailure();
+                                }
 
 
                             }
@@ -126,7 +195,7 @@ public class LoginActivity extends AppCompatActivity{
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         //Failure Callback
-                        Log.e("ERROR", "Error occurred ", error);
+                        System.err.println(error);
                     }
                 });
         requestQueue.add(jsonObjReq);

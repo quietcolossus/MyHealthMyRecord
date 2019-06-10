@@ -71,11 +71,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("");
         toolbar.setLogo(R.drawable.logo);
         setSupportActionBar(toolbar);
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        mRecyclerView = findViewById(R.id.my_recycler_view);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         if (checkSelfPermission(Manifest.permission.CAMERA)
@@ -98,8 +98,8 @@ public class MainActivity extends AppCompatActivity {
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        mDrawerLayout = findViewById(R.id.drawer);
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
             VectorDrawableCompat indicator
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                 });
 
         //Floating action button to create a dialogue
-        FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton myFab = findViewById(R.id.fab);
         myFab.setBackgroundColor(Color.RED);
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
         MediaMetadataRetriever infoVideo = new MediaMetadataRetriever();
         File folder = new File(getExternalFilesDir(null).getAbsolutePath() + "/Encrypted/");
         File[] listOfFiles = folder.listFiles();
-        String items[] = new String[listOfFiles.length];
+        String[] items = new String[listOfFiles.length];
         if (g == "date") {
             for (int i = 0; i < listOfFiles.length; i++) {
                 if (listOfFiles[i].isFile()) {
