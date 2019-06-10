@@ -24,6 +24,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.Arrays;
 import java.net.ConnectException;
 import java.util.ArrayList;
@@ -57,7 +59,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder{
         // each data item is just a string in this case
         public TextView mTextView;
         public TextView date;
@@ -70,19 +72,19 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
         public ViewHolder(View v) {
             super(v);
-            mTextView = (TextView) v.findViewById(R.id.my_text_view);
-            delete  =  (ImageView) v.findViewById(R.id.delete_image);
-            share = (ImageView) v.findViewById(R.id.share_image);
-            View = (ImageView) v.findViewById(R.id.view_image);
-            time = (TextView) v.findViewById(R.id.time_text);
-            date = (TextView) v.findViewById(R.id.date_text);
-            user_switch = (Switch) v.findViewById(R.id.user_switch);
-            user_share = (ImageView) v.findViewById(R.id.shareU_image);
-            rootV = (ViewGroup) v.findViewById(R.id.card_view);
+            mTextView = v.findViewById(R.id.my_text_view);
+            delete  = v.findViewById(R.id.delete_image);
+            share = v.findViewById(R.id.share_image);
+            View = v.findViewById(R.id.view_image);
+            time = v.findViewById(R.id.time_text);
+            date = v.findViewById(R.id.date_text);
+            user_switch = v.findViewById(R.id.user_switch);
+            user_share = v.findViewById(R.id.shareU_image);
+            rootV = v.findViewById(R.id.card_view);
 
 
 //// TODO: 17/08/2016 Implement the above variables in the XML
-            ImageButton shareImageButton = (ImageButton) itemView.findViewById(R.id.share_image);
+            ImageButton shareImageButton = itemView.findViewById(R.id.share_image);
             shareImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
                 public void onClick(View v) {
@@ -91,14 +93,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 final Dialog dialog = new Dialog(mContext);
                 dialog.setContentView(R.layout.share_dialog);
                 dialog.show();
-                Button cancel = (Button) dialog.findViewById(R.id.cancel_button);
+                Button cancel = dialog.findViewById(R.id.cancel_button);
                 cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
                     }
                 });
-                Button shareb = (Button) dialog.findViewById(R.id.share_button);
+                Button shareb = dialog.findViewById(R.id.share_button);
                 shareb.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -108,6 +110,23 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
                 }
             });
+            mTextView.findViewById(R.id.my_text_view).setOnClickListener(new View.OnClickListener()  {
+                @Override
+                public void onClick(android.view.View view) {
+
+                    //Toast.makeText(view.getContext(), "works",Toast.LENGTH_LONG).show();
+
+                }
+
+            });
+            mTextView.findViewById(R.id.my_text_view).setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(android.view.View view) {
+                    Toast.makeText(view.getContext(), "works",Toast.LENGTH_LONG).show();
+                    return true;
+                }
+            });
+
         }
     }
     // Provide a suitable constructor (depends on the kind of dataset)
@@ -143,6 +162,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 mContext.startActivity(intent);
             }
         });
+
+
         holder.delete.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {

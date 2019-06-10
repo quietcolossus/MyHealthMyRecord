@@ -48,6 +48,14 @@
         android:layout_centerVertical="true"
         android:layout_alignEnd="@+id/RegisterTV" />
 
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/google_signin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/LoginBTN"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="190dp" />
+
     <TextView
         android:id="@+id/RegisterTV"
         android:layout_width="wrap_content"

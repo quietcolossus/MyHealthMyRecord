@@ -208,9 +208,9 @@ public class CameraApi extends AppCompatActivity {
         createVideoFolder();
 
         mMediaRecorder = new MediaRecorder();
-        mChronometer = (Chronometer) findViewById(R.id.chronometer); //the timer
-        mTextureView = (TextureView) findViewById(R.id.textureView);
-        mProgress = (ProgressBar) findViewById(R.id.progressBar);
+        mChronometer = findViewById(R.id.chronometer); //the timer
+        mTextureView = findViewById(R.id.textureView);
+        mProgress = findViewById(R.id.progressBar);
 
         pValue = 0;
         mProgress.setProgress(pValue);
@@ -218,7 +218,7 @@ public class CameraApi extends AppCompatActivity {
             @Override
             public void onTick(long millisUntilFinished) {
                 pValue++;
-                mProgress.setProgress((int)pValue*100/(100000/1000));
+                mProgress.setProgress(pValue *100/(100000/1000));
                 if(pValue > 60) {
                     if(mIsRecording) {
                         mProgress.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
@@ -252,7 +252,7 @@ public class CameraApi extends AppCompatActivity {
 
 
 
-        mRecordImageButton = (ImageButton) findViewById(R.id.videoOnlineImageButton);
+        mRecordImageButton = findViewById(R.id.videoOnlineImageButton);
         //onclicklistener when you stop recording
         mRecordImageButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -286,7 +286,7 @@ public class CameraApi extends AppCompatActivity {
             }
         });
 
-        mFlipCamera = (ImageButton) findViewById(R.id.cameraFlipImageButton);
+        mFlipCamera = findViewById(R.id.cameraFlipImageButton);
         mFlipCamera.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -342,7 +342,7 @@ public class CameraApi extends AppCompatActivity {
                             final Dialog dialog = new Dialog(getContext());
                             dialog.setContentView(R.layout.share_dialog);
                             dialog.show();
-                            Button cancel = (Button) dialog.findViewById(R.id.cancel_button);
+                            Button cancel = dialog.findViewById(R.id.cancel_button);
                             cancel.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -350,7 +350,7 @@ public class CameraApi extends AppCompatActivity {
                                     finish();
                                 }
                             });
-                            Button shareb = (Button) dialog.findViewById(R.id.share_button);
+                            Button shareb = dialog.findViewById(R.id.share_button);
                             shareb.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -661,7 +661,7 @@ public class CameraApi extends AppCompatActivity {
 
     private static int sensorToDeviceRotation(CameraCharacteristics cameraCharacteristics, int deviceOrientation){
         int result;
-        int sensorOrientation = cameraCharacteristics.get(cameraCharacteristics.SENSOR_ORIENTATION);
+        int sensorOrientation = cameraCharacteristics.get(CameraCharacteristics.SENSOR_ORIENTATION);
         deviceOrientation = ORIENTATIONS.get(deviceOrientation);
        /* if (cameraCharacteristics.get(CameraCharacteristics.LENS_FACING) ==
                 CameraCharacteristics.LENS_FACING_FRONT){

@@ -38,10 +38,10 @@ public class addContactActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addcontact);
 
-        final Button addContactBtn = (Button) findViewById(R.id.addContactBTN);
+        final Button addContactBtn = findViewById(R.id.addContactBTN);
 
 
-        final TextView cNameTV = (TextView) findViewById(R.id.FnameTV);
+        final TextView cNameTV = findViewById(R.id.FnameTV);
         text = cNameTV.getText();
         final Integer click = shareCircleActivity.click;
 
@@ -57,9 +57,9 @@ public class addContactActivity extends Activity {
         final TextView tv9 = shareCircleActivity.tv9;
         final TextView tv2 = shareCircleActivity.tv2;
         final TextView tv3 = shareCircleActivity.tv3;
-        rb1 = (RadioButton) findViewById(R.id.level1rb);
-     rb2 = (RadioButton) findViewById(R.id.level2rb);
-        rb3 = (RadioButton) findViewById(R.id.level3rb);
+        rb1 = findViewById(R.id.level1rb);
+        rb2 = findViewById(R.id.level2rb);
+        rb3 = findViewById(R.id.level3rb);
 
       /*If certain TextView clicked sets integer click to position number, based on which TV clicked creates a new circle resource in that position */
         addContactBtn.setOnClickListener(new View.OnClickListener() {
