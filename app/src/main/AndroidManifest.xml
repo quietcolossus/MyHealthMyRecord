@@ -16,8 +16,6 @@
         android:name="android.hardware.camera.front"
         android:required="true" />
 
-
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -48,7 +46,7 @@
         <activity android:name=".RegisterActivity"></activity>
         <activity
             android:name=".CurateVideo"
-            android:label="CurateVideo"
+            android:label="Curate Video"
             ></activity>
         <activity android:name=".MyVitalsActivity"></activity>
         <activity android:name=".shareCircleActivity"></activity>

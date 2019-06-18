@@ -712,8 +712,7 @@ public class CameraApi extends AppCompatActivity {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String prepend = "VIDEO_" + timeStamp + "_";
         File videoFile = File.createTempFile(prepend,".mp4",mVideoFolder); //creates the actual file
-        //cfileName = videoFile.getAbsolutePath(); //name of file name is stored
-        cfileName = videoFile.getAbsolutePath();
+        cfileName = videoFile.getAbsolutePath(); //name of file name is stored
         return videoFile;
     }
 

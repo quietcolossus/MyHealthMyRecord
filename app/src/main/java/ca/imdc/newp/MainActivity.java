@@ -10,10 +10,14 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.preference.DialogPreference;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
@@ -36,9 +40,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -47,6 +57,7 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     static final int REQUEST_VIDEO_CAPTURE = 1;
+    private static final int REQUEST_TAKE_GALLERY_VIDEO = 3;
     //String cfileName;
     //String encfileName;
     TextView instr;
@@ -64,7 +75,8 @@ public class MainActivity extends AppCompatActivity {
     public Button share;
     public String globName;
     public String[] lastDataset;
-    public HashMap<String, HashMap<String, ArrayList<String>>> tagRecord = new HashMap<>();
+    public static HashMap<String, HashMap<String, ArrayList<Object>>> tagRecord = new HashMap<>();
+    public JSONObject jTags;
 
     public static boolean clicked=false;
     public static boolean isOther = false;
@@ -77,7 +89,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        String obj = PreferenceManager.getDefaultSharedPreferences(this).getString("tagRecord", null);
 
+        if (obj == null) { obj = ""; };
+        try {
+            jTags = new JSONObject(obj);
+            System.out.println(jTags);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            System.out.println(jTags.get("MULTIPLE").getClass());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(obj);
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("");
         toolbar.setLogo(R.drawable.logo);
@@ -202,6 +230,13 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void dispatchUploadVideoIntent() {
+        Intent intent = new Intent();
+        intent.setType("video/");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Video"),REQUEST_TAKE_GALLERY_VIDEO);
+    }
+
 
     public void dispatchTakeVideoIntent() {
         //startActivity(new Intent(MainActivity.this, CameraApi.class));
@@ -243,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
             String replacer = data.getStringExtra("result");
             String name = data.getStringExtra("name");
             int position = data.getIntExtra("position", -1);
-            HashMap<String, ArrayList<String>> tags = (HashMap<String, ArrayList<String>>) data.getSerializableExtra("tags");
+            HashMap<String, ArrayList<Object>> tags = (HashMap<String, ArrayList<Object>>) data.getSerializableExtra("tags");
 
             ArrayList<String> list = new ArrayList<>(Arrays.asList(myDataset));
             if (position != -1) {
@@ -260,15 +295,56 @@ public class MainActivity extends AppCompatActivity {
             tagRecord.put(replacer, tags);
             for (String keyName: tagRecord.keySet()){
                 String key = keyName;
-                HashMap<String, ArrayList<String>> value = tagRecord.get(keyName);
+                HashMap<String, ArrayList<Object>> value = tagRecord.get(keyName);
                 System.out.println(key + " " + value);
             }
+
+            JSONObject obj = new JSONObject(tagRecord);
+            System.out.println(obj);
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putString("tagRecord", obj.toString()).apply();
 
 ////
             renameIt(getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+name,  getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+replacer);
             renameIt(getExternalFilesDir(null).getAbsolutePath()+"/Video/"+name.replace(".encrypt",""), getExternalFilesDir(null).getAbsolutePath()+"/Video/"+replacer.replace(".encrypt",""));
             System.out.println("myDataset" + Arrays.toString(myDataset));
 
+        }
+
+        if (requestCode == REQUEST_TAKE_GALLERY_VIDEO) {
+            Uri selectedImageUri = data.getData();
+            String path  = getPath(selectedImageUri);
+            try {
+
+                FileInputStream fis;
+                fis = new FileInputStream(new File(path));
+
+                System.out.println(path);
+
+                //this is where you set whatever path you want to save it as:
+
+                File tmpFile = new File("/storage/emulated/0/Android/data/ca.imdc.newp/files/Encrypted/","VideoFile.mp4");
+
+                //save the video to the File path
+                FileOutputStream fos = new FileOutputStream(tmpFile);
+
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = fis.read(buf)) >= 0) {
+                    fos.write(buf, 0, len);
+                }
+                fis.close();
+                fos.close();
+            } catch (IOException io_e) {
+                // TODO: handle error
+            }
+            if (videosExist()) {
+                myDataset = populateList("names");
+                System.out.println("myDataset" + Arrays.toString(myDataset));
+                myDate = populateList("date");
+                System.out.println("myDate" + Arrays.toString(myDate));
+            }
+            mAdapter = new MyAdapter(myDataset, myDate, this);
+            mRecyclerView.setAdapter(mAdapter);
         }
 
         if (requestCode == REQUEST_VIDEO_CAPTURE) {
@@ -282,6 +358,7 @@ public class MainActivity extends AppCompatActivity {
                     myDate = populateList("date");
                    System.out.println("nyDate" + Arrays.toString(myDate));
                 }
+
                 mAdapter = new MyAdapter(myDataset, myDate, this);
                 mRecyclerView.setAdapter(mAdapter);
                 System.out.println("hwllo");
@@ -311,6 +388,19 @@ public class MainActivity extends AppCompatActivity {
             }
 //
         }
+    }
+    public String getPath(Uri uri) {
+        String[] projection = { MediaStore.Video.Media.DATA };
+        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+        if (cursor != null) {
+            // HERE YOU WILL GET A NULLPOINTER IF CURSOR IS NULL
+            // THIS CAN BE, IF YOU USED OI FILE MANAGER FOR PICKING THE MEDIA
+            int column_index = cursor
+                    .getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } else
+            return null;
     }
 
     /*@Override
@@ -453,6 +543,12 @@ public class MainActivity extends AppCompatActivity {
 
                             dispatchTakeVideoIntent();
                             mAdapter.notifyDataSetChanged();
+                        }
+                    })
+                    .setNegativeButton("EXISTING", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dispatchUploadVideoIntent();
+
                         }
                     })
                     .setNeutralButton("OTHER", new DialogInterface.OnClickListener() {
