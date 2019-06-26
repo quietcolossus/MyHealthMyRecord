@@ -402,18 +402,19 @@ public class CameraApi extends AppCompatActivity {
             }
         }
         else if(requestCode == REQUEST_EXTERNAL_STORAGE_PERMISSION_RESULT){
-            if(grantResults[1] == PackageManager.PERMISSION_GRANTED){
-                /*mIsRecording = true;
-                mRecordImageButton.setImageResource(R.mipmap.btn_video);
-                try {
-                    createVideoFileName();
-                    createEncVideoFileName();
-                }
-                catch (IOException e) {
-                    e.printStackTrace();
-                }*/
+            System.out.println(Arrays.toString(grantResults));
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+//                mIsRecording = true;
+//                mRecordImageButton.setImageResource(R.mipmap.btn_video);
+//                try {
+//                    createVideoFileName();
+//                    createEncVideoFileName();
+//                }
+//                catch (IOException e) {
+//                    e.printStackTrace();
+//                }
                 Toast.makeText(this,"Storage permission successfully granted",Toast.LENGTH_SHORT).show();
-                //finish();
+//                recreate();
 
 
             }
@@ -422,7 +423,6 @@ public class CameraApi extends AppCompatActivity {
             }
 
         }
-
     }
 
     @Override
@@ -515,7 +515,7 @@ public class CameraApi extends AppCompatActivity {
         Matrix matrix = new Matrix ();
         int rotation = getWindowManager().getDefaultDisplay().getRotation();
         RectF textureRectF = new RectF(0, 0, width, height);
-        RectF previewRectF = new RectF(0, 0, mPreviewSize.getHeight(), mPreviewSize.getWidth());
+        RectF previewRectF = new RectF(0, 0, width, height);
         float centerX = textureRectF.centerX();
         float centerY = textureRectF.centerY();
 
@@ -713,8 +713,7 @@ public class CameraApi extends AppCompatActivity {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String prepend = "VIDEO_" + timeStamp + "_";
         File videoFile = File.createTempFile(prepend,".mp4",mVideoFolder); //creates the actual file
-        //cfileName = videoFile.getAbsolutePath(); //name of file name is stored
-        cfileName = videoFile.getAbsolutePath();
+        cfileName = videoFile.getAbsolutePath(); //name of file name is stored
         return videoFile;
     }
 
@@ -733,7 +732,6 @@ public class CameraApi extends AppCompatActivity {
 
         //check to see for if permission granted for newer versions of android
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-
 
             if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
                 mIsRecording = true;

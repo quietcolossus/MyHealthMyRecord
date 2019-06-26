@@ -51,10 +51,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private Fade mFade;
     private ViewGroup rootV;
     private int iD = 1;
-    private String globalName;
-    private int globalPos;
-
-
 
 
     public Context mContext;
@@ -136,30 +132,30 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         return vh;
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent resultIntent) {
-        // Check which request we're responding to
-        if (requestCode == 1) {
-            // Make sure the request was successful
-            if (resultCode == RESULT_OK) {
-                MainActivity mainact = new MainActivity();
-                String replacer = resultIntent.getStringExtra("result");
-
-//                String name = (String) mTextView.getText();
+//    public void onActivityResult(int requestCode, int resultCode, Intent resultIntent) {
+//        // Check which request we're responding to
+//        if (requestCode == 1) {
+//            // Make sure the request was successful
+//            if (resultCode == RESULT_OK) {
+//                MainActivity mainact = new MainActivity();
+//                String replacer = resultIntent.getStringExtra("result");
 //
-                ArrayList<String> list = new ArrayList<String>(Arrays.asList(mDataset));
-                list.set(globalPos, replacer);
-                mDataset = list.toArray(new String[list.size()]);
-                notifyDataSetChanged();
+////                String name = (String) mTextView.getText();
 ////
-                mainact.renameIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+globalName,  mContext.getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+replacer);
-                mainact.renameIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Video/"+globalName.replace(".encrypt",""), mContext.getExternalFilesDir(null).getAbsolutePath()+"/Video/"+replacer.replace(".encrypt",""));
-                // The user picked a contact.
-                // The Intent's data Uri identifies which contact was selected.
-
-                // Do something with the contact here (bigger example below)
-            }
-        }
-    }
+//                ArrayList<String> list = new ArrayList<String>(Arrays.asList(mDataset));
+//                list.set(globalPos, replacer);
+//                mDataset = list.toArray(new String[list.size()]);
+//                notifyDataSetChanged();
+//////
+//                mainact.renameIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+globalName,  mContext.getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+replacer);
+//                mainact.renameIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Video/"+globalName.replace(".encrypt",""), mContext.getExternalFilesDir(null).getAbsolutePath()+"/Video/"+replacer.replace(".encrypt",""));
+//                // The user picked a contact.
+//                // The Intent's data Uri identifies which contact was selected.
+//
+//                // Do something with the contact here (bigger example below)
+//            }
+//        }
+//    }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
@@ -198,7 +194,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 String bc = mainact.decrypt(name);
                 System.out.println("BC:"+bc);
                 Intent intent=new Intent(Intent.ACTION_VIEW,Uri.parse(bc));
-                intent.setDataAndType(Uri.parse(bc), "video/mp4");
+                intent.setDataAndType(Uri.parse(bc), "video/*");
                 mContext.startActivity(intent);
             }
         });
@@ -206,7 +202,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 MainActivity mainact = new MainActivity();
-                ArrayList<String> list = new ArrayList<String>(Arrays.asList(mDataset));
+                ArrayList<String> list = new ArrayList<>(Arrays.asList(mDataset));
                 list.remove(list.get(position));
 
                 mDataset = list.toArray(new String[list.size()]);
@@ -216,7 +212,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 String name = (String) holder.mTextView.getText();
                 mainact.deleteIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+name);
                 mainact.deleteIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Video/"+name.replace(".encrypt",""));
-
             }
 
         });
@@ -233,7 +228,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 notifyDataSetChanged();
             }
         });
-//// TODO: 17/08/2016  implement date and time datasets. We need to retrieve it directly from an array
+//// TODO: 17/08/2016 implement date and time datasets. We need to retrieve it directly from an array
     }
     // Return the size of your dataset (invoked by the layout manager)
     @Override
