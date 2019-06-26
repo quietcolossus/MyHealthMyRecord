@@ -75,7 +75,8 @@ public class MainActivity extends AppCompatActivity {
     public Button share;
     public String globName;
     public String[] lastDataset;
-    public static HashMap<String, HashMap<String, ArrayList<Object>>> tagRecord = new HashMap<>();
+    public static JSONObject jRecord = new JSONObject();
+
     public JSONObject jTags;
 
     public static boolean clicked=false;
@@ -93,17 +94,12 @@ public class MainActivity extends AppCompatActivity {
 
         if (obj == null) { obj = ""; };
         try {
-            jTags = new JSONObject(obj);
+            jRecord = new JSONObject(obj);
             System.out.println(jTags);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        try {
-            System.out.println(jTags.get("MULTIPLE").getClass());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
         System.out.println(obj);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -160,8 +156,6 @@ public class MainActivity extends AppCompatActivity {
                     } else if (id == R.id.nav_settings) {
 
                         }
-
-
                         mDrawerLayout.closeDrawer(GravityCompat.START);
                         return true;
                     }
@@ -278,7 +272,16 @@ public class MainActivity extends AppCompatActivity {
             String replacer = data.getStringExtra("result");
             String name = data.getStringExtra("name");
             int position = data.getIntExtra("position", -1);
-            HashMap<String, ArrayList<Object>> tags = (HashMap<String, ArrayList<Object>>) data.getSerializableExtra("tags");
+            System.out.println(data.getStringExtra("tags"));
+            JSONObject jTags = null;
+            try {
+                jTags = new JSONObject (data.getStringExtra("tags"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+//            HashMap<String, ArrayList<Object>> tags = (HashMap<String, ArrayList<Object>>) data.getSerializableExtra("tags");
 
             ArrayList<String> list = new ArrayList<>(Arrays.asList(myDataset));
             if (position != -1) {
@@ -286,28 +289,32 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 System.out.println("Hello");
             }
+
             myDataset = list.toArray(new String[list.size()]);
             mAdapter.notifyDataSetChanged();
 
             mAdapter = new MyAdapter(myDataset, myDate, this);
             mRecyclerView.setAdapter(mAdapter);
-            if (tagRecord.containsKey(name)) {tagRecord.remove(name);}
-            tagRecord.put(replacer, tags);
-            for (String keyName: tagRecord.keySet()){
-                String key = keyName;
-                HashMap<String, ArrayList<Object>> value = tagRecord.get(keyName);
-                System.out.println(key + " " + value);
+            try {
+                jRecord.put(replacer, jTags);
+                jRecord.remove(name);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
+//            for (String keyName: tagRecord.keySet()){
+//                String key = keyName;
+//                HashMap<String, ArrayList<Object>> value = tagRecord.get(keyName);
+//                System.out.println(key + " " + value);
+//            }
 
-            JSONObject obj = new JSONObject(tagRecord);
-            System.out.println(obj);
-            PreferenceManager.getDefaultSharedPreferences(this).edit().putString("tagRecord", obj.toString()).apply();
-
+//            JSONObject obj = new JSONObject(tagRecord);
+//            System.out.println(obj);
+            System.out.println("JTAGS" + jTags);
+            PreferenceManager.getDefaultSharedPreferences(this).edit().putString("tagRecord", jRecord.toString()).apply();
 ////
             renameIt(getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+name,  getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+replacer);
             renameIt(getExternalFilesDir(null).getAbsolutePath()+"/Video/"+name.replace(".encrypt",""), getExternalFilesDir(null).getAbsolutePath()+"/Video/"+replacer.replace(".encrypt",""));
             System.out.println("myDataset" + Arrays.toString(myDataset));
-
         }
 
         if (requestCode == REQUEST_TAKE_GALLERY_VIDEO) {
@@ -458,7 +465,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void deleteIt(String path) {
         File folder = new File(path);
-        tagRecord.remove(path.replaceAll(".+/", ""));
+        jRecord.remove(path.replaceAll(".+/", ""));
         if (folder.exists())
             folder.delete();
     }

@@ -46,7 +46,7 @@
         <activity android:name=".RegisterActivity"></activity>
         <activity
             android:name=".CurateVideo"
-            android:label="Curate Video"
+            android:label="Curate video information (OPTIONAL)"
             ></activity>
         <activity android:name=".MyVitalsActivity"></activity>
         <activity android:name=".shareCircleActivity"></activity>
