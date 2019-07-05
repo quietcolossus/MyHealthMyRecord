@@ -1,13 +1,16 @@
 package ca.imdc.newp;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.SeekBar;
+import android.widget.ToggleButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,32 +27,33 @@ public class CurateVideo extends AppCompatActivity {
     public SeekBar mValence;
     public SeekBar mArousal;
 
-    public CheckBox mHome;
-    public CheckBox mWorkplace;
-    public CheckBox mInstitution;
-    public CheckBox mOutdoors;
-    public CheckBox mIndoors;
-    public CheckBox mSchool;
+    public ToggleButton mHome;
+    public ToggleButton mWorkplace;
+    public ToggleButton mInstitution;
+    public ToggleButton mOutdoors;
+    public ToggleButton mIndoors;
+    public ToggleButton mSchool;
 
-    public CheckBox mLeisure;
-    public CheckBox mWork;
-    public CheckBox mExercise;
-    public CheckBox mTravel;
-    public CheckBox mChores;
-    public CheckBox mCulture;
-    public CheckBox mFood;
-    public CheckBox mMeds;
+    public ToggleButton mLeisure;
+    public ToggleButton mWork;
+    public ToggleButton mExercise;
+    public ToggleButton mTravel;
+    public ToggleButton mChores;
+    public ToggleButton mCulture;
+    public ToggleButton mFood;
+    public ToggleButton mMeds;
 
-    public CheckBox mFamily;
-    public CheckBox mFriends;
-    public CheckBox mMedical;
-    public CheckBox mEveryone;
+    public ToggleButton mFamily;
+    public ToggleButton mFriends;
+    public ToggleButton mMedical;
+    public ToggleButton mEveryone;
 
     public JSONObject tags;
+    public JSONObject vidMemory;
 
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.curate2);
+        setContentView(R.layout.curate3);
         tags = new JSONObject();
         try {
             tags.put("Arousal", new JSONObject());
@@ -104,17 +108,29 @@ public class CurateVideo extends AppCompatActivity {
         }
         else { name = "default123"; position = -1;}
 
+        System.out.println(name);
+        mRenameVideo.setHint(name);
+        vidMemory = tags;
+        try {
+            vidMemory.put("Valence", 50);
+            vidMemory.put("Arousal", 50);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         if (rTags.has(name)) {
-            JSONObject vidMemory = null;
+
             try {
                 vidMemory = (JSONObject) rTags.get(name);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            mRenameVideo.setHint(name);
+
             try {
                 mValence.setProgress( (Integer) vidMemory.get("Valence"));
                 mArousal.setProgress( (Integer) vidMemory.get("Arousal"));
+
+                if (((JSONObject) vidMemory.get("Location")).has("Home")) {mHome.setBackgroundColor(Color.parseColor("#eeeeee"));}
 
                 mHome.setChecked(((JSONObject) vidMemory.get("Location")).has("Home"));
                 mWorkplace.setChecked(((JSONObject) vidMemory.get("Location")).has("Workplace"));
@@ -143,15 +159,19 @@ public class CurateVideo extends AppCompatActivity {
 
             System.out.println("IT's WORKING SO FAR");
         }
+        else {
+        }
+
 
         System.out.println(b);
-
 
 
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String stringToPassBack = mRenameVideo.getText().toString().equals("") ? name : mRenameVideo.getText().toString();
+
+                System.out.println("--------------" + stringToPassBack);
 
                 int valence = mValence.getProgress();
                 int arousal = mArousal.getProgress();
@@ -217,5 +237,38 @@ public class CurateVideo extends AppCompatActivity {
                 finish();
             }
         });
+
+
+    }
+    @Override
+    public void onBackPressed() {
+        MainActivity mainact = new MainActivity();
+        JSONObject rTags = mainact.jRecord;
+
+        Intent output = new Intent();
+        final Bundle b = getIntent().getExtras();
+        final String name;
+        final int position;
+
+        if (b != null) {
+            name = (String) b.get("name");
+            position = (int) b.get("position");
+        }
+        else { name = "default123"; position = -1;}
+
+        if (rTags.has(name)) {
+            try {
+                vidMemory = (JSONObject) rTags.get(name);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        output.putExtra("position", position);
+        output.putExtra("name", name);
+        output.putExtra("result", name);
+        output.putExtra("tags", vidMemory.toString());
+        setResult(RESULT_OK, output);
+        finish();
     }
 }

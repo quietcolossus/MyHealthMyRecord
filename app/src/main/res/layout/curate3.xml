@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:weightSum="16">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:text="Input new video title:"
+            android:textSize="20sp"/>
+        <Space
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+        <EditText
+            android:id="@+id/nameentry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Video title"
+            android:imeOptions="actionDone"
+            android:textSize="20sp"/>
+        <Space
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:text="Rate your feelings from negative to positive:"
+            android:textSize="20sp"/>
+        <Space
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="true"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/ic_badmood" />
+
+            <SeekBar
+                android:id="@+id/valence_bar"
+                android:layout_height="40dp"
+                android:layout_weight="90"
+                android:progress="50"
+                android:layout_width="0dp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/ic_goodmood" />
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Rate your energy level from low to high:"
+            android:textSize="20sp"/>
+        <Space
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="true"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/ic_lowenergy" />
+
+            <SeekBar
+                android:id="@+id/arousal_bar"
+                android:layout_height="40dp"
+                android:layout_weight="90"
+                android:progress="50"
+                android:layout_width="0dp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@drawable/ic_highenergy" />
+        </LinearLayout>
+        <!--<LinearLayout android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!--xmlns:android="http://schemas.android.com/apk/res/android">-->
+
+        <!--<CheckBox-->
+        <!--android:id="@+id/happy_check"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Happy"-->
+        <!--android:textSize="20dp"/>-->
+        <!--<Space-->
+        <!--android:layout_weight="0.5"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_width="wrap_content"/>-->
+        <!--<CheckBox-->
+        <!--android:id="@+id/sad_check"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Sad"-->
+        <!--android:textSize="20dp"/>-->
+        <!--<Space-->
+        <!--android:layout_weight="0.5"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_width="wrap_content"/>-->
+        <!--</LinearLayout>-->
+        <!--<LinearLayout android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!--xmlns:android="http://schemas.android.com/apk/res/android">-->
+
+        <!--<CheckBox-->
+        <!--android:id="@+id/angry_check"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Angry"-->
+        <!--android:textSize="20dp"/>-->
+        <!--<Space-->
+        <!--android:layout_weight="0.5"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_width="wrap_content"/>-->
+        <!--<CheckBox-->
+        <!--android:id="@+id/neutral_check"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Neutral"-->
+        <!--android:textSize="20dp"/>-->
+        <!--<Space-->
+        <!--android:layout_weight="0.5"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_width="wrap_content"/>-->
+
+        <!--</LinearLayout>-->
+        <Space
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:text="This video includes the following LOCATIONS:"
+            android:textSize="20sp" />
+        <Space
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+
+        <LinearLayout android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            xmlns:android="http://schemas.android.com/apk/res/android">
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="0.5"
+                android:layout_width="0dp">
+
+                <ToggleButton
+                    android:id="@+id/home_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+                    android:drawableLeft="@drawable/ic_home"
+                    android:textOff=" Home"
+                    android:textOn=" Home"
+                    android:textSize="20dp" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5" />
+
+                <ToggleButton
+                    android:id="@+id/workplace_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:drawableLeft="@drawable/ic_work"
+
+                    android:textAlignment="textStart"
+                    android:textOff=" Workplace"
+                    android:textOn=" Workplace"
+                    android:textSize="20dp" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5" />
+                <ToggleButton
+                    android:id="@+id/school_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+                    android:drawableLeft="@drawable/ic_school"
+                    android:textOff=" School"
+                    android:textOn=" School"
+                    android:textSize="20dp" />
+                <Space
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="0.5"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <ToggleButton
+                    android:id="@+id/outdoors_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+                    android:drawableLeft="@drawable/ic_nature"
+                    android:textOff=" Outdoors"
+                    android:textOn=" Outdoors"
+                    android:textSize="20dp" />
+                <Space
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+                <ToggleButton
+                    android:id="@+id/indoors_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+                    android:drawableLeft="@drawable/ic_indoors"
+                    android:textOff=" Indoors"
+                    android:textOn=" Indoors"
+                    android:textSize="20dp" />
+                <Space
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+                <ToggleButton
+                    android:id="@+id/institution_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+                    android:drawableLeft="@drawable/ic_institution"
+                    android:textOff=" Institution"
+                    android:textOn=" Institution"
+                    android:textSize="20dp" />
+                <Space
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+            </LinearLayout></LinearLayout>
+
+        <Space
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+
+        <Space
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:text="This video includes the following types of ACTIVITIES:"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <LinearLayout android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="0.5"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <ToggleButton
+                    android:id="@+id/leisure_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+                    android:drawableLeft="@drawable/ic_leisure"
+                    android:textOff=" Leisure/Play"
+                    android:textOn=" Leisure/Play"
+                    android:textSize="20dp" />
+                <Space
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+                <ToggleButton
+                    android:id="@+id/working_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+                    android:drawableLeft="@drawable/ic_working"
+                    android:textOff=" At Work"
+                    android:textOn=" At Work"
+                    android:textSize="20dp" />
+                <Space
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+                <ToggleButton
+                    android:id="@+id/chores_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+                    android:drawableLeft="@drawable/ic_chores"
+                    android:textOff=" Chores"
+                    android:textOn=" Chores"
+                    android:textSize="20dp" />
+                <Space
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+                <ToggleButton
+                    android:id="@+id/food_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+                    android:drawableLeft="@drawable/ic_food"
+                    android:textOff=" Eating"
+                    android:textOn=" Eating"
+                    android:textSize="20dp" />
+                <Space
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/></LinearLayout>
+
+            <LinearLayout android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="0.5"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <ToggleButton
+                    android:id="@+id/travel_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+                    android:drawableLeft="@drawable/ic_travel"
+                    android:textOff=" Travel"
+                    android:textOn=" Travel"
+                    android:textSize="20dp" />
+                <Space
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+                <ToggleButton
+                    android:id="@+id/exercise_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+                    android:drawableLeft="@drawable/ic_exercise"
+                    android:textOff=" Exercise"
+                    android:textOn=" Exercise"
+                    android:textSize="20dp" />
+                <Space
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+                <ToggleButton
+                    android:id="@+id/cultural_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+                    android:drawableLeft="@drawable/ic_culture"
+                    android:textOff=" Cultural"
+                    android:textOn=" Cultural"
+                    android:textSize="20dp" />
+                <Space
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+                <ToggleButton
+                    android:id="@+id/meds_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+                    android:drawableLeft="@drawable/ic_meds"
+                    android:textOff=" Medical"
+                    android:textOn=" Medical"
+                    android:textSize="20dp" />
+                <Space
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+            </LinearLayout></LinearLayout>
+        <Space
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:text="I am willing to SHARE this video with:"
+            android:textSize="20sp" />
+        <Space
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <LinearLayout android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="0.5"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <ToggleButton
+                    android:id="@+id/family_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+                    android:drawableLeft="@drawable/ic_family"
+                    android:textOff=" My Family"
+                    android:textOn=" My Family"
+                    android:textSize="20dp" />
+                <Space
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+                <ToggleButton
+                    android:id="@+id/friends_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+                    android:drawableLeft="@drawable/ic_friends"
+                    android:textOff=" My Friends"
+                    android:textOn=" My Friends"
+                    android:textSize="20dp" />
+                <Space
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+            </LinearLayout>
+            <LinearLayout android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="0.5"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <ToggleButton
+                    android:id="@+id/medical_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+                    android:drawableLeft="@drawable/ic_hcp"
+                    android:textOff=" My HCP Team"
+                    android:textOn=" My HCP Team"
+                    android:textSize="20dp" />
+                <Space
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+                <ToggleButton
+                    android:id="@+id/everyone_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+                    android:drawableLeft="@drawable/ic_everyone"
+                    android:textOff=" Everyone"
+                    android:textOn=" Everyone"
+                    android:textSize="20dp" />
+                <Space
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+            </LinearLayout></LinearLayout>
+
+        <LinearLayout
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+
+
+            <Button
+
+                android:id="@+id/submit_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:text="Save and Submit"
+                android:textSize="20dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout></ScrollView>
