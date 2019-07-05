@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     private String[] Test1 = {"Halo"};
     private DrawerLayout mDrawerLayout;
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    public static RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private String[] myDataset;
     private String[] myDate;
@@ -225,6 +225,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void dispatchUploadVideoIntent() {
+
         Intent intent = new Intent();
         intent.setType("video/");
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -237,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
         //int a;
         //Random random = new Random();
         //a = random.nextInt(70) + 1;
-
+        MainActivity mainActivity = new MainActivity();
         Intent openCameraIntent = new Intent(MainActivity.this, CameraApi.class);
 
         //Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
@@ -296,8 +297,8 @@ public class MainActivity extends AppCompatActivity {
             mAdapter = new MyAdapter(myDataset, myDate, this);
             mRecyclerView.setAdapter(mAdapter);
             try {
-                jRecord.put(replacer, jTags);
                 jRecord.remove(name);
+                jRecord.put(replacer, jTags);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
