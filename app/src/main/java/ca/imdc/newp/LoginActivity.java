@@ -181,7 +181,9 @@ public class LoginActivity extends AppCompatActivity {
 
     public void updateUI(GoogleSignInAccount account){
         Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-
+        mainIntent.putExtra("email", account.getEmail());
+        mainIntent.putExtra("name", account.getGivenName());
+        mainIntent.putExtra("name", account.getId());
         startActivity(mainIntent);
     }
     public interface VolleyCallback{
@@ -246,6 +248,8 @@ public class LoginActivity extends AppCompatActivity {
 
         return 0;
     }
+
+
 
 
     public int loginVolley(final VolleyCallback callback, final EditText username, final EditText password){

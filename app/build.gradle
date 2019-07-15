@@ -33,6 +33,9 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.google.android.gms:play-services-identity:16.0.0'
     testImplementation 'junit:junit:4.12'
+    implementation 'com.ibm.watson.developer_cloud:java-sdk:6.9.0'
+
+
     implementation group: 'postgresql', name: 'postgresql', version: '9.0-801.jdbc4'
 
 }

@@ -41,6 +41,18 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.common.api.ApiException;
+import com.ibm.watson.developer_cloud.service.security.IamOptions;
+import com.ibm.watson.developer_cloud.visual_recognition.v3.VisualRecognition;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -53,6 +65,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -66,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     private String[] Test1 = {"Halo"};
     private DrawerLayout mDrawerLayout;
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    public static RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private String[] myDataset;
     private String[] myDate;
@@ -171,6 +184,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         // use a linear layout manager
+
+
+        IamOptions options = new IamOptions.Builder()
+                .apiKey("{VRHKcB5jKWLzBdIFjk6D6wQDYRPQhAUZzYGzOPOukj_m}")
+                .build();
+        VisualRecognition visualRecognition = new VisualRecognition("{1.1.1}", options);
+
     }
 
     String[] populateList(String g) {
@@ -225,6 +245,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void dispatchUploadVideoIntent() {
+
         Intent intent = new Intent();
         intent.setType("video/");
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -237,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
         //int a;
         //Random random = new Random();
         //a = random.nextInt(70) + 1;
-
+        MainActivity mainActivity = new MainActivity();
         Intent openCameraIntent = new Intent(MainActivity.this, CameraApi.class);
 
         //Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
@@ -296,8 +317,8 @@ public class MainActivity extends AppCompatActivity {
             mAdapter = new MyAdapter(myDataset, myDate, this);
             mRecyclerView.setAdapter(mAdapter);
             try {
-                jRecord.put(replacer, jTags);
                 jRecord.remove(name);
+                jRecord.put(replacer, jTags);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -310,6 +331,19 @@ public class MainActivity extends AppCompatActivity {
 //            JSONObject obj = new JSONObject(tagRecord);
 //            System.out.println(obj);
             System.out.println("JTAGS" + jTags);
+
+            String email = getIntent().getStringExtra("account");
+            String firstname = getIntent().getStringExtra("name");
+            String ownerid = getIntent().getStringExtra("id");
+
+            parseAndSend(new RegisterActivity.VolleyCallback() {
+                @Override
+                public void onSuccess(String result) {
+                    System.out.println("SENT JTAGS BACK TO DB");
+                }
+            }, email,firstname,jTags, ownerid);
+
+
             PreferenceManager.getDefaultSharedPreferences(this).edit().putString("tagRecord", jRecord.toString()).apply();
 ////
             renameIt(getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+name,  getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+replacer);
@@ -607,6 +641,80 @@ public class MainActivity extends AppCompatActivity {
 
             return builder.create();
         }
+    }
+
+    public int parseAndSend(final RegisterActivity.VolleyCallback callback, String gmail, String name, JSONObject tags, String ownerid){
+
+        final String googleEmail = gmail;
+        final String googleName = name;
+        final String URL = "http://141.117.145.178:3000/videos";
+        final RequestQueue requestQueue = Volley.newRequestQueue(this);
+        final JSONObject jtags = tags;
+        final String ownerid1 = ownerid;
+
+        // Video Tag JSONObject Positions and their data:
+        // 1->Arousal  2->Valence 3->Location 4->Activity 5->Sharing
+
+
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    StringRequest postRequest = new StringRequest(Request.Method.POST, URL,
+                            new Response.Listener<String>()
+                            {
+                                @Override
+                                public void onResponse(String response) {
+                                    // response
+                                    Log.d("Response", response);
+                                    callback.onSuccess(response);
+                                }
+                            },
+                            new Response.ErrorListener()
+                            {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    // error
+                                }
+                            }
+                    ) {
+                        @Override
+                        protected Map<String, String> getParams()
+                        {
+                            final HashMap<String, String> params = new HashMap<String, String>();
+                            // Order to send the params in is: ownername, owneremail, videoid, videodata, valence, arousal, location, activity, sharing, ownerid
+
+                            params.put("ownername", googleName);
+                            params.put("owneremail", googleEmail);
+                            params.put("placeholder-video-id", "placeholder");
+                            params.put("placeholder-video-data", "placeholder");
+                            try {
+                                params.put("valance", String.valueOf(jtags.getJSONObject(String.valueOf(1))));
+                                params.put("arousal", String.valueOf(jtags.getJSONObject(String.valueOf(0))));
+                                params.put("location", String.valueOf(jtags.getJSONObject(String.valueOf(2))));
+                                params.put("activity", String.valueOf(jtags.getJSONObject(String.valueOf(3))));
+                                params.put("sharing", String.valueOf(jtags.getJSONObject(String.valueOf(4))));
+                                params.put("ownerid", ownerid1);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            return params;
+                        }
+                    };
+
+                    requestQueue.add(postRequest);
+
+
+                } catch ( Exception e ) {
+                    System.err.println( e.getClass().getName()+": "+ e.getMessage() );
+                }
+
+            }
+
+
+        }).start();
+
+        return 0;
     }
 
 }

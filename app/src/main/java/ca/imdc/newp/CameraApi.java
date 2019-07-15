@@ -724,7 +724,6 @@ public class CameraApi extends AppCompatActivity {
         //encfileName = encvideoFile.getAbsolutePath(); //name of file name is stored
         encfileName = mencVideoFolder.getAbsolutePath()+ "/" + prepend + "ENC.mp4";
 
-
     }
 
     //storage method #3
