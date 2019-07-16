@@ -259,8 +259,8 @@ public class MainActivity extends AppCompatActivity {
         //Random random = new Random();
         //a = random.nextInt(70) + 1;
         MainActivity mainActivity = new MainActivity();
-        Intent openCameraIntent = new Intent(MainActivity.this, CameraApi.class);
-
+        //Intent openCameraIntent = new Intent(MainActivity.this, CameraApi.class);
+        Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         //Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
        // takeVideoIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         //openCameraIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
