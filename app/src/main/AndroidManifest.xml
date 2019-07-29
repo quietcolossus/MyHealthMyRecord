@@ -51,7 +51,8 @@
         <activity android:name=".MyVitalsActivity"></activity>
         <activity android:name=".shareCircleActivity"></activity>
         <activity android:name=".addContactActivity"></activity>
-
+        <activity
+            android:name=".viewVideo"></activity>
 
 
     </application>

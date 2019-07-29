@@ -12,10 +12,13 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.preference.DialogPreference;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
@@ -40,6 +43,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -61,12 +66,17 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+
+import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
+import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
 
 public class MainActivity extends AppCompatActivity {
     static final int REQUEST_VIDEO_CAPTURE = 1;
@@ -97,7 +107,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     public boolean videosExist;
-
+    public Uri videoUri;
+    private VideoView videoView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -252,7 +263,56 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "Select Video"),REQUEST_TAKE_GALLERY_VIDEO);
     }
 
+    private static File getOutputMediaFile(int type){
+        // To be safe, you should check that the SDCard is mounted
+        // using Environment.getExternalStorageState() before doing this.
 
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), "MyCameraApp");
+        // This location works best if you want the created images to be shared
+        // between applications and persist after your app has been uninstalled.
+
+        // Create the storage directory if it does not exist
+        if (! mediaStorageDir.exists()){
+            if (! mediaStorageDir.mkdirs()){
+                Log.d("MyCameraApp", "failed to create directory");
+                return null;
+            }
+        }
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        File mediaFile;
+        if (type == MEDIA_TYPE_IMAGE){
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+                    "IMG_"+ timeStamp + ".jpg");
+        } else if(type == MEDIA_TYPE_VIDEO) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+                    "VID_"+ timeStamp + ".mp4");
+        } else {
+            return null;
+        }
+
+        return mediaFile;
+    }
+
+    private static Uri getOutputVideoUri() {
+        if (Environment.getExternalStorageState() == null) {
+            return null;
+        }
+
+        File mediaStorage = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "YOUR_APP_VIDEO");
+        if (!mediaStorage.exists() &&
+                !mediaStorage.mkdirs()) {
+            //Log.e(, "failed to create directory: " + mediaStorage);
+            return null;
+        }
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+        File mediaFile = new File(mediaStorage, "VID_" + timeStamp + ".mp4");
+        return Uri.fromFile(mediaFile);
+    }
     public void dispatchTakeVideoIntent() {
         //startActivity(new Intent(MainActivity.this, CameraApi.class));
         //int a;
@@ -260,7 +320,7 @@ public class MainActivity extends AppCompatActivity {
         //a = random.nextInt(70) + 1;
         MainActivity mainActivity = new MainActivity();
         //Intent openCameraIntent = new Intent(MainActivity.this, CameraApi.class);
-        Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent openCameraIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         //Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
        // takeVideoIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         //openCameraIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -279,6 +339,12 @@ public class MainActivity extends AppCompatActivity {
         //takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile((new File(cfileName))));
         //openCameraIntent.putExtra(openCameraIntent.EXTRA_ORIGINATING_URI, Uri.fromFile((new File(cfileName))));
         //if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
+
+//        File fileUri = getOutputMediaFile(MEDIA_TYPE_VIDEO);  // create a file to save the video in specific folder (this works for video only)
+//
+//        openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+//        openCameraIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1); // set the video image quality to high
+
         if (openCameraIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(openCameraIntent, REQUEST_VIDEO_CAPTURE);
 
@@ -288,7 +354,29 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+        File sdCard = Environment.getExternalStorageDirectory();
+        File dir = new File (sdCard.getAbsolutePath() + "/Android/data/app/ca.imdc.newp/");
+        dir.mkdirs();
+        File file = new File(dir, "filename");
+        MediaPlayer mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+
+        Uri videoUri = data.getData();
+        String path1 = videoUri.getPath();
+        Intent videoview = new Intent(MainActivity.this,viewVideo.class);
+        videoview.putExtra("uri", videoUri);
+        startActivityForResult(videoview, 0);
+
+
+        if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK && videoUri != null) {
+            // do what you want with videoUri
+
+
+        }
+
+
         if (requestCode == 2) {
             String replacer = data.getStringExtra("result");
             String name = data.getStringExtra("name");
