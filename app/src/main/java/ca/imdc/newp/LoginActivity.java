@@ -93,7 +93,9 @@ public class LoginActivity extends AppCompatActivity {
         final String username = mUsername.getText().toString();
         final String password = mPassword.getText().toString();
 
+        Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
 
+        startActivity(mainIntent);
         //updateUI(account);
 
         //Requests user's informations

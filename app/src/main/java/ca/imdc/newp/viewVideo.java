@@ -11,8 +11,15 @@ import java.io.IOException;
 
 public class viewVideo extends MainActivity {
     private VideoView videoView;
-    Bundle extras = getIntent().getExtras();
-    String uri = extras.getString("uri");
+
+
+
+
+
+
+    //Bundle extras = getIntent().getExtras().getParcelable("uri");
+    //String uri = extras.getString("uri");
+    Uri uri = (Uri) getIntent().getExtras().get("uri");
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.videoview);
@@ -34,7 +41,7 @@ public class viewVideo extends MainActivity {
         }
         mediaPlayer.start();
         videoView = findViewById(R.id.surface);
-        videoView.setVideoURI(Uri.parse(uri));
+        videoView.setVideoURI(uri);
         videoView.start();
         videoView.setOnCompletionListener ( new MediaPlayer.OnCompletionListener() {
 
