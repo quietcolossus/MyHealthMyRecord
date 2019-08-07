@@ -3,22 +3,26 @@ import android.Manifest;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.Context;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ProviderInfo;
 import android.content.res.Configuration;
+import android.content.res.XmlResourceParser;
 import android.database.Cursor;
+import android.graphics.Camera;
 import android.graphics.Color;
 import android.media.AudioManager;
+import android.media.CamcorderProfile;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.StrictMode;
 import android.preference.DialogPreference;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
@@ -26,6 +30,7 @@ import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.graphics.drawable.VectorDrawableCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -43,7 +48,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.android.volley.Request;
@@ -66,6 +70,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -75,8 +81,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
-import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE;
-import static android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO;
+import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
+import static android.content.Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
+import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity {
     static final int REQUEST_VIDEO_CAPTURE = 1;
@@ -104,17 +111,32 @@ public class MainActivity extends AppCompatActivity {
 
     public static boolean clicked=false;
     public static boolean isOther = false;
+    protected static String encfileName;
+
+    protected static File mencVideoFolder;
 
 
     public boolean videosExist;
-    public Uri videoUri;
+    private File mVideoFolder;
+
+    public static final int MEDIA_TYPE_IMAGE = 1;
+    public static final int MEDIA_TYPE_VIDEO = 2;
+
+    protected Uri videoUri;
     private VideoView videoView;
+    private Uri fileUri;
+    private String videoFilePath;
+    public Uri videoURI;
+    public FileOutputStream fos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         String obj = PreferenceManager.getDefaultSharedPreferences(this).getString("tagRecord", null);
+
+
 
         if (obj == null) { obj = ""; };
         try {
@@ -163,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
             supportActionBar.setHomeAsUpIndicator(indicator);
             supportActionBar.setDisplayHomeAsUpEnabled(true);
         }
+
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     // This method will trigger on item Click of navigation menu
@@ -263,90 +286,124 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "Select Video"),REQUEST_TAKE_GALLERY_VIDEO);
     }
 
-    private static File getOutputMediaFile(int type){
-        // To be safe, you should check that the SDCard is mounted
-        // using Environment.getExternalStorageState() before doing this.
 
-        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "MyCameraApp");
-        // This location works best if you want the created images to be shared
-        // between applications and persist after your app has been uninstalled.
+    /** Create a file Uri for saving an image or video */
+//    private static Uri getOutputMediaFileUri(int type){
+//        return Uri.fromFile(getOutputMediaFile(type));
+//    }
+//
+//    /** Create a File for saving an image or video */
+//    private static File getOutputMediaFile(int type){
+//        // To be safe, you should check that the SDCard is mounted
+//        // using Environment.getExternalStorageState() before doing this.
+//
+//        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+//                Environment.DIRECTORY_PICTURES), "MHMR_videos");
+//        // This location works best if you want the created images to be shared
+//        // between applications and persist after your app has been uninstalled.
+//
+//        // Create the storage directory if it does not exist
+//        if (! mediaStorageDir.exists()){
+//            if (! mediaStorageDir.mkdirs()){
+//                Log.d("MHMR", "failed to create directory");
+//                return null;
+//            }
+//        }
+//
+//        // Create a media file name
+//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+//        File mediaFile;
+//        if (type == MEDIA_TYPE_IMAGE){
+//            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+//                    "IMG_"+ timeStamp + ".jpg");
+//        } else if(type == MEDIA_TYPE_VIDEO) {
+//            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+//                    "VID_"+ timeStamp + ".mp4");
+//        } else {
+//            return null;
+//        }
+//
+//        return mediaFile;
+//    }
 
-        // Create the storage directory if it does not exist
-        if (! mediaStorageDir.exists()){
-            if (! mediaStorageDir.mkdirs()){
-                Log.d("MyCameraApp", "failed to create directory");
-                return null;
-            }
-        }
+    private File createVideoFile() throws IOException {
+        String timeStamp =
+                new SimpleDateFormat("yyyyMMdd_HHmmss",
+                        Locale.getDefault()).format(new Date());
+        String imageFileName = "VID_" + timeStamp + "_";
+        File storageDir =
+                getExternalFilesDir(Environment.DIRECTORY_DCIM);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".gp3",         /* suffix */
+                storageDir      /* directory */
+        );
 
-        // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE){
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_"+ timeStamp + ".jpg");
-        } else if(type == MEDIA_TYPE_VIDEO) {
-            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "VID_"+ timeStamp + ".mp4");
-        } else {
-            return null;
-        }
-
-        return mediaFile;
+        videoFilePath = image.getAbsolutePath();
+        return image;
     }
 
-    private static Uri getOutputVideoUri() {
-        if (Environment.getExternalStorageState() == null) {
-            return null;
-        }
-
-        File mediaStorage = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "YOUR_APP_VIDEO");
-        if (!mediaStorage.exists() &&
-                !mediaStorage.mkdirs()) {
-            //Log.e(, "failed to create directory: " + mediaStorage);
-            return null;
-        }
-
-        // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
-        File mediaFile = new File(mediaStorage, "VID_" + timeStamp + ".mp4");
-        return Uri.fromFile(mediaFile);
-    }
-    public void dispatchTakeVideoIntent() {
+    public void dispatchTakeVideoIntent() throws IOException {
         //startActivity(new Intent(MainActivity.this, CameraApi.class));
         //int a;
         //Random random = new Random();
         //a = random.nextInt(70) + 1;
+
+
+        //CameraApi.createVideoFolder();
+//        String extStorage = Environment.getExternalStorageState();
+//        mencVideoFolder = new File(extStorage + "/data/app/ca.imdc.newp-2");
         MainActivity mainActivity = new MainActivity();
-        //Intent openCameraIntent = new Intent(MainActivity.this, CameraApi.class);
+
+
+        //createEncVideoFileName();
+        //System.out.println(mencVideoFolder + "--------------------------------------------------->>>>>>>>>>>>");
+        //File newVideo = new File(mVideoFolder, encfileName);
         Intent openCameraIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        openCameraIntent.addFlags(FLAG_GRANT_READ_URI_PERMISSION|FLAG_GRANT_WRITE_URI_PERMISSION);
+        if(openCameraIntent.resolveActivity(getPackageManager()) != null){
+            //Create a file to store the image
+            File video = null;
+            try {
+                video = createVideoFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+
+            }
+            if (video != null) {
+                 videoURI = FileProvider.getUriForFile(this,"com.example.fileprovider", video);
+                openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        videoURI);
+                startActivityForResult(openCameraIntent,
+                        REQUEST_VIDEO_CAPTURE);
+            }
+        }
+
+
+
+
+
+
+        String fName = "VideoFileName.mp3";
+        File f = new File(fName);
+        openCameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+
+        //openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+
         //Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
        // takeVideoIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        //openCameraIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        openCameraIntent.setFlags(FLAG_GRANT_READ_URI_PERMISSION);
+        openCameraIntent.setFlags(FLAG_GRANT_WRITE_URI_PERMISSION);
 
-        // File videoDir = new File(System.getProperty("user.dir") + "/Video/");
-
-
-        //if (!videoDir.exists()) videoDir.mkdir();
-        //cfileName = videoDir.getAbsolutePath() + "/Untitled-" + a + ".mp4";
-        //encfileName = new File(System.getProperty("user.dir") + "/Encrypted/").getAbsolutePath() + "/Untitled-" + a + ".mp4";
-        //encfileName = getExternalFilesDir(null).getAbsolutePath() + "/Encrypted/Untitled-" + a + ".mp4";
-       // System.out.println("Video Dir: " + videoDir.getAbsolutePath());
-        //System.out.println("CFile Dir: " + cfileName);
-        //System.out.println("EncFile Dir: " + encfileName);
-               //File cFileDir = new File(cfileName);
+        //File outputFile = new File("/data/app/ca.imdc.newp-1");
+        //videoUri = Uri.fromFile(outputFile);
         //takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile((new File(cfileName))));
-        //openCameraIntent.putExtra(openCameraIntent.EXTRA_ORIGINATING_URI, Uri.fromFile((new File(cfileName))));
+
+
+        //openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,file);
         //if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
-
-//        File fileUri = getOutputMediaFile(MEDIA_TYPE_VIDEO);  // create a file to save the video in specific folder (this works for video only)
-//
-//        openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-//        openCameraIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1); // set the video image quality to high
-
         if (openCameraIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(openCameraIntent, REQUEST_VIDEO_CAPTURE);
+            //startActivityForResult(openCameraIntent, REQUEST_VIDEO_CAPTURE);
 
         }
     }
@@ -354,21 +411,63 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+       super.onActivityResult(requestCode, resultCode, data);
         File sdCard = Environment.getExternalStorageDirectory();
-        File dir = new File (sdCard.getAbsolutePath() + "/Android/data/app/ca.imdc.newp/");
+        File dir = new File (sdCard.getAbsolutePath() + "/Android/data/app/ca.imdc.newp-2");
         dir.mkdirs();
         File file = new File(dir, "filename");
+        //String videoUri1 = videoUri.getPath();
+        //Intent video = new Intent(MainActivity.this, viewVideo.class);
+        Bundle bundle = new Bundle();
+        //video.putExtras(bundle);
+        //String test = (String) data.getExtras().get("data");
+        //Uri test = data.getData();
+        String test = videoURI.getPath();
+//        bundle.putParcelable("uri", test);
+//        bundle.putString("uri", test);
+//        video.setData(test);
+       // video.putExtra("uri", test);
+        // -------------------------
+
+
+
+        File newFile = new File(dir, "VIDEO");
+        //Uri contentUri = FileProvider.getUriForFile(getApplicationContext(), "com.example.fileprovider", newFile);
+        Uri contentUri = data.getData();
+        //video.putExtra("uri",contentUri);
+
+
+
         MediaPlayer mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        //Intent intent1 = new Intent();
+        //setResult(RESULT_OK, intent1);
+        //finish();
+
+        try {
+            mediaPlayer.setDataSource(getApplicationContext(), contentUri);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            mediaPlayer.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mediaPlayer.start();
+        videoView = findViewById(R.id.surface);
+        videoView.setVideoURI(contentUri);
+        videoView.start();
+        videoView.setOnCompletionListener ( new MediaPlayer.OnCompletionListener() {
+
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                videoView.start();
+            }
+        });
 
 
-        Uri videoUri = data.getData();
-        String path1 = videoUri.getPath();
-        Intent videoview = new Intent(MainActivity.this,viewVideo.class);
-        videoview.putExtra("uri", videoUri);
-        startActivityForResult(videoview, 0);
-
+        //startActivity(video);
 
         if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK && videoUri != null) {
             // do what you want with videoUri
@@ -407,7 +506,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 jRecord.remove(name);
                 jRecord.put(replacer, jTags);
-            } catch (JSONException e) {
+            } catch (JSONException    e) {
                 e.printStackTrace();
             }
 //            for (String keyName: tagRecord.keySet()){
@@ -439,9 +538,11 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("myDataset" + Arrays.toString(myDataset));
         }
 
-        if (requestCode == REQUEST_TAKE_GALLERY_VIDEO) {
+        //if (requestCode == REQUEST_TAKE_GALLERY_VIDEO) {
+        if(resultCode == RESULT_OK){
             Uri selectedImageUri = data.getData();
-            String path  = getPath(selectedImageUri);
+            //String path  = getPath(selectedImageUri);
+            String path = selectedImageUri.toString();
             try {
 
                 FileInputStream fis;
@@ -452,7 +553,7 @@ public class MainActivity extends AppCompatActivity {
                 //this is where you set whatever path you want to save it as:
 
                 File tmpFile = new File("/storage/emulated/0/Android/data/ca.imdc.newp/files/Encrypted/","VideoFile.mp4");
-
+                tmpFile.canWrite();
                 //save the video to the File path
                 FileOutputStream fos = new FileOutputStream(tmpFile);
 
@@ -463,10 +564,13 @@ public class MainActivity extends AppCompatActivity {
                 }
                 fis.close();
                 fos.close();
+
             } catch (IOException io_e) {
                 // TODO: handle error
+
             }
             if (videosExist()) {
+
                 myDataset = populateList("names");
                 System.out.println("myDataset" + Arrays.toString(myDataset));
                 myDate = populateList("date");
@@ -499,7 +603,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("position", position);
                 intent.putExtra("name", globName);
                 startActivityForResult(intent, 2);
-                deleteAllVids();
+                //deleteAllVids();
             }
             if (CameraApi.isAnother == 1) {
                 CameraApi.isAnother = 0;
@@ -513,10 +617,22 @@ public class MainActivity extends AppCompatActivity {
                     //do nothing
                 }
 
-                dispatchTakeVideoIntent();
+                try {
+                    dispatchTakeVideoIntent();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 //
         }
+    }
+    private void createEncVideoFileName() throws IOException{
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String prepend = "VIDEO_ENC_" + timeStamp + "_";
+        //File  encvideoFile = File.createTempFile(prepend,"ENC.mp4.encrypt",mencVideoFolder); //creates the encrypted file
+        //encfileName = encvideoFile.getAbsolutePath(); //name of file name is stored
+        encfileName = mencVideoFolder.getAbsolutePath()+ "/" + prepend + "ENC.mp4";
+
     }
     public String getPath(Uri uri) {
         String[] projection = { MediaStore.Video.Media.DATA };
@@ -524,8 +640,7 @@ public class MainActivity extends AppCompatActivity {
         if (cursor != null) {
             // HERE YOU WILL GET A NULLPOINTER IF CURSOR IS NULL
             // THIS CAN BE, IF YOU USED OI FILE MANAGER FOR PICKING THE MEDIA
-            int column_index = cursor
-                    .getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
             cursor.moveToFirst();
             return cursor.getString(column_index);
         } else
@@ -633,6 +748,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void halo(String ubc) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(ubc));
+        intent.addFlags(FLAG_GRANT_READ_URI_PERMISSION);
         intent.setDataAndType(Uri.parse(ubc), "video/mp4");
         startActivity(intent);
     }
@@ -670,7 +786,11 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int id) {
                             clicked=true;
 
-                            dispatchTakeVideoIntent();
+                            try {
+                                dispatchTakeVideoIntent();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                             mAdapter.notifyDataSetChanged();
                         }
                     })
@@ -710,7 +830,11 @@ public class MainActivity extends AppCompatActivity {
                     .setNeutralButton("Agree", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
 
-                            dispatchTakeVideoIntent();
+                            try {
+                                dispatchTakeVideoIntent();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                             mAdapter.notifyDataSetChanged();
                             // User cancelled the dialog
                         }
@@ -776,11 +900,11 @@ public class MainActivity extends AppCompatActivity {
                             params.put("placeholder-video-id", "placeholder");
                             params.put("placeholder-video-data", "placeholder");
                             try {
-                                params.put("valance", String.valueOf(jtags.getJSONObject(String.valueOf(1))));
-                                params.put("arousal", String.valueOf(jtags.getJSONObject(String.valueOf(0))));
-                                params.put("location", String.valueOf(jtags.getJSONObject(String.valueOf(2))));
-                                params.put("activity", String.valueOf(jtags.getJSONObject(String.valueOf(3))));
-                                params.put("sharing", String.valueOf(jtags.getJSONObject(String.valueOf(4))));
+                                params.put("valence", String.valueOf(jtags.getJSONObject("Valence")));
+                                params.put("arousal", String.valueOf(jtags.getJSONObject("Arousal")));
+                                params.put("location", String.valueOf(jtags.getJSONObject("Location")));
+                                params.put("activity", String.valueOf(jtags.getJSONObject("Activity")));
+                                params.put("sharing", String.valueOf(jtags.getJSONObject("Sharing")));
                                 params.put("ownerid", ownerid1);
                             } catch (JSONException e) {
                                 e.printStackTrace();
