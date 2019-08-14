@@ -3,6 +3,7 @@ import android.Manifest;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.ContextWrapper;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.Context;
@@ -70,7 +71,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -342,7 +345,57 @@ public class MainActivity extends AppCompatActivity {
         videoFilePath = image.getAbsolutePath();
         return image;
     }
+    private void saveVideoToInternalStorage (String filePath) {
 
+        File newfile;
+
+        try {
+
+            File currentFile = new File(filePath);
+            String fileName = currentFile.getName();
+
+            ContextWrapper cw = new ContextWrapper(getApplicationContext());
+            File directory = cw.getDir("videoDir", Context.MODE_PRIVATE);
+
+
+            newfile = new File(directory, fileName+".mp3");
+
+            if(currentFile.exists()){
+
+                InputStream in = new FileInputStream(currentFile);
+                OutputStream out = new FileOutputStream(newfile);
+
+                // Copy the bits from instream to outstream
+                byte[] buf = new byte[1024];
+                int len;
+
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+
+                in.close();
+                out.close();
+
+                Log.v("", "Video file saved successfully.");
+
+            }else{
+                Log.v("", "Video saving failed. Source file missing.");
+            }
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void loadVideoFromInternalStorage(String filePath){
+
+        Uri uri = Uri.parse(Environment.getExternalStorageDirectory()+filePath);
+        videoView.setVideoURI(uri);
+
+    }
     public void dispatchTakeVideoIntent() throws IOException {
         //startActivity(new Intent(MainActivity.this, CameraApi.class));
         //int a;
@@ -360,31 +413,11 @@ public class MainActivity extends AppCompatActivity {
         //System.out.println(mencVideoFolder + "--------------------------------------------------->>>>>>>>>>>>");
         //File newVideo = new File(mVideoFolder, encfileName);
         Intent openCameraIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        startActivityForResult(openCameraIntent,REQUEST_VIDEO_CAPTURE);
         openCameraIntent.addFlags(FLAG_GRANT_READ_URI_PERMISSION|FLAG_GRANT_WRITE_URI_PERMISSION);
-        if(openCameraIntent.resolveActivity(getPackageManager()) != null){
-            //Create a file to store the image
-            File video = null;
-            try {
-                video = createVideoFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-
-            }
-            if (video != null) {
-                 videoURI = FileProvider.getUriForFile(this,"com.example.fileprovider", video);
-                openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                        videoURI);
-                startActivityForResult(openCameraIntent,
-                        REQUEST_VIDEO_CAPTURE);
-            }
-        }
 
 
-
-
-
-
-        String fName = "VideoFileName.mp3";
+        String fName = "VideoFileName.mp4";
         File f = new File(fName);
         openCameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
 
@@ -422,7 +455,7 @@ public class MainActivity extends AppCompatActivity {
         //video.putExtras(bundle);
         //String test = (String) data.getExtras().get("data");
         //Uri test = data.getData();
-        String test = videoURI.getPath();
+        //String test = videoURI.getPath();
 //        bundle.putParcelable("uri", test);
 //        bundle.putString("uri", test);
 //        video.setData(test);
@@ -432,8 +465,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         File newFile = new File(dir, "VIDEO");
+
         //Uri contentUri = FileProvider.getUriForFile(getApplicationContext(), "com.example.fileprovider", newFile);
         Uri contentUri = data.getData();
+
+        File uriToFile = new File(contentUri.getPath());
+        saveVideoToInternalStorage(uriToFile.toString());
+
         //video.putExtra("uri",contentUri);
 
 
@@ -445,7 +483,8 @@ public class MainActivity extends AppCompatActivity {
         //finish();
 
         try {
-            mediaPlayer.setDataSource(getApplicationContext(), contentUri);
+            mediaPlayer.setDataSource(getApplicationContext(), Uri.fromFile(uriToFile));
+            mediaPlayer.prepareAsync();
         } catch (IOException e) {
             e.printStackTrace();
         }
