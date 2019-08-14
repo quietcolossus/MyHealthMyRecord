@@ -86,6 +86,7 @@ import java.util.Random;
 
 import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
 import static android.content.Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
+import static com.google.android.gms.common.util.IOUtils.copyStream;
 import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity {
@@ -464,54 +465,55 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        File newFile = new File(dir, "VIDEO");
 
-        //Uri contentUri = FileProvider.getUriForFile(getApplicationContext(), "com.example.fileprovider", newFile);
         Uri contentUri = data.getData();
 
-        File uriToFile = new File(contentUri.getPath());
-        saveVideoToInternalStorage(uriToFile.toString());
+
 
         //video.putExtra("uri",contentUri);
 
-
-
-        MediaPlayer mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        //Intent intent1 = new Intent();
-        //setResult(RESULT_OK, intent1);
-        //finish();
-
-        try {
-            mediaPlayer.setDataSource(getApplicationContext(), Uri.fromFile(uriToFile));
-            mediaPlayer.prepareAsync();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            mediaPlayer.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        mediaPlayer.start();
-        videoView = findViewById(R.id.surface);
-        videoView.setVideoURI(contentUri);
-        videoView.start();
-        videoView.setOnCompletionListener ( new MediaPlayer.OnCompletionListener() {
-
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-                videoView.start();
-            }
-        });
-
-
         //startActivity(video);
 
-        if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK && videoUri != null) {
+        if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK && contentUri != null) {
             // do what you want with videoUri
+            System.out.println("------------------------------------------------------------------------------------------------------------------");
+            Intent videoIntent = new Intent(getApplicationContext(), viewVideo.class);
+            //videoIntent.setAction(Intent.ACTION_SEND);
+
+            videoIntent.setData(contentUri);
+
+            getBaseContext().getApplicationContext().startActivity(videoIntent);
 
 
+        }
+
+
+        try {
+            Date date= new Date();
+            android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", date);
+            String Video_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + getString(R.string.app_name) + "/video/";
+            File storeDirectory = new File(Video_DIRECTORY);
+
+            try {
+                if (storeDirectory.exists() == false) {
+                    storeDirectory.mkdirs();
+                }
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+
+            }
+            File storeDirectory12 = new File(storeDirectory,date+".mp3");
+            InputStream inputStream = getContentResolver().openInputStream(contentUri);
+            FileOutputStream fileOutputStream = new FileOutputStream(storeDirectory12);
+            copyStream(inputStream, fileOutputStream);
+            fileOutputStream.close();
+            inputStream.close();
+        } catch (FileNotFoundException e) {
+            Log.e("Exception", "" + e);
+        } catch (IOException e) {
+            Log.e("Exception", "" + e);
         }
 
 
@@ -579,9 +581,10 @@ public class MainActivity extends AppCompatActivity {
 
         //if (requestCode == REQUEST_TAKE_GALLERY_VIDEO) {
         if(resultCode == RESULT_OK){
-            Uri selectedImageUri = data.getData();
+            //Uri selectedImageUri = data.getData();
+            Uri selectedImageUri = contentUri; // i changed this to test a fix for null poiner exception -Manuel
             //String path  = getPath(selectedImageUri);
-            String path = selectedImageUri.toString();
+            String path = contentUri.toString();
             try {
 
                 FileInputStream fis;
