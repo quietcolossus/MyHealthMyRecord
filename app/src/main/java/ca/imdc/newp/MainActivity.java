@@ -493,7 +493,7 @@ public class MainActivity extends AppCompatActivity {
             android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", date);
             String Video_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + getString(R.string.app_name) + "/video/";
             File storeDirectory = new File(Video_DIRECTORY);
-
+            System.out.println(Video_DIRECTORY);
             try {
                 if (storeDirectory.exists() == false) {
                     storeDirectory.mkdirs();
@@ -504,12 +504,17 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
 
             }
-            File storeDirectory12 = new File(storeDirectory,date+".mp3");
-            InputStream inputStream = getContentResolver().openInputStream(contentUri);
-            FileOutputStream fileOutputStream = new FileOutputStream(storeDirectory12);
-            copyStream(inputStream, fileOutputStream);
-            fileOutputStream.close();
-            inputStream.close();
+            if (storeDirectory.exists() == true) {
+                File storeDirectory12 = new File(storeDirectory,"VideoFile"+".mp3");
+                storeDirectory12.createNewFile();
+                InputStream inputStream = getContentResolver().openInputStream(contentUri);
+                FileOutputStream fileOutputStream = new FileOutputStream(storeDirectory12);
+                copyStream(inputStream, fileOutputStream);
+                fileOutputStream.close();
+                inputStream.close();
+            }
+
+
         } catch (FileNotFoundException e) {
             Log.e("Exception", "" + e);
         } catch (IOException e) {

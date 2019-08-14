@@ -88,7 +88,7 @@ public class viewVideo extends MainActivity {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
                 videoView.start();
-                System.out.println("LOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOP");
+                //System.out.println("LOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOP");
             }
         });
         System.out.println("start got ran ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
