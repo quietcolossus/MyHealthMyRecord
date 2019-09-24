@@ -126,12 +126,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
 
-    protected Uri videoUri;
-    private VideoView videoView;
-    private Uri fileUri;
-    private String videoFilePath;
-    public Uri videoURI;
-    public FileOutputStream fos;
+    public String originalAudio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -291,61 +286,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    /** Create a file Uri for saving an image or video */
-//    private static Uri getOutputMediaFileUri(int type){
-//        return Uri.fromFile(getOutputMediaFile(type));
-//    }
-//
-//    /** Create a File for saving an image or video */
-//    private static File getOutputMediaFile(int type){
-//        // To be safe, you should check that the SDCard is mounted
-//        // using Environment.getExternalStorageState() before doing this.
-//
-//        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-//                Environment.DIRECTORY_PICTURES), "MHMR_videos");
-//        // This location works best if you want the created images to be shared
-//        // between applications and persist after your app has been uninstalled.
-//
-//        // Create the storage directory if it does not exist
-//        if (! mediaStorageDir.exists()){
-//            if (! mediaStorageDir.mkdirs()){
-//                Log.d("MHMR", "failed to create directory");
-//                return null;
-//            }
-//        }
-//
-//        // Create a media file name
-//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-//        File mediaFile;
-//        if (type == MEDIA_TYPE_IMAGE){
-//            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-//                    "IMG_"+ timeStamp + ".jpg");
-//        } else if(type == MEDIA_TYPE_VIDEO) {
-//            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-//                    "VID_"+ timeStamp + ".mp4");
-//        } else {
-//            return null;
-//        }
-//
-//        return mediaFile;
-//    }
 
-    private File createVideoFile() throws IOException {
-        String timeStamp =
-                new SimpleDateFormat("yyyyMMdd_HHmmss",
-                        Locale.getDefault()).format(new Date());
-        String imageFileName = "VID_" + timeStamp + "_";
-        File storageDir =
-                getExternalFilesDir(Environment.DIRECTORY_DCIM);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".gp3",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        videoFilePath = image.getAbsolutePath();
-        return image;
-    }
     private void saveVideoToInternalStorage (String filePath) {
 
         File newfile;
@@ -391,12 +332,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void loadVideoFromInternalStorage(String filePath){
 
-        Uri uri = Uri.parse(Environment.getExternalStorageDirectory()+filePath);
-        videoView.setVideoURI(uri);
-
-    }
     public void dispatchTakeVideoIntent() throws IOException {
         //startActivity(new Intent(MainActivity.this, CameraApi.class));
         //int a;
@@ -467,8 +403,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         Uri contentUri = data.getData();
-
-
+        String vidPath = FileUtils.getPath(this, contentUri);
+        try {
+            new AudioExtractor().genVideoUsingMuxer(vidPath, originalAudio, -1, -1, true, false);
+            System.out.println(" ++++++++++++++++++++++++++AUDIO SUCCESSFULLY EXTRACTED, URI OF AUDIO IS: " + originalAudio);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         //video.putExtra("uri",contentUri);
 

@@ -91,7 +91,10 @@ public class viewVideo extends MainActivity {
                 //System.out.println("LOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOPLOOOP");
             }
         });
-        System.out.println("start got ran ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+        System.out.println("start (viewVideo.java) got ran ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+
+
+
     }
 
 
