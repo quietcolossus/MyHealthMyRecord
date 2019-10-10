@@ -126,7 +126,6 @@ public class MainActivity extends AppCompatActivity {
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
 
-    public String originalAudio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -404,8 +403,18 @@ public class MainActivity extends AppCompatActivity {
 
         Uri contentUri = data.getData();
         String vidPath = FileUtils.getPath(this, contentUri);
+
+        File root = new File(Environment.getExternalStorageDirectory(), "VIDEOS");
+        if (!root.exists()) {
+            root.mkdirs();
+        }
+        File vidFile = new File(root, contentUri.toString());
+
+
+
+        File originalAudio = new File(root, "VIDEO");
         try {
-            new AudioExtractor().genVideoUsingMuxer(vidPath, originalAudio, -1, -1, true, false);
+            new AudioExtractor().genVideoUsingMuxer(vidFile.getAbsolutePath(), originalAudio.getAbsolutePath(), -1, -1, true, false);
             System.out.println(" ++++++++++++++++++++++++++AUDIO SUCCESSFULLY EXTRACTED, URI OF AUDIO IS: " + originalAudio);
         } catch (IOException e) {
             e.printStackTrace();

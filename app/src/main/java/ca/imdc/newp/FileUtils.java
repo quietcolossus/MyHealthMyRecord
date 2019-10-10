@@ -16,6 +16,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 
+import com.google.android.gms.common.util.IOUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
