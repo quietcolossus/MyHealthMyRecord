@@ -34,6 +34,7 @@ import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 
+import android.graphics.Camera;
 import android.graphics.Color;
 import android.content.res.Resources;
 import android.graphics.Matrix;
@@ -238,6 +239,7 @@ public class CameraApi extends AppCompatActivity {
                         startPreview();
                         dialog3 whatNext = new dialog3();
                         whatNext.show(getFragmentManager(), "dialog3");
+//                        finish();
                     }
 
                 }
@@ -274,6 +276,7 @@ public class CameraApi extends AppCompatActivity {
                     startPreview();
                     dialog3 whatNext = new dialog3();
                     whatNext.show(getFragmentManager(), "dialog3");
+
                 }
                 else{
                     mIsRecording = true;
@@ -318,60 +321,61 @@ public class CameraApi extends AppCompatActivity {
         });
     }
 
-    public class dialog3 extends DialogFragment {
+    public static class dialog3 extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstance) {
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
             //LayoutInflater inflater = getActivity().getLayoutInflater();
-            builder.setTitle("Your video has been saved! " +
-                    " Would you like to share this video or make another one?")
+            builder.setTitle("Great video! " +
+                    " Would you like to save this video or make another one?")
                     .setPositiveButton("Another video", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
 
-                        finish();
+                            getActivity().finish();
                             isAnother = 1;
 
                         }
                         //stays on cameraapi
                     })
-                    .setNegativeButton("Share", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                            /*MainActivity.dialog4 shareD = new MainActivity.dialog4();
-                            shareD.show(CameraApi.this.getFragmentManager(), "dialog4");*/
-                            final Dialog dialog = new Dialog(getContext());
-                            dialog.setContentView(R.layout.share_dialog);
-                            dialog.show();
-                            Button cancel = dialog.findViewById(R.id.cancel_button);
-                            cancel.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    dialog.dismiss();
-                                    finish();
-                                }
-                            });
-                            Button shareb = dialog.findViewById(R.id.share_button);
-                            shareb.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Toast.makeText(getApplicationContext(), "Video was shared!", Toast.LENGTH_SHORT).show();
-                                    dialog.dismiss();
-                                    finish();
-                                }
-                            });
-                        }
-                        //stays on cameraapi
-                    })
-                    .setNeutralButton("Home", new DialogInterface.OnClickListener() {
+//                    .setNegativeButton("Share", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//
+//                            /*MainActivity.dialog4 shareD = new MainActivity.dialog4();
+//                            shareD.show(CameraApi.this.getFragmentManager(), "dialog4");*/
+//                            final Dialog dialog = new Dialog(getContext());
+//                            dialog.setContentView(R.layout.share_dialog);
+//                            dialog.show();
+//                            Button cancel = dialog.findViewById(R.id.cancel_button);
+//                            cancel.setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//                                    dialog.dismiss();
+////                                    ((CameraApi)getActivity()).finish();
+//                                }
+//                            });
+//                            Button shareb = dialog.findViewById(R.id.share_button);
+//                            shareb.setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+////                                    Toast.makeText(((CameraApi)getActivity()).getApplicationContext(), "Video was shared!", Toast.LENGTH_SHORT).show();
+//                                    dialog.dismiss();
+////                                    ((CameraApi)getActivity()).finish();
+//                                }
+//                            });
+//                        }
+//                        //stays on cameraapi
+//                    })
+                    .setNeutralButton("Save", new DialogInterface.OnClickListener() {
                         public void onClick (DialogInterface dialog, int id){
-                            finish();
+                            getActivity().finish();
                       }
                     });
 
             return builder.create();
         }
+
     }
 
     @Override

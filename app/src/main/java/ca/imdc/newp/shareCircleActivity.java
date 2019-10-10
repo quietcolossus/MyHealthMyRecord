@@ -94,7 +94,7 @@ tv1= new TextView(this);
               click=1;
                 c1.setVisibility(View.INVISIBLE);
                 RelativeLayout ll = (RelativeLayout) findViewById(R.id.sharecircle);
-                ll.addView(tv1);
+//                ll.addView(tv1);
             }
         });
         tv1.setOnClickListener(new View.OnClickListener() {

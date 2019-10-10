@@ -537,31 +537,31 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public class dialog extends DialogFragment {
+    public static class dialog extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstance) {
 
             // Use the Builder class for convenient dialog construction
+
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
             LayoutInflater inflater = getActivity().getLayoutInflater();
             builder.setTitle("Who are you recording?")
                     .setPositiveButton("SELF", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             clicked=true;
-
-                            dispatchTakeVideoIntent();
+                            ((MainActivity)getActivity()).dispatchTakeVideoIntent();
                             mAdapter.notifyDataSetChanged();
                         }
                     })
                     .setNegativeButton("EXISTING", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            dispatchUploadVideoIntent();
+                            ((MainActivity)getActivity()).dispatchTakeVideoIntent();
 
                         }
                     })
                     .setNeutralButton("OTHER", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            //MainActivity.isOther = true;
+                            MainActivity.isOther = true;
                             clicked= false;
                             dialog2 myAlert2 = new dialog2();
                             myAlert2.show(getFragmentManager(), "dialog2");
@@ -572,7 +572,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public class dialog2 extends DialogFragment {
+    public static class dialog2 extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstance) {
 
@@ -589,7 +589,7 @@ public class MainActivity extends AppCompatActivity {
                     .setNeutralButton("Agree", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
 
-                            dispatchTakeVideoIntent();
+                            ((MainActivity)getActivity()).dispatchTakeVideoIntent();
                             mAdapter.notifyDataSetChanged();
                             // User cancelled the dialog
                         }
