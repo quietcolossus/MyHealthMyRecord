@@ -41,6 +41,12 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.github.hiteshsondhi88.libffmpeg.ExecuteBinaryResponseHandler;
+import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
+import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler;
+import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
+import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -282,6 +288,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
+
+
 //            HashMap<String, ArrayList<Object>> tags = (HashMap<String, ArrayList<Object>>) data.getSerializableExtra("tags");
 
             ArrayList<String> list = new ArrayList<>(Arrays.asList(myDataset));
@@ -316,6 +324,64 @@ public class MainActivity extends AppCompatActivity {
             renameIt(getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+name,  getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+replacer);
             renameIt(getExternalFilesDir(null).getAbsolutePath()+"/Video/"+name.replace(".encrypt",""), getExternalFilesDir(null).getAbsolutePath()+"/Video/"+replacer.replace(".encrypt",""));
             System.out.println("myDataset" + Arrays.toString(myDataset));
+
+            FFmpeg ffmpeg = FFmpeg.getInstance(this);
+            try {
+                //Load the binary
+                ffmpeg.loadBinary(new LoadBinaryResponseHandler() {
+
+                    @Override
+                    public void onStart() {}
+
+                    @Override
+                    public void onFailure() {}
+
+                    @Override
+                    public void onSuccess() {}
+
+                    @Override
+                    public void onFinish() {}
+                });
+            } catch (FFmpegNotSupportedException e) {
+                // Handle if FFmpeg is not supported by device
+            }
+            try {
+                // to execute "ffmpeg -version" command you just need to pass "-version"
+                // Now, you can execute your command here
+
+                String[] command = {"-i", CameraApi.cfileName , "-ab", "128k", "-ac", "2", "-ar", "44100", "-vn", CameraApi.cfileName.replace(".mp4",".mp3")};
+                ffmpeg.execute(command, new ExecuteBinaryResponseHandler() {
+
+                    @Override
+                    public void onStart() {
+                        System.out.println("FFMPEG COMMAND STARTS");
+                    }
+
+                    @Override
+                    public void onProgress(String message) {
+                        System.out.println("FFMPEG COMMAND IN PROGRESS: " + message);
+
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        System.out.println("FFMPEG COMMAND FAILED" + message);
+
+                    }
+
+                    @Override
+                    public void onSuccess(String message) {
+                        Log.i("SUCCESS", message);
+                    }
+
+                    @Override
+                    public void onFinish() {
+
+                    }
+                });
+            } catch (FFmpegCommandAlreadyRunningException e) {
+                // Handle if FFmpeg is already running
+            }
         }
 
         if (requestCode == REQUEST_TAKE_GALLERY_VIDEO) {
@@ -378,7 +444,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("position", position);
                 intent.putExtra("name", globName);
                 startActivityForResult(intent, 2);
-                deleteAllVids();
+                //deleteAllVids();
             }
             if (CameraApi.isAnother == 1) {
                 CameraApi.isAnother = 0;
@@ -509,6 +575,8 @@ public class MainActivity extends AppCompatActivity {
         }
         return decr.getAbsolutePath();
     }
+
+
 
     public void halo(String ubc) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(ubc));

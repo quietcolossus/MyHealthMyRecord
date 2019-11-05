@@ -21,7 +21,9 @@ android {
             debuggable true
         }
     }
+
 }
+
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
@@ -34,5 +36,5 @@ dependencies {
     implementation 'com.google.android.gms:play-services-identity:16.0.0'
     testImplementation 'junit:junit:4.12'
     implementation group: 'postgresql', name: 'postgresql', version: '9.0-801.jdbc4'
-
+    implementation 'com.writingminds:FFmpegAndroid:0.3.2'
 }
