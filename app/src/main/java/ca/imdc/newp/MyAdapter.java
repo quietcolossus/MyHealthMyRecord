@@ -1,43 +1,29 @@
 package ca.imdc.newp;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.icu.util.RangeValueIterator;
-import android.media.Image;
 import android.net.Uri;
-import android.support.design.widget.Snackbar;
-import android.support.transition.Fade;
-import android.support.transition.Scene;
-import android.support.transition.TransitionManager;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.content.res.TypedArrayUtils;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.transition.Fade;
+import androidx.transition.Scene;
+import androidx.transition.TransitionManager;
+import androidx.fragment.app.FragmentManager;
+import androidx.core.content.res.TypedArrayUtils;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Arrays;
-import java.net.ConnectException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-import static android.support.transition.Fade.IN;
-import static ca.imdc.newp.MainActivity.*;
-import static ca.imdc.newp.R.id.card_view;
-import static ca.imdc.newp.R.id.root;
+import static androidx.transition.Fade.IN;
 import static ca.imdc.newp.R.layout.item;
 
 /**

@@ -1,55 +1,40 @@
 package ca.imdc.newp;
-import android.Manifest;
 
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.content.ContextWrapper;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.Context;
+import android.Manifest;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ProviderInfo;
-import android.content.res.Configuration;
-import android.content.res.XmlResourceParser;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Camera;
 import android.graphics.Color;
-import android.media.AudioManager;
-import android.media.CamcorderProfile;
 import android.media.MediaMetadataRetriever;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.preference.DialogPreference;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.provider.Settings;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.graphics.drawable.VectorDrawableCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.VideoView;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -57,11 +42,22 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.common.api.ApiException;
-import com.ibm.watson.developer_cloud.service.security.IamOptions;
-import com.ibm.watson.developer_cloud.visual_recognition.v3.VisualRecognition;
+import com.github.hiteshsondhi88.libffmpeg.ExecuteBinaryResponseHandler;
+import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
+import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler;
+import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
+import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import com.ibm.cloud.sdk.core.http.HttpMediaType;
+import com.ibm.cloud.sdk.core.security.Authenticator;
+import com.ibm.cloud.sdk.core.security.IamAuthenticator;
+import com.ibm.watson.developer_cloud.android.library.audio.MicrophoneInputStream;
+
+import com.ibm.watson.speech_to_text.v1.SpeechToText;
+import com.ibm.watson.speech_to_text.v1.model.RecognizeOptions;
+import com.ibm.watson.speech_to_text.v1.model.SpeechRecognitionResults;
+import com.ibm.watson.speech_to_text.v1.websocket.BaseRecognizeCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -72,22 +68,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
 
 import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
-import static android.content.Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
-import static com.google.android.gms.common.util.IOUtils.copyStream;
-import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity {
     static final int REQUEST_VIDEO_CAPTURE = 1;
@@ -131,6 +120,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
 
         String obj = PreferenceManager.getDefaultSharedPreferences(this).getString("tagRecord", null);
 
@@ -218,10 +210,6 @@ public class MainActivity extends AppCompatActivity {
         // use a linear layout manager
 
 
-        IamOptions options = new IamOptions.Builder()
-                .apiKey("{VRHKcB5jKWLzBdIFjk6D6wQDYRPQhAUZzYGzOPOukj_m}")
-                .build();
-        VisualRecognition visualRecognition = new VisualRecognition("{1.1.1}", options);
 
     }
 
@@ -331,13 +319,68 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+     void watsonSend() {
+        // START OF WATSON TEST ------------------------------------------
+        Authenticator authenticator =  new IamAuthenticator("ilPJZOJKW6OhAKjLVEnq2cQXYWjnf73vZWy1dJSUt0Am");
+        SpeechToText service = new SpeechToText(authenticator);
+
+        InputStream audio = null;
+        try {
+            audio = new FileInputStream(CameraApi.cfileName.replace(".mp4",".mp3"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        RecognizeOptions options = new RecognizeOptions.Builder()
+                .audio(audio)
+                .contentType(HttpMediaType.AUDIO_MP3)
+                .interimResults(true)
+                .build();
+
+        service.recognizeUsingWebSocket(options, new BaseRecognizeCallback() {
+
+
+            @Override
+            public void onConnected() {
+                super.onConnected();
+                System.out.println("CONNECTED TO WATSON *_*_*_*_*_*_*_*_*__*_**_*_*_**__");
+            }
+
+            @Override
+            public void onTranscription(SpeechRecognitionResults speechResults) {
+                super.onTranscription(speechResults);
+                System.out.println(speechResults);
+            }
+        });
+
+// wait 20 seconds for the asynchronous response
+        try {
+            Thread.sleep(5000);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+    private class playback extends BaseRecognizeCallback {
+
+        public void onTranscription(Response<SpeechRecognitionResults> speechResults) {
+            if (speechResults != null && !speechResults.toString().isEmpty()) {
+                String text = speechResults.toString();
+
+            }
+        }
+
+    }
+
 
     public void dispatchTakeVideoIntent() throws IOException {
         //startActivity(new Intent(MainActivity.this, CameraApi.class));
         //int a;
         //Random random = new Random();
         //a = random.nextInt(70) + 1;
-
+        Intent openCameraIntent = new Intent(MainActivity.this, CameraApi.class);
 
         //CameraApi.createVideoFolder();
 //        String extStorage = Environment.getExternalStorageState();
@@ -345,34 +388,11 @@ public class MainActivity extends AppCompatActivity {
         MainActivity mainActivity = new MainActivity();
 
 
-        //createEncVideoFileName();
-        //System.out.println(mencVideoFolder + "--------------------------------------------------->>>>>>>>>>>>");
-        //File newVideo = new File(mVideoFolder, encfileName);
-        Intent openCameraIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        startActivityForResult(openCameraIntent,REQUEST_VIDEO_CAPTURE);
-        openCameraIntent.addFlags(FLAG_GRANT_READ_URI_PERMISSION|FLAG_GRANT_WRITE_URI_PERMISSION);
 
 
-        String fName = "VideoFileName.mp4";
-        File f = new File(fName);
-        openCameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-
-        //openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
-
-        //Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-       // takeVideoIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        openCameraIntent.setFlags(FLAG_GRANT_READ_URI_PERMISSION);
-        openCameraIntent.setFlags(FLAG_GRANT_WRITE_URI_PERMISSION);
-
-        //File outputFile = new File("/data/app/ca.imdc.newp-1");
-        //videoUri = Uri.fromFile(outputFile);
-        //takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile((new File(cfileName))));
-
-
-        //openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,file);
         //if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
         if (openCameraIntent.resolveActivity(getPackageManager()) != null) {
-            //startActivityForResult(openCameraIntent, REQUEST_VIDEO_CAPTURE);
+            startActivityForResult(openCameraIntent, REQUEST_VIDEO_CAPTURE);
 
         }
     }
@@ -380,98 +400,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-       super.onActivityResult(requestCode, resultCode, data);
-        File sdCard = Environment.getExternalStorageDirectory();
-        File dir = new File (sdCard.getAbsolutePath() + "/Android/data/app/ca.imdc.newp-2");
-        dir.mkdirs();
-        File file = new File(dir, "filename");
-        //String videoUri1 = videoUri.getPath();
-        //Intent video = new Intent(MainActivity.this, viewVideo.class);
-        Bundle bundle = new Bundle();
-        //video.putExtras(bundle);
-        //String test = (String) data.getExtras().get("data");
-        //Uri test = data.getData();
-        //String test = videoURI.getPath();
-//        bundle.putParcelable("uri", test);
-//        bundle.putString("uri", test);
-//        video.setData(test);
-       // video.putExtra("uri", test);
-        // -------------------------
 
 
-
-
-        Uri contentUri = data.getData();
-        String vidPath = FileUtils.getPath(this, contentUri);
-
-        File root = new File(Environment.getExternalStorageDirectory(), "VIDEOS");
-        if (!root.exists()) {
-            root.mkdirs();
-        }
-        File vidFile = new File(root, contentUri.toString());
-
-
-
-        File originalAudio = new File(root, "VIDEO");
-        try {
-            new AudioExtractor().genVideoUsingMuxer(vidFile.getAbsolutePath(), originalAudio.getAbsolutePath(), -1, -1, true, false);
-            System.out.println(" ++++++++++++++++++++++++++AUDIO SUCCESSFULLY EXTRACTED, URI OF AUDIO IS: " + originalAudio);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        //video.putExtra("uri",contentUri);
-
-        //startActivity(video);
-
-        if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK && contentUri != null) {
-            // do what you want with videoUri
-            System.out.println("------------------------------------------------------------------------------------------------------------------");
-            Intent videoIntent = new Intent(getApplicationContext(), viewVideo.class);
-            //videoIntent.setAction(Intent.ACTION_SEND);
-
-            videoIntent.setData(contentUri);
-
-            getBaseContext().getApplicationContext().startActivity(videoIntent);
-
-
-        }
-
-
-        try {
-            Date date= new Date();
-            android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", date);
-            String Video_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + getString(R.string.app_name) + "/video/";
-            File storeDirectory = new File(Video_DIRECTORY);
-            System.out.println(Video_DIRECTORY);
-            try {
-                if (storeDirectory.exists() == false) {
-                    storeDirectory.mkdirs();
-                }
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-
-            }
-            if (storeDirectory.exists() == true) {
-                File storeDirectory12 = new File(storeDirectory,"VideoFile"+".mp3");
-                storeDirectory12.createNewFile();
-                InputStream inputStream = getContentResolver().openInputStream(contentUri);
-                FileOutputStream fileOutputStream = new FileOutputStream(storeDirectory12);
-                copyStream(inputStream, fileOutputStream);
-                fileOutputStream.close();
-                inputStream.close();
-            }
-
-
-        } catch (FileNotFoundException e) {
-            Log.e("Exception", "" + e);
-        } catch (IOException e) {
-            Log.e("Exception", "" + e);
-        }
-
-
+        //super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 2) {
             String replacer = data.getStringExtra("result");
             String name = data.getStringExtra("name");
@@ -483,6 +414,8 @@ public class MainActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
+
 
 
 //            HashMap<String, ArrayList<Object>> tags = (HashMap<String, ArrayList<Object>>) data.getSerializableExtra("tags");
@@ -502,7 +435,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 jRecord.remove(name);
                 jRecord.put(replacer, jTags);
-            } catch (JSONException    e) {
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
 //            for (String keyName: tagRecord.keySet()){
@@ -514,32 +447,79 @@ public class MainActivity extends AppCompatActivity {
 //            JSONObject obj = new JSONObject(tagRecord);
 //            System.out.println(obj);
             System.out.println("JTAGS" + jTags);
-
-            String email = getIntent().getStringExtra("account");
-            String firstname = getIntent().getStringExtra("name");
-            String ownerid = getIntent().getStringExtra("id");
-
-            parseAndSend(new RegisterActivity.VolleyCallback() {
-                @Override
-                public void onSuccess(String result) {
-                    System.out.println("SENT JTAGS BACK TO DB");
-                }
-            }, email,firstname,jTags, ownerid);
-
-
             PreferenceManager.getDefaultSharedPreferences(this).edit().putString("tagRecord", jRecord.toString()).apply();
 ////
             renameIt(getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+name,  getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+replacer);
             renameIt(getExternalFilesDir(null).getAbsolutePath()+"/Video/"+name.replace(".encrypt",""), getExternalFilesDir(null).getAbsolutePath()+"/Video/"+replacer.replace(".encrypt",""));
             System.out.println("myDataset" + Arrays.toString(myDataset));
+
+            FFmpeg ffmpeg = FFmpeg.getInstance(this);
+            try {
+                //Load the binary
+                ffmpeg.loadBinary(new LoadBinaryResponseHandler() {
+
+                    @Override
+                    public void onStart() {}
+
+                    @Override
+                    public void onFailure() {}
+
+                    @Override
+                    public void onSuccess() {}
+
+                    @Override
+                    public void onFinish() {}
+                });
+            } catch (FFmpegNotSupportedException e) {
+                // Handle if FFmpeg is not supported by device
+            }
+            try {
+                // to execute "ffmpeg -version" command you just need to pass "-version"
+                // Now, you can execute your command here
+
+                String[] command = {"-i", CameraApi.cfileName , "-ab", "128k", "-ac", "2", "-ar", "44100", "-vn", CameraApi.cfileName.replace(".mp4",".mp3")};
+                ffmpeg.execute(command, new ExecuteBinaryResponseHandler() {
+
+                    @Override
+                    public void onStart() {
+                        System.out.println("FFMPEG COMMAND STARTS");
+                    }
+
+                    @Override
+                    public void onProgress(String message) {
+                        System.out.println("FFMPEG COMMAND IN PROGRESS: " + message);
+
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        System.out.println("FFMPEG COMMAND FAILED" + message);
+
+                    }
+
+                    @Override
+                    public void onSuccess(String message) {
+                        Log.i("SUCCESS", message);
+
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        watsonSend();
+
+
+                    }
+                });
+            } catch (FFmpegCommandAlreadyRunningException e) {
+                // Handle if FFmpeg is already running
+            }
         }
 
-        //if (requestCode == REQUEST_TAKE_GALLERY_VIDEO) {
-        if(resultCode == RESULT_OK){
-            //Uri selectedImageUri = data.getData();
-            Uri selectedImageUri = contentUri; // i changed this to test a fix for null poiner exception -Manuel
-            //String path  = getPath(selectedImageUri);
-            String path = contentUri.toString();
+
+        if (requestCode == REQUEST_TAKE_GALLERY_VIDEO) {
+            Uri selectedImageUri = data.getData();
+            String path  = getPath(selectedImageUri);
             try {
 
                 FileInputStream fis;
@@ -550,7 +530,7 @@ public class MainActivity extends AppCompatActivity {
                 //this is where you set whatever path you want to save it as:
 
                 File tmpFile = new File("/storage/emulated/0/Android/data/ca.imdc.newp/files/Encrypted/","VideoFile.mp4");
-                tmpFile.canWrite();
+
                 //save the video to the File path
                 FileOutputStream fos = new FileOutputStream(tmpFile);
 
@@ -561,13 +541,10 @@ public class MainActivity extends AppCompatActivity {
                 }
                 fis.close();
                 fos.close();
-
             } catch (IOException io_e) {
                 // TODO: handle error
-
             }
             if (videosExist()) {
-
                 myDataset = populateList("names");
                 System.out.println("myDataset" + Arrays.toString(myDataset));
                 myDate = populateList("date");
@@ -582,11 +559,11 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_CANCELED) {
                 crypto();
 
-               if (videosExist()) {
+                if (videosExist()) {
                     myDataset = populateList("names");
                     System.out.println("myDataset" + Arrays.toString(myDataset));
                     myDate = populateList("date");
-                   System.out.println("nyDate" + Arrays.toString(myDate));
+                    System.out.println("nyDate" + Arrays.toString(myDate));
                 }
 
                 mAdapter = new MyAdapter(myDataset, myDate, this);
@@ -776,7 +753,7 @@ public class MainActivity extends AppCompatActivity {
         public Dialog onCreateDialog(Bundle savedInstance) {
 
             // Use the Builder class for convenient dialog construction
-            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             LayoutInflater inflater = getActivity().getLayoutInflater();
             builder.setTitle("Who are you recording?")
                     .setPositiveButton("SELF", new DialogInterface.OnClickListener() {
@@ -815,7 +792,7 @@ public class MainActivity extends AppCompatActivity {
         public Dialog onCreateDialog(Bundle savedInstance) {
 
             // Use the Builder class for convenient dialog construction
-            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             LayoutInflater inflater = getActivity().getLayoutInflater();
             builder.setView(inflater.inflate(R.layout.dialog_text, null))
                     .setTitle("Consent")
@@ -844,7 +821,7 @@ public class MainActivity extends AppCompatActivity {
         public Dialog onCreateDialog(Bundle savedInstance) {
 
             // Use the Builder class for convenient dialog construction
-            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             LayoutInflater inflater = getActivity().getLayoutInflater();
             builder.setView(inflater.inflate(R.layout.share_dialog, null));
 

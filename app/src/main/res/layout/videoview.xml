@@ -26,6 +26,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|bottom"
-            android:src="@android:drawable/checkbox_on_background" />
+            app:srcCompat="@android:drawable/checkbox_on_background" />
     </FrameLayout>
 </LinearLayout>

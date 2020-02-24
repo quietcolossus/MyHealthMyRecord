@@ -3,7 +3,7 @@ package ca.imdc.newp;
 
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
