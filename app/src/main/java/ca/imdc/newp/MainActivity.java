@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
 
+    public static final String EXTRA_MESSAGE = "ca.imdc.newp.MESSAGE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -272,8 +273,6 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "Select Video"),REQUEST_TAKE_GALLERY_VIDEO);
     }
 
-
-
     private void saveVideoToInternalStorage (String filePath) {
 
         File newfile;
@@ -319,6 +318,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void displayTranscript(String text){
+        String transcript = text;
+        Intent intent = new Intent(this, DisplayActivity.class);
+        intent.putExtra("TRANSCRIPT",transcript);
+        startActivity(intent);
+    }
+
      void watsonSend() {
         // START OF WATSON TEST ------------------------------------------
         Authenticator authenticator =  new IamAuthenticator("ilPJZOJKW6OhAKjLVEnq2cQXYWjnf73vZWy1dJSUt0Am");
@@ -350,6 +356,10 @@ public class MainActivity extends AppCompatActivity {
             public void onTranscription(SpeechRecognitionResults speechResults) {
                 super.onTranscription(speechResults);
                 System.out.println(speechResults);
+                if (speechResults.getResults() != null && !speechResults.getResults().isEmpty()) {
+                    String text = speechResults.getResults().get(0).getAlternatives().get(0).getTranscript();
+                    displayTranscript(speechResults.toString());
+                }
             }
         });
 
@@ -363,16 +373,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-    private class playback extends BaseRecognizeCallback {
 
-        public void onTranscription(Response<SpeechRecognitionResults> speechResults) {
-            if (speechResults != null && !speechResults.toString().isEmpty()) {
-                String text = speechResults.toString();
 
-            }
-        }
-
-    }
 
 
     public void dispatchTakeVideoIntent() throws IOException {
@@ -500,8 +502,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(String message) {
                         Log.i("SUCCESS", message);
-
-
                     }
 
                     @Override

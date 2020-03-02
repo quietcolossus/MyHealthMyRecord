@@ -36,6 +36,8 @@ dependencies {
     implementation 'com.android.volley:volley:1.1.0'
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.google.android.gms:play-services-identity:16.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'com.google.android.material:material:1.0.0'
     testImplementation 'junit:junit:4.13'
     implementation 'com.ibm.watson.developer_cloud:java-sdk:6.14.2'
     implementation 'org.apache.commons:commons-lang3:3.9'
@@ -43,7 +45,7 @@ dependencies {
     implementation group: 'postgresql', name: 'postgresql', version: '9.4.1208-jdbc42-atlassian-hosted'
     implementation 'com.writingminds:FFmpegAndroid:0.3.2'
     implementation 'com.ibm.watson.developer_cloud:android-sdk:0.5.2'
-    implementation ('com.ibm.watson:ibm-watson:8.0.0') {
+    implementation('com.ibm.watson:ibm-watson:8.0.0') {
         exclude group: 'com.google.code.findbugs', module: 'annotations'
     }
 
