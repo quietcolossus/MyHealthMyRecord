@@ -1,5 +1,6 @@
 package ca.imdc.newp;
 
+
 import android.Manifest;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -116,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
     public static final int MEDIA_TYPE_VIDEO = 2;
 
     public static final String EXTRA_MESSAGE = "ca.imdc.newp.MESSAGE";
+
+    public String transcript;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -320,7 +323,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void displayTranscript(String text){
         String transcript = text;
-        Intent intent = new Intent(this, DisplayActivity.class);
+        Intent intent = new Intent(this, VideoTranscript.class);
         intent.putExtra("TRANSCRIPT",transcript);
         startActivity(intent);
     }
@@ -358,7 +361,8 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println(speechResults);
                 if (speechResults.getResults() != null && !speechResults.getResults().isEmpty()) {
                     String text = speechResults.getResults().get(0).getAlternatives().get(0).getTranscript();
-                    displayTranscript(speechResults.toString());
+                    transcript = speechResults.toString();
+                    //displayTranscript(speechResults.toString());
                 }
             }
         });
@@ -507,7 +511,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onFinish() {
                         watsonSend();
-
+                        displayTranscript(transcript);
 
                     }
                 });

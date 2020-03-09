@@ -12,16 +12,21 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
-public class DisplayActivity extends AppCompatActivity {
-
+public class VideoTranscript extends AppCompatActivity {
+    //public TextView transcript = (TextView) findViewById(R.id.message);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Intent intent = getIntent();
         String message = intent.getStringExtra("TRANSCRIPT");
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                transcript.setText(message);
+//
+//            }
+//        });
         super.onCreate(savedInstanceState);
-        TextView transcript = (TextView) findViewById(R.id.messageText);
-        transcript.setText(message);
-        setContentView(R.layout.activity_display);
+        setContentView(R.layout.activity_video_transcript);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -29,7 +34,7 @@ public class DisplayActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Creating Word Cloud", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });

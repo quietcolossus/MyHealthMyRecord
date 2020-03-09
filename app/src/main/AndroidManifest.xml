@@ -24,8 +24,8 @@
         android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".DisplayActivity"
-            android:label="@string/title_activity_display"
+            android:name=".VideoTranscript"
+            android:label="@string/title_activity_video_transcript"
             android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
         <activity
             android:name=".MainActivity"

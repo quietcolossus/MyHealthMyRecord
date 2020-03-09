@@ -10,6 +10,7 @@ import java.io.File;
  * Created by imdc on 18/08/2016.
  */
 public class VideoProcressing extends AppCompatActivity{
+
     private static final int REQUEST_VIDEO_CAPTURE = 1;
     Context con;
     AppCompatActivity act;
