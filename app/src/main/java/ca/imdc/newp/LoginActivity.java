@@ -1,6 +1,6 @@
 package ca.imdc.newp;
 
-        import android.support.v7.app.AppCompatActivity;
+        import androidx.appcompat.app.AppCompatActivity;
         import android.os.Bundle;
         import android.content.Intent;
         import android.util.Log;
@@ -18,12 +18,10 @@ package ca.imdc.newp;
 
         import com.android.volley.toolbox.StringRequest;
         import com.android.volley.toolbox.Volley;
-        import com.google.android.gms.auth.api.Auth;
         import com.google.android.gms.auth.api.signin.GoogleSignIn;
         import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
         import com.google.android.gms.auth.api.signin.GoogleSignInClient;
         import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-        import com.google.android.gms.auth.api.signin.GoogleSignInResult;
         import com.google.android.gms.common.SignInButton;
         import com.google.android.gms.common.api.ApiException;
         import com.google.android.gms.common.api.GoogleApiClient;
@@ -93,7 +91,9 @@ public class LoginActivity extends AppCompatActivity {
         final String username = mUsername.getText().toString();
         final String password = mPassword.getText().toString();
 
+        Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
 
+        startActivity(mainIntent);
         //updateUI(account);
 
         //Requests user's informations
@@ -181,7 +181,9 @@ public class LoginActivity extends AppCompatActivity {
 
     public void updateUI(GoogleSignInAccount account){
         Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-
+        mainIntent.putExtra("email", account.getEmail());
+        mainIntent.putExtra("name", account.getGivenName());
+        mainIntent.putExtra("name", account.getId());
         startActivity(mainIntent);
     }
     public interface VolleyCallback{
@@ -246,6 +248,8 @@ public class LoginActivity extends AppCompatActivity {
 
         return 0;
     }
+
+
 
 
     public int loginVolley(final VolleyCallback callback, final EditText username, final EditText password){

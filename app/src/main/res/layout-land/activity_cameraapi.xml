@@ -24,7 +24,7 @@
         android:layout_marginTop="18dp"
         android:id="@+id/cameraFlipImageButton"
         android:contentDescription="@string/camera_flip_button"
-        android:src="@mipmap/ic_camera_flip"
+        app:srcCompat="@mipmap/ic_camera_flip"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_marginStart="18dp" />
@@ -37,7 +37,7 @@
         android:layout_marginLeft="20dp"
         android:scaleType="fitXY"
         android:layout_centerHorizontal="true"
-        android:src="@mipmap/btn_video_online"
+        app:srcCompat="@mipmap/btn_video_online"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true" />
 

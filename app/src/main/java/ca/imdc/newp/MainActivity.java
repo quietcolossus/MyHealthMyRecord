@@ -1,43 +1,28 @@
 package ca.imdc.newp;
-import android.Manifest;
 
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.content.pm.PackageManager;
-import android.content.Context;
+
+import android.Manifest;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Camera;
 import android.graphics.Color;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.preference.DialogPreference;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.provider.Settings;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.graphics.drawable.VectorDrawableCompat;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -55,11 +40,16 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Random;
+import java.util.Map;
+
+import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
 
 public class MainActivity extends AppCompatActivity {
     static final int REQUEST_VIDEO_CAPTURE = 1;
@@ -87,9 +77,20 @@ public class MainActivity extends AppCompatActivity {
 
     public static boolean clicked=false;
     public static boolean isOther = false;
+    protected static String encfileName;
+
+    protected static File mencVideoFolder;
 
 
     public boolean videosExist;
+    private File mVideoFolder;
+
+    public static final int MEDIA_TYPE_IMAGE = 1;
+    public static final int MEDIA_TYPE_VIDEO = 2;
+
+    public static final String EXTRA_MESSAGE = "ca.imdc.newp.MESSAGE";
+
+    public String transcript;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -238,8 +239,112 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "Select Video"),REQUEST_TAKE_GALLERY_VIDEO);
     }
 
+    private void saveVideoToInternalStorage (String filePath) {
 
-    public void dispatchTakeVideoIntent() {
+        File newfile;
+
+        try {
+
+            File currentFile = new File(filePath);
+            String fileName = currentFile.getName();
+
+            ContextWrapper cw = new ContextWrapper(getApplicationContext());
+            File directory = cw.getDir("videoDir", Context.MODE_PRIVATE);
+
+
+            newfile = new File(directory, fileName+".mp3");
+
+            if(currentFile.exists()){
+
+                InputStream in = new FileInputStream(currentFile);
+                OutputStream out = new FileOutputStream(newfile);
+
+                // Copy the bits from instream to outstream
+                byte[] buf = new byte[1024];
+                int len;
+
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+
+                in.close();
+                out.close();
+
+                Log.v("", "Video file saved successfully.");
+
+            }else{
+                Log.v("", "Video saving failed. Source file missing.");
+            }
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void displayTranscript(String text){
+        String transcript = text;
+        Intent intent = new Intent(this, VideoTranscript.class);
+        intent.putExtra("TRANSCRIPT",transcript);
+        startActivity(intent);
+    }
+
+     void watsonSend() {
+        // START OF WATSON TEST ------------------------------------------
+        Authenticator authenticator =  new IamAuthenticator("ilPJZOJKW6OhAKjLVEnq2cQXYWjnf73vZWy1dJSUt0Am");
+        SpeechToText service = new SpeechToText(authenticator);
+
+        InputStream audio = null;
+        try {
+            audio = new FileInputStream(CameraApi.cfileName.replace(".mp4",".mp3"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        RecognizeOptions options = new RecognizeOptions.Builder()
+                .audio(audio)
+                .contentType(HttpMediaType.AUDIO_MP3)
+                .interimResults(true)
+                .build();
+
+        service.recognizeUsingWebSocket(options, new BaseRecognizeCallback() {
+
+
+            @Override
+            public void onConnected() {
+                super.onConnected();
+                System.out.println("CONNECTED TO WATSON *_*_*_*_*_*_*_*_*__*_**_*_*_**__");
+            }
+
+            @Override
+            public void onTranscription(SpeechRecognitionResults speechResults) {
+                super.onTranscription(speechResults);
+                System.out.println(speechResults);
+                if (speechResults.getResults() != null && !speechResults.getResults().isEmpty()) {
+                    String text = speechResults.getResults().get(0).getAlternatives().get(0).getTranscript();
+                    transcript = speechResults.toString();
+                    //displayTranscript(speechResults.toString());
+                }
+            }
+        });
+
+// wait 20 seconds for the asynchronous response
+        try {
+            Thread.sleep(5000);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+
+
+    public void dispatchTakeVideoIntent() throws IOException {
         //startActivity(new Intent(MainActivity.this, CameraApi.class));
         //int a;
         //Random random = new Random();
@@ -286,8 +391,6 @@ public class MainActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-
 
 
 //            HashMap<String, ArrayList<Object>> tags = (HashMap<String, ArrayList<Object>>) data.getSerializableExtra("tags");
@@ -376,6 +479,8 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onFinish() {
+                        watsonSend();
+                        displayTranscript(transcript);
 
                     }
                 });
@@ -430,7 +535,7 @@ public class MainActivity extends AppCompatActivity {
                     myDataset = populateList("names");
                     System.out.println("myDataset" + Arrays.toString(myDataset));
                     myDate = populateList("date");
-                   System.out.println("nyDate" + Arrays.toString(myDate));
+                    System.out.println("nyDate" + Arrays.toString(myDate));
                 }
 
                 mAdapter = new MyAdapter(myDataset, myDate, this);
@@ -458,10 +563,22 @@ public class MainActivity extends AppCompatActivity {
                     //do nothing
                 }
 
-                dispatchTakeVideoIntent();
+                try {
+                    dispatchTakeVideoIntent();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 //
         }
+    }
+    private void createEncVideoFileName() throws IOException{
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String prepend = "VIDEO_ENC_" + timeStamp + "_";
+        //File  encvideoFile = File.createTempFile(prepend,"ENC.mp4.encrypt",mencVideoFolder); //creates the encrypted file
+        //encfileName = encvideoFile.getAbsolutePath(); //name of file name is stored
+        encfileName = mencVideoFolder.getAbsolutePath()+ "/" + prepend + "ENC.mp4";
+
     }
     public String getPath(Uri uri) {
         String[] projection = { MediaStore.Video.Media.DATA };
@@ -469,8 +586,7 @@ public class MainActivity extends AppCompatActivity {
         if (cursor != null) {
             // HERE YOU WILL GET A NULLPOINTER IF CURSOR IS NULL
             // THIS CAN BE, IF YOU USED OI FILE MANAGER FOR PICKING THE MEDIA
-            int column_index = cursor
-                    .getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA);
             cursor.moveToFirst();
             return cursor.getString(column_index);
         } else
@@ -576,10 +692,9 @@ public class MainActivity extends AppCompatActivity {
         return decr.getAbsolutePath();
     }
 
-
-
     public void halo(String ubc) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(ubc));
+        intent.addFlags(FLAG_GRANT_READ_URI_PERMISSION);
         intent.setDataAndType(Uri.parse(ubc), "video/mp4");
         startActivity(intent);
     }
@@ -676,6 +791,80 @@ public class MainActivity extends AppCompatActivity {
 
             return builder.create();
         }
+    }
+
+    public int parseAndSend(final RegisterActivity.VolleyCallback callback, String gmail, String name, JSONObject tags, String ownerid){
+
+        final String googleEmail = gmail;
+        final String googleName = name;
+        final String URL = "http://141.117.145.178:3000/videos";
+        final RequestQueue requestQueue = Volley.newRequestQueue(this);
+        final JSONObject jtags = tags;
+        final String ownerid1 = ownerid;
+
+        // Video Tag JSONObject Positions and their data:
+        // 1->Arousal  2->Valence 3->Location 4->Activity 5->Sharing
+
+
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    StringRequest postRequest = new StringRequest(Request.Method.POST, URL,
+                            new Response.Listener<String>()
+                            {
+                                @Override
+                                public void onResponse(String response) {
+                                    // response
+                                    Log.d("Response", response);
+                                    callback.onSuccess(response);
+                                }
+                            },
+                            new Response.ErrorListener()
+                            {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    // error
+                                }
+                            }
+                    ) {
+                        @Override
+                        protected Map<String, String> getParams()
+                        {
+                            final HashMap<String, String> params = new HashMap<String, String>();
+                            // Order to send the params in is: ownername, owneremail, videoid, videodata, valence, arousal, location, activity, sharing, ownerid
+
+                            params.put("ownername", googleName);
+                            params.put("owneremail", googleEmail);
+                            params.put("placeholder-video-id", "placeholder");
+                            params.put("placeholder-video-data", "placeholder");
+                            try {
+                                params.put("valence", String.valueOf(jtags.getJSONObject("Valence")));
+                                params.put("arousal", String.valueOf(jtags.getJSONObject("Arousal")));
+                                params.put("location", String.valueOf(jtags.getJSONObject("Location")));
+                                params.put("activity", String.valueOf(jtags.getJSONObject("Activity")));
+                                params.put("sharing", String.valueOf(jtags.getJSONObject("Sharing")));
+                                params.put("ownerid", ownerid1);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            return params;
+                        }
+                    };
+
+                    requestQueue.add(postRequest);
+
+
+                } catch ( Exception e ) {
+                    System.err.println( e.getClass().getName()+": "+ e.getMessage() );
+                }
+
+            }
+
+
+        }).start();
+
+        return 0;
     }
 
 }

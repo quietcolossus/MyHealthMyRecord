@@ -24,21 +24,17 @@ package ca.imdc.newp;
  */
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 
 import android.graphics.Camera;
 import android.graphics.Color;
-import android.content.res.Resources;
 import android.graphics.Matrix;
-import android.graphics.PorterDuff;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
@@ -50,6 +46,7 @@ import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.MediaRecorder;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
@@ -73,6 +70,13 @@ import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import java.io.File;
 import java.io.IOException;
@@ -239,7 +243,6 @@ public class CameraApi extends AppCompatActivity {
                         startPreview();
                         dialog3 whatNext = new dialog3();
                         whatNext.show(getFragmentManager(), "dialog3");
-//                        finish();
                     }
 
                 }
@@ -276,7 +279,6 @@ public class CameraApi extends AppCompatActivity {
                     startPreview();
                     dialog3 whatNext = new dialog3();
                     whatNext.show(getFragmentManager(), "dialog3");
-
                 }
                 else{
                     mIsRecording = true;
@@ -321,13 +323,13 @@ public class CameraApi extends AppCompatActivity {
         });
     }
 
-    public static class dialog3 extends DialogFragment {
+    public class dialog3 extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstance) {
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
             //LayoutInflater inflater = getActivity().getLayoutInflater();
-            builder.setTitle("Great video! " +
-                    " Would you like to save this video or make another one?")
+            builder.setTitle("Your video has been saved! " +
+                    " Would you like to share this video or make another one?")
                     .setPositiveButton("Another video", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
@@ -338,36 +340,36 @@ public class CameraApi extends AppCompatActivity {
                         }
                         //stays on cameraapi
                     })
-//                    .setNegativeButton("Share", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                            /*MainActivity.dialog4 shareD = new MainActivity.dialog4();
-//                            shareD.show(CameraApi.this.getFragmentManager(), "dialog4");*/
-//                            final Dialog dialog = new Dialog(getContext());
-//                            dialog.setContentView(R.layout.share_dialog);
-//                            dialog.show();
-//                            Button cancel = dialog.findViewById(R.id.cancel_button);
-//                            cancel.setOnClickListener(new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View v) {
-//                                    dialog.dismiss();
-////                                    ((CameraApi)getActivity()).finish();
-//                                }
-//                            });
-//                            Button shareb = dialog.findViewById(R.id.share_button);
-//                            shareb.setOnClickListener(new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View v) {
-////                                    Toast.makeText(((CameraApi)getActivity()).getApplicationContext(), "Video was shared!", Toast.LENGTH_SHORT).show();
-//                                    dialog.dismiss();
-////                                    ((CameraApi)getActivity()).finish();
-//                                }
-//                            });
-//                        }
-//                        //stays on cameraapi
-//                    })
-                    .setNeutralButton("Save", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("Share", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            /*MainActivity.dialog4 shareD = new MainActivity.dialog4();
+                            shareD.show(CameraApi.this.getFragmentManager(), "dialog4");*/
+                            final Dialog dialog = new Dialog(getContext());
+                            dialog.setContentView(R.layout.share_dialog);
+                            dialog.show();
+                            Button cancel = dialog.findViewById(R.id.cancel_button);
+                            cancel.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialog.dismiss();
+                                    finish();
+                                }
+                            });
+                            Button shareb = dialog.findViewById(R.id.share_button);
+                            shareb.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Toast.makeText(getApplicationContext(), "Video was shared!", Toast.LENGTH_SHORT).show();
+                                    dialog.dismiss();
+                                    finish();
+                                }
+                            });
+                        }
+                        //stays on cameraapi
+                    })
+                    .setNeutralButton("Home", new DialogInterface.OnClickListener() {
                         public void onClick (DialogInterface dialog, int id){
                             getActivity().finish();
                       }
@@ -375,7 +377,6 @@ public class CameraApi extends AppCompatActivity {
 
             return builder.create();
         }
-
     }
 
     @Override
