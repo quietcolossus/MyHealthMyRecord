@@ -52,11 +52,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.SystemClock;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Size;
@@ -323,7 +319,7 @@ public class CameraApi extends AppCompatActivity {
         });
     }
 
-    public class dialog3 extends DialogFragment {
+    public static class dialog3 extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstance) {
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
@@ -354,16 +350,16 @@ public class CameraApi extends AppCompatActivity {
                                 @Override
                                 public void onClick(View v) {
                                     dialog.dismiss();
-                                    finish();
+                                    getActivity().finish();
                                 }
                             });
                             Button shareb = dialog.findViewById(R.id.share_button);
                             shareb.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Toast.makeText(getApplicationContext(), "Video was shared!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity().getApplicationContext(), "Video was shared!", Toast.LENGTH_SHORT).show();
                                     dialog.dismiss();
-                                    finish();
+                                    getActivity().finish();
                                 }
                             });
                         }

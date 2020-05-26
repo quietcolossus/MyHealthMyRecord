@@ -12,21 +12,20 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 public class VideoTranscript extends AppCompatActivity {
     //public TextView transcript = (TextView) findViewById(R.id.message);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Intent intent = getIntent();
-        String message = intent.getStringExtra("TRANSCRIPT");
-//        runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                transcript.setText(message);
-//
-//            }
-//        });
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_transcript);
+        Intent intent = getIntent();
+        String message = intent.getStringExtra("TRANSCRIPT");
+        System.out.println(message);
+        TextView transcript = findViewById(R.id.message);
+        transcript.setText(message);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

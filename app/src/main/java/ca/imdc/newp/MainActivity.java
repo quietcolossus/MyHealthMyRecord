@@ -31,6 +31,15 @@ import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
 import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler;
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import com.ibm.cloud.sdk.core.http.HttpMediaType;
+import com.ibm.cloud.sdk.core.security.Authenticator;
+import com.ibm.cloud.sdk.core.security.IamAuthenticator;
+import com.ibm.watson.speech_to_text.v1.SpeechToText;
+import com.ibm.watson.speech_to_text.v1.model.RecognizeOptions;
+import com.ibm.watson.speech_to_text.v1.model.SpeechRecognitionResults;
+import com.ibm.watson.speech_to_text.v1.websocket.BaseRecognizeCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,6 +57,16 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
 
@@ -72,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
     public String globName;
     public String[] lastDataset;
     public static JSONObject jRecord = new JSONObject();
+    public static JSONObject tRecord = new JSONObject();
 
     public JSONObject jTags;
 
@@ -98,11 +118,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         String obj = PreferenceManager.getDefaultSharedPreferences(this).getString("tagRecord", null);
+        String transcripts = PreferenceManager.getDefaultSharedPreferences(this).getString("transcriptRecord", null);
 
         if (obj == null) { obj = ""; };
         try {
             jRecord = new JSONObject(obj);
             System.out.println(jTags);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (transcripts == null) { transcripts = ""; };
+        try {
+            tRecord = new JSONObject(transcripts);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -286,6 +314,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void displayTranscript(String text){
         String transcript = text;
+        System.out.println(transcript);
+        transcript = transcript.substring(transcript.indexOf("transcript") + 14);
+        transcript = transcript.substring(0, transcript.indexOf("\""));
         Intent intent = new Intent(this, VideoTranscript.class);
         intent.putExtra("TRANSCRIPT",transcript);
         startActivity(intent);
@@ -297,6 +328,7 @@ public class MainActivity extends AppCompatActivity {
         SpeechToText service = new SpeechToText(authenticator);
 
         InputStream audio = null;
+
         try {
             audio = new FileInputStream(CameraApi.cfileName.replace(".mp4",".mp3"));
         } catch (FileNotFoundException e) {
@@ -321,8 +353,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTranscription(SpeechRecognitionResults speechResults) {
                 super.onTranscription(speechResults);
-                System.out.println(speechResults);
+//                System.out.println(speechResults);
                 if (speechResults.getResults() != null && !speechResults.getResults().isEmpty()) {
+                    System.out.println(speechResults.getResults());
                     String text = speechResults.getResults().get(0).getAlternatives().get(0).getTranscript();
                     transcript = speechResults.toString();
                     //displayTranscript(speechResults.toString());
@@ -717,9 +750,6 @@ public class MainActivity extends AppCompatActivity {
         return fName;
     }
 
-
-
-
     public static class dialog extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstance) {
@@ -732,13 +762,21 @@ public class MainActivity extends AppCompatActivity {
                     .setPositiveButton("SELF", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             clicked=true;
-                            ((MainActivity)getActivity()).dispatchTakeVideoIntent();
+                            try {
+                                ((MainActivity)getActivity()).dispatchTakeVideoIntent();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                             mAdapter.notifyDataSetChanged();
                         }
                     })
                     .setNegativeButton("EXISTING", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            ((MainActivity)getActivity()).dispatchTakeVideoIntent();
+                            try {
+                                ((MainActivity)getActivity()).dispatchTakeVideoIntent();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
 
                         }
                     })
@@ -772,7 +810,11 @@ public class MainActivity extends AppCompatActivity {
                     .setNeutralButton("Agree", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
 
-                            ((MainActivity)getActivity()).dispatchTakeVideoIntent();
+                            try {
+                                ((MainActivity)getActivity()).dispatchTakeVideoIntent();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                             mAdapter.notifyDataSetChanged();
                             // User cancelled the dialog
                         }
@@ -793,7 +835,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public int parseAndSend(final RegisterActivity.VolleyCallback callback, String gmail, String name, JSONObject tags, String ownerid){
+    /*public int parseAndSend(final RegisterActivity.VolleyCallback callback, String gmail, String name, JSONObject tags, String ownerid){
 
         final String googleEmail = gmail;
         final String googleName = name;
@@ -865,6 +907,6 @@ public class MainActivity extends AppCompatActivity {
         }).start();
 
         return 0;
-    }
+    }*/
 
 }

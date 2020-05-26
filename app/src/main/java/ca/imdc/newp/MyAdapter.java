@@ -53,6 +53,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         public TextView time;
         public ImageView delete;
         public ImageView share;
+        public ImageView data;
         public ImageView View;
         public ImageView menu;
         public Switch user_switch;
@@ -64,6 +65,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             mTextView = (TextView) v.findViewById(R.id.my_text_view);
             delete  =  (ImageView) v.findViewById(R.id.delete_image);
             share = (ImageView) v.findViewById(R.id.share_image);
+            data = (ImageView) v.findViewById(R.id.trasncript_image);
             View = (ImageView) v.findViewById(R.id.view_image);
             time = (TextView) v.findViewById(R.id.time_text);
             date = (TextView) v.findViewById(R.id.date_text);
@@ -184,6 +186,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 mContext.startActivity(intent);
             }
         });
+        holder.data.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent dataIntent = new Intent(mContext, VideoTranscript.class);
+                dataIntent.putExtra("name", holder.mTextView.getText());
+                mContext.startActivity(dataIntent);
+            }
+
+        });
         holder.delete.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -205,6 +216,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         final boolean isExpanded = position==mExpandedPosition;
         holder.share.setVisibility(isExpanded?View.VISIBLE:View.GONE);
         holder.delete.setVisibility(isExpanded?View.VISIBLE:View.GONE);
+        holder.data.setVisibility(isExpanded?View.VISIBLE:View.GONE);
         holder.itemView.setActivated(isExpanded);
         holder.menu.setOnClickListener(new View.OnClickListener(){
             @Override
