@@ -49,4 +49,7 @@ dependencies {
         exclude group: 'com.google.code.findbugs', module: 'annotations'
     }
 
+    implementation 'com.jjoe64:graphview:4.2.2'
+    implementation 'com.mordred.wordcloud:Wordcloud:2.6'
+
 }

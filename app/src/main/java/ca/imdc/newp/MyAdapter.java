@@ -190,7 +190,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 Intent dataIntent = new Intent(mContext, VideoTranscript.class);
-                dataIntent.putExtra("name", holder.mTextView.getText());
+                dataIntent.putExtra("TRANSCRIPT", holder.mTextView.getText());
                 mContext.startActivity(dataIntent);
             }
 

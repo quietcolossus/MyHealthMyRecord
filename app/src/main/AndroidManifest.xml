@@ -52,7 +52,10 @@
         <activity android:name=".MyVitalsActivity" />
         <activity android:name=".shareCircleActivity" />
         <activity android:name=".addContactActivity" />
-        <activity android:name=".viewVideo" /> <!-- FileProvider - a ContentProvider for making the image file securely available to the other end -->
+        <activity android:name=".WordCloudActivity" />
+        <activity android:name=".dataNavigationActivity" />
+        <activity android:name=".viewVideo" />
+        <activity android:name=".GraphActivity" /> <!-- FileProvider - a ContentProvider for making the image file securely available to the other end -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.fileprovider"

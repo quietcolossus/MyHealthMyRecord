@@ -24,6 +24,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="color" value="000000" />
+                                                <entry key="opacityPercent" value="60" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -34,7 +35,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/social/ic_mood_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/communication/ic_message_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -56,7 +57,7 @@
                                   <option name="values">
                                     <map>
                                       <entry key="imageAsset" value="C:\Users\IMDC\baseline-supervised_user_circle-24px.svg" />
-                                      <entry key="outputName" value="ic_goodmood" />
+                                      <entry key="outputName" value="ic_transcript" />
                                       <entry key="themeColor" value="ffffff" />
                                     </map>
                                   </option>

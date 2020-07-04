@@ -135,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
         System.out.println(obj);
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("");
@@ -150,7 +149,6 @@ public class MainActivity extends AppCompatActivity {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, CameraApi.REQUEST_EXTERNAL_STORAGE_PERMISSION_RESULT);
             requestPermissions(new String[]{Manifest.permission.INTERNET}, CameraApi.REQUEST_INTERNET_RESULT);
         }
-
 
         // specify an adapter (see also next example)
         if (videosExist()) {
@@ -187,6 +185,8 @@ public class MainActivity extends AppCompatActivity {
                             startActivity(shareIntent);
                         }
                     else if (id == R.id.nav_myv) {
+                        Intent dataIntent = new Intent(MainActivity.this, dataNavigationActivity.class);
+                        startActivity(dataIntent);
 
                     } else if (id == R.id.nav_settings) {
 
@@ -312,17 +312,35 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void displayTranscript(String text){
-        String transcript = text;
-        System.out.println(transcript);
-        transcript = transcript.substring(transcript.indexOf("transcript") + 14);
-        transcript = transcript.substring(0, transcript.indexOf("\""));
+    public void displayTranscript(String title, String text) throws JSONException {
+        StringBuilder transcript = new StringBuilder();
+
+        System.out.println("RECEIVE" + text);
+        while (text == null) {System.out.println("RESULT" + text);}
+        int index = 0;
+        int end_index = 0;
+        while (index != -1) {
+            index = text.indexOf("\"transcript\"");
+            if (index != -1) {
+                text = text.substring(index + 15);
+                System.out.println(text.substring(0, text.indexOf("\"")));
+                transcript.append(text.substring(0, text.indexOf("\"")));
+
+            }
+        }
+        text = transcript.toString();
+        tRecord.put(title, text);
+        System.out.println(tRecord.toString());
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putString("transcriptRecord", tRecord.toString()).apply();
+
+//        transcript = transcript.substring(transcript.indexOf("transcript") + 14);
+//        transcript = transcript.substring(0, transcript.indexOf("\""));
         Intent intent = new Intent(this, VideoTranscript.class);
-        intent.putExtra("TRANSCRIPT",transcript);
+        intent.putExtra("TRANSCRIPT",title);
         startActivity(intent);
     }
 
-     void watsonSend() {
+     void watsonSend(String videoTitle) {
         // START OF WATSON TEST ------------------------------------------
         Authenticator authenticator =  new IamAuthenticator("ilPJZOJKW6OhAKjLVEnq2cQXYWjnf73vZWy1dJSUt0Am");
         SpeechToText service = new SpeechToText(authenticator);
@@ -338,8 +356,9 @@ public class MainActivity extends AppCompatActivity {
         RecognizeOptions options = new RecognizeOptions.Builder()
                 .audio(audio)
                 .contentType(HttpMediaType.AUDIO_MP3)
-                .interimResults(true)
+                .interimResults(false)
                 .build();
+//                .cont
 
         service.recognizeUsingWebSocket(options, new BaseRecognizeCallback() {
 
@@ -358,6 +377,14 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println(speechResults.getResults());
                     String text = speechResults.getResults().get(0).getAlternatives().get(0).getTranscript();
                     transcript = speechResults.toString();
+                    System.out.println("oOoOoO----------------------HEY LOOK AT ME----------------OoOoOo");
+                    System.out.println(transcript);
+                    try {
+                        displayTranscript(videoTitle, transcript);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                     //displayTranscript(speechResults.toString());
                 }
             }
@@ -418,6 +445,7 @@ public class MainActivity extends AppCompatActivity {
             String name = data.getStringExtra("name");
             int position = data.getIntExtra("position", -1);
             System.out.println(data.getStringExtra("tags"));
+
             JSONObject jTags = null;
             try {
                 jTags = new JSONObject (data.getStringExtra("tags"));
@@ -512,8 +540,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onFinish() {
-                        watsonSend();
-                        displayTranscript(transcript);
+                        watsonSend(replacer);
 
                     }
                 });

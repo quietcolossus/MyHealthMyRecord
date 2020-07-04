@@ -12,6 +12,8 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 public class VideoTranscript extends AppCompatActivity {
@@ -24,7 +26,13 @@ public class VideoTranscript extends AppCompatActivity {
         String message = intent.getStringExtra("TRANSCRIPT");
         System.out.println(message);
         TextView transcript = findViewById(R.id.message);
-        transcript.setText(message);
+        MainActivity mainact = new MainActivity();
+        JSONObject rTags = mainact.tRecord;
+        try {
+            transcript.setText((String) rTags.get(message));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
