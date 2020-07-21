@@ -59,6 +59,8 @@ public class LoginActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                updateUI(user);
+
                 // ...
             } else {
                 // Sign in failed. If response is null the user canceled the
@@ -70,42 +72,15 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
 
-        try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-
-            // Signed in successfully, show authenticated UI.
-            String email = account.getEmail();
-            String id = account.getId();
-            System.out.println(email);
-            System.out.println(id);
-            sendInfo(new RegisterActivity.VolleyCallback() {
-                @Override
-                public void onSuccess(String result) {
-                    System.out.println(result);
-                }
-
-            }, email, id);
-            updateUI(account);
-        } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w("ERROR:", "signInResult:failed code=" + e.getStatusCode());
-            updateUI(null);
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Choose authentication providers
         super.onCreate(savedInstanceState);
         List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.EmailBuilder().build(),
-                new AuthUI.IdpConfig.PhoneBuilder().build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build(),
-                new AuthUI.IdpConfig.FacebookBuilder().build(),
-                new AuthUI.IdpConfig.TwitterBuilder().build());
+                new AuthUI.IdpConfig.GoogleBuilder().build()
+                );
 
 // Create and launch sign-in intent
         startActivityForResult(
@@ -116,11 +91,11 @@ public class LoginActivity extends AppCompatActivity {
                 RC_SIGN_IN);
     }
 
-    public void updateUI(GoogleSignInAccount account){
+    public void updateUI(FirebaseUser user){
         Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-        mainIntent.putExtra("email", account.getEmail());
-        mainIntent.putExtra("name", account.getGivenName());
-        mainIntent.putExtra("name", account.getId());
+        mainIntent.putExtra("email", user.getEmail());
+        mainIntent.putExtra("name", user.getDisplayName());
+        mainIntent.putExtra("name", user.getUid());
         startActivity(mainIntent);
     }
     public interface VolleyCallback{
