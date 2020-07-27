@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-        package="ca.imdc.newp">
+    package="ca.imdc.newp">
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <uses-feature
@@ -21,17 +21,20 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/AppTheme">
-
+        android:theme="@style/AppTheme.NoActionBar"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".VideoTranscript"
+            android:label="@string/title_activity_video_transcript"
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".CameraApi"
-            android:screenOrientation="portrait"
-            android:label="@string/app_name1"></activity>
+            android:label="@string/app_name1"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".LoginActivity"
             android:label="@string/app_name"
@@ -42,29 +45,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".RegisterActivity" />
         <activity
             android:name=".CurateVideo"
-            android:label="Curate video information (OPTIONAL)"
-            ></activity>
-        <activity android:name=".MyVitalsActivity"></activity>
-        <activity android:name=".shareCircleActivity"></activity>
-        <activity android:name=".addContactActivity"></activity>
-        <activity
-            android:name=".viewVideo"></activity>
-
-        <!-- FileProvider - a ContentProvider for making the image file securely available to the other end -->
+            android:label="Curate video information (OPTIONAL)" />
+        <activity android:name=".MyVitalsActivity" />
+        <activity android:name=".shareCircleActivity" />
+        <activity android:name=".addContactActivity" />
+        <activity android:name=".WordCloudActivity" />
+        <activity android:name=".dataNavigationActivity" />
+        <activity android:name=".viewVideo" />
+        <activity android:name=".GraphActivity" /> <!-- FileProvider - a ContentProvider for making the image file securely available to the other end -->
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.fileprovider"
             android:exported="false"
-            android:grantUriPermissions="true" >
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-
     </application>
 
 </manifest>

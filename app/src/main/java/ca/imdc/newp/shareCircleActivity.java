@@ -10,9 +10,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -94,7 +94,7 @@ tv1= new TextView(this);
               click=1;
                 c1.setVisibility(View.INVISIBLE);
                 RelativeLayout ll = (RelativeLayout) findViewById(R.id.sharecircle);
-                ll.addView(tv1);
+//                ll.addView(tv1);
             }
         });
         tv1.setOnClickListener(new View.OnClickListener() {

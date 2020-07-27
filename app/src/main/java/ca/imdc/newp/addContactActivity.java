@@ -1,31 +1,21 @@
 package ca.imdc.newp;
 
-import android.app.Activity;
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.RadioButton;
-import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.util.concurrent.atomic.AtomicIntegerArray;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 
 
 /**
  * Created by santh on 2017-11-06.
  */
 
-public class addContactActivity extends Activity {
+public class addContactActivity extends AppCompatActivity {
     public static CharSequence text;
     public static boolean saveState1=false;
     public static boolean rb1check=false;

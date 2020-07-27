@@ -24,20 +24,17 @@ package ca.imdc.newp;
  */
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 
+import android.graphics.Camera;
 import android.graphics.Color;
-import android.content.res.Resources;
 import android.graphics.Matrix;
-import android.graphics.PorterDuff;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
@@ -49,16 +46,13 @@ import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.MediaRecorder;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.SystemClock;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Size;
@@ -72,6 +66,13 @@ import android.widget.Chronometer;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import java.io.File;
 import java.io.IOException;
@@ -318,7 +319,7 @@ public class CameraApi extends AppCompatActivity {
         });
     }
 
-    public class dialog3 extends DialogFragment {
+    public static class dialog3 extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstance) {
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
@@ -329,7 +330,7 @@ public class CameraApi extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
 
-                        finish();
+                            getActivity().finish();
                             isAnother = 1;
 
                         }
@@ -349,16 +350,16 @@ public class CameraApi extends AppCompatActivity {
                                 @Override
                                 public void onClick(View v) {
                                     dialog.dismiss();
-                                    finish();
+                                    getActivity().finish();
                                 }
                             });
                             Button shareb = dialog.findViewById(R.id.share_button);
                             shareb.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Toast.makeText(getApplicationContext(), "Video was shared!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity().getApplicationContext(), "Video was shared!", Toast.LENGTH_SHORT).show();
                                     dialog.dismiss();
-                                    finish();
+                                    getActivity().finish();
                                 }
                             });
                         }
@@ -366,7 +367,7 @@ public class CameraApi extends AppCompatActivity {
                     })
                     .setNeutralButton("Home", new DialogInterface.OnClickListener() {
                         public void onClick (DialogInterface dialog, int id){
-                            finish();
+                            getActivity().finish();
                       }
                     });
 
@@ -723,6 +724,7 @@ public class CameraApi extends AppCompatActivity {
        //File  encvideoFile = File.createTempFile(prepend,"ENC.mp4.encrypt",mencVideoFolder); //creates the encrypted file
         //encfileName = encvideoFile.getAbsolutePath(); //name of file name is stored
         encfileName = mencVideoFolder.getAbsolutePath()+ "/" + prepend + "ENC.mp4";
+
 
     }
 

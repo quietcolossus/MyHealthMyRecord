@@ -1,67 +1,48 @@
 package ca.imdc.newp;
-import android.Manifest;
 
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.content.ContextWrapper;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.Context;
+
+import android.Manifest;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ProviderInfo;
-import android.content.res.Configuration;
-import android.content.res.XmlResourceParser;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Camera;
 import android.graphics.Color;
-import android.media.AudioManager;
-import android.media.CamcorderProfile;
 import android.media.MediaMetadataRetriever;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.preference.DialogPreference;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.provider.Settings;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.graphics.drawable.VectorDrawableCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.VideoView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.common.api.ApiException;
-import com.ibm.watson.developer_cloud.service.security.IamOptions;
-import com.ibm.watson.developer_cloud.visual_recognition.v3.VisualRecognition;
+import com.firebase.ui.auth.AuthUI;
+import com.github.hiteshsondhi88.libffmpeg.ExecuteBinaryResponseHandler;
+import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
+import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler;
+import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
+import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import com.ibm.cloud.sdk.core.http.HttpMediaType;
+import com.ibm.cloud.sdk.core.security.Authenticator;
+import com.ibm.cloud.sdk.core.security.IamAuthenticator;
+import com.ibm.watson.speech_to_text.v1.SpeechToText;
+import com.ibm.watson.speech_to_text.v1.model.RecognizeOptions;
+import com.ibm.watson.speech_to_text.v1.model.SpeechRecognitionResults;
+import com.ibm.watson.speech_to_text.v1.websocket.BaseRecognizeCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -72,21 +53,26 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Random;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import static android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION;
-import static android.content.Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
-import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity {
     static final int REQUEST_VIDEO_CAPTURE = 1;
@@ -109,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
     public String globName;
     public String[] lastDataset;
     public static JSONObject jRecord = new JSONObject();
+    public static JSONObject tRecord = new JSONObject();
 
     public JSONObject jTags;
 
@@ -125,12 +112,9 @@ public class MainActivity extends AppCompatActivity {
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
 
-    protected Uri videoUri;
-    private VideoView videoView;
-    private Uri fileUri;
-    private String videoFilePath;
-    public Uri videoURI;
-    public FileOutputStream fos;
+    public static final String EXTRA_MESSAGE = "ca.imdc.newp.MESSAGE";
+
+    public String transcript;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,8 +122,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         String obj = PreferenceManager.getDefaultSharedPreferences(this).getString("tagRecord", null);
-
-
+        String transcripts = PreferenceManager.getDefaultSharedPreferences(this).getString("transcriptRecord", null);
 
         if (obj == null) { obj = ""; };
         try {
@@ -149,6 +132,12 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        if (transcripts == null) { transcripts = ""; };
+        try {
+            tRecord = new JSONObject(transcripts);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         System.out.println(obj);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -164,7 +153,6 @@ public class MainActivity extends AppCompatActivity {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, CameraApi.REQUEST_EXTERNAL_STORAGE_PERMISSION_RESULT);
             requestPermissions(new String[]{Manifest.permission.INTERNET}, CameraApi.REQUEST_INTERNET_RESULT);
         }
-
 
         // specify an adapter (see also next example)
         if (videosExist()) {
@@ -188,7 +176,6 @@ public class MainActivity extends AppCompatActivity {
             supportActionBar.setHomeAsUpIndicator(indicator);
             supportActionBar.setDisplayHomeAsUpEnabled(true);
         }
-
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     // This method will trigger on item Click of navigation menu
@@ -202,9 +189,16 @@ public class MainActivity extends AppCompatActivity {
                             startActivity(shareIntent);
                         }
                     else if (id == R.id.nav_myv) {
+                        Intent dataIntent = new Intent(MainActivity.this, dataNavigationActivity.class);
+                        startActivity(dataIntent);
 
                     } else if (id == R.id.nav_settings) {
 
+                        }
+                    else if(id == R.id.nav_sign_out)
+                        {
+                            Log.i("NavigationMenu","Signing out from Navigation menu");
+                            signOut();
                         }
                         mDrawerLayout.closeDrawer(GravityCompat.START);
                         return true;
@@ -221,13 +215,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         // use a linear layout manager
-
-
-        IamOptions options = new IamOptions.Builder()
-                .apiKey("{VRHKcB5jKWLzBdIFjk6D6wQDYRPQhAUZzYGzOPOukj_m}")
-                .build();
-        VisualRecognition visualRecognition = new VisualRecognition("{1.1.1}", options);
-
     }
 
     String[] populateList(String g) {
@@ -289,62 +276,20 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(Intent.createChooser(intent, "Select Video"),REQUEST_TAKE_GALLERY_VIDEO);
     }
 
+    public void signOut()
+    {
+        AuthUI.getInstance().signOut(this).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful())
+                {
+                    startActivity(new Intent(MainActivity.this,LoginActivity.class));
+                }
+            }
+        });
 
-    /** Create a file Uri for saving an image or video */
-//    private static Uri getOutputMediaFileUri(int type){
-//        return Uri.fromFile(getOutputMediaFile(type));
-//    }
-//
-//    /** Create a File for saving an image or video */
-//    private static File getOutputMediaFile(int type){
-//        // To be safe, you should check that the SDCard is mounted
-//        // using Environment.getExternalStorageState() before doing this.
-//
-//        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-//                Environment.DIRECTORY_PICTURES), "MHMR_videos");
-//        // This location works best if you want the created images to be shared
-//        // between applications and persist after your app has been uninstalled.
-//
-//        // Create the storage directory if it does not exist
-//        if (! mediaStorageDir.exists()){
-//            if (! mediaStorageDir.mkdirs()){
-//                Log.d("MHMR", "failed to create directory");
-//                return null;
-//            }
-//        }
-//
-//        // Create a media file name
-//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-//        File mediaFile;
-//        if (type == MEDIA_TYPE_IMAGE){
-//            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-//                    "IMG_"+ timeStamp + ".jpg");
-//        } else if(type == MEDIA_TYPE_VIDEO) {
-//            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-//                    "VID_"+ timeStamp + ".mp4");
-//        } else {
-//            return null;
-//        }
-//
-//        return mediaFile;
-//    }
-
-    private File createVideoFile() throws IOException {
-        String timeStamp =
-                new SimpleDateFormat("yyyyMMdd_HHmmss",
-                        Locale.getDefault()).format(new Date());
-        String imageFileName = "VID_" + timeStamp + "_";
-        File storageDir =
-                getExternalFilesDir(Environment.DIRECTORY_DCIM);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".gp3",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        videoFilePath = image.getAbsolutePath();
-        return image;
     }
+
     private void saveVideoToInternalStorage (String filePath) {
 
         File newfile;
@@ -390,53 +335,126 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void loadVideoFromInternalStorage(String filePath){
+    public void displayTranscript(String title, String text) throws JSONException {
+        StringBuilder transcript = new StringBuilder();
 
-        Uri uri = Uri.parse(Environment.getExternalStorageDirectory()+filePath);
-        videoView.setVideoURI(uri);
+        System.out.println("RECEIVE" + text);
+        while (text == null) {System.out.println("RESULT" + text);}
+        int index = 0;
+        int end_index = 0;
+        while (index != -1) {
+            index = text.indexOf("\"transcript\"");
+            if (index != -1) {
+                text = text.substring(index + 15);
+                System.out.println(text.substring(0, text.indexOf("\"")));
+                transcript.append(text.substring(0, text.indexOf("\"")));
+
+            }
+        }
+        text = transcript.toString();
+        tRecord.put(title, text);
+        System.out.println(tRecord.toString());
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putString("transcriptRecord", tRecord.toString()).apply();
+
+//        transcript = transcript.substring(transcript.indexOf("transcript") + 14);
+//        transcript = transcript.substring(0, transcript.indexOf("\""));
+        Intent intent = new Intent(this, VideoTranscript.class);
+        intent.putExtra("TRANSCRIPT",title);
+        startActivity(intent);
+    }
+
+     void watsonSend(String videoTitle) {
+        // START OF WATSON TEST ------------------------------------------
+        Authenticator authenticator =  new IamAuthenticator("ilPJZOJKW6OhAKjLVEnq2cQXYWjnf73vZWy1dJSUt0Am");
+        SpeechToText service = new SpeechToText(authenticator);
+
+        InputStream audio = null;
+
+        try {
+            audio = new FileInputStream(CameraApi.cfileName.replace(".mp4",".mp3"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        RecognizeOptions options = new RecognizeOptions.Builder()
+                .audio(audio)
+                .contentType(HttpMediaType.AUDIO_MP3)
+                .interimResults(false)
+                .build();
+//                .cont
+
+        service.recognizeUsingWebSocket(options, new BaseRecognizeCallback() {
+
+
+            @Override
+            public void onConnected() {
+                super.onConnected();
+                System.out.println("CONNECTED TO WATSON *_*_*_*_*_*_*_*_*__*_**_*_*_**__");
+            }
+
+            @Override
+            public void onTranscription(SpeechRecognitionResults speechResults) {
+                super.onTranscription(speechResults);
+//                System.out.println(speechResults);
+                if (speechResults.getResults() != null && !speechResults.getResults().isEmpty()) {
+                    System.out.println(speechResults.getResults());
+                    String text = speechResults.getResults().get(0).getAlternatives().get(0).getTranscript();
+                    transcript = speechResults.toString();
+                    System.out.println("oOoOoO----------------------HEY LOOK AT ME----------------OoOoOo");
+                    System.out.println(transcript);
+                    try {
+                        displayTranscript(videoTitle, transcript);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    //displayTranscript(speechResults.toString());
+                }
+            }
+        });
+
+// wait 20 seconds for the asynchronous response
+        try {
+            Thread.sleep(5000);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
 
     }
+
+
+
+
     public void dispatchTakeVideoIntent() throws IOException {
         //startActivity(new Intent(MainActivity.this, CameraApi.class));
         //int a;
         //Random random = new Random();
         //a = random.nextInt(70) + 1;
-
-
-        //CameraApi.createVideoFolder();
-//        String extStorage = Environment.getExternalStorageState();
-//        mencVideoFolder = new File(extStorage + "/data/app/ca.imdc.newp-2");
         MainActivity mainActivity = new MainActivity();
-
-
-        //createEncVideoFileName();
-        //System.out.println(mencVideoFolder + "--------------------------------------------------->>>>>>>>>>>>");
-        //File newVideo = new File(mVideoFolder, encfileName);
-        Intent openCameraIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        startActivityForResult(openCameraIntent,REQUEST_VIDEO_CAPTURE);
-        openCameraIntent.addFlags(FLAG_GRANT_READ_URI_PERMISSION|FLAG_GRANT_WRITE_URI_PERMISSION);
-
-
-        String fName = "VideoFileName.mp4";
-        File f = new File(fName);
-        openCameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-
-        //openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+        Intent openCameraIntent = new Intent(MainActivity.this, CameraApi.class);
 
         //Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
        // takeVideoIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        openCameraIntent.setFlags(FLAG_GRANT_READ_URI_PERMISSION);
-        openCameraIntent.setFlags(FLAG_GRANT_WRITE_URI_PERMISSION);
+        //openCameraIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-        //File outputFile = new File("/data/app/ca.imdc.newp-1");
-        //videoUri = Uri.fromFile(outputFile);
+        // File videoDir = new File(System.getProperty("user.dir") + "/Video/");
+
+
+        //if (!videoDir.exists()) videoDir.mkdir();
+        //cfileName = videoDir.getAbsolutePath() + "/Untitled-" + a + ".mp4";
+        //encfileName = new File(System.getProperty("user.dir") + "/Encrypted/").getAbsolutePath() + "/Untitled-" + a + ".mp4";
+        //encfileName = getExternalFilesDir(null).getAbsolutePath() + "/Encrypted/Untitled-" + a + ".mp4";
+       // System.out.println("Video Dir: " + videoDir.getAbsolutePath());
+        //System.out.println("CFile Dir: " + cfileName);
+        //System.out.println("EncFile Dir: " + encfileName);
+               //File cFileDir = new File(cfileName);
         //takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile((new File(cfileName))));
-
-
-        //openCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,file);
+        //openCameraIntent.putExtra(openCameraIntent.EXTRA_ORIGINATING_URI, Uri.fromFile((new File(cfileName))));
         //if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
         if (openCameraIntent.resolveActivity(getPackageManager()) != null) {
-            //startActivityForResult(openCameraIntent, REQUEST_VIDEO_CAPTURE);
+            startActivityForResult(openCameraIntent, REQUEST_VIDEO_CAPTURE);
 
         }
     }
@@ -444,82 +462,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-       super.onActivityResult(requestCode, resultCode, data);
-        File sdCard = Environment.getExternalStorageDirectory();
-        File dir = new File (sdCard.getAbsolutePath() + "/Android/data/app/ca.imdc.newp-2");
-        dir.mkdirs();
-        File file = new File(dir, "filename");
-        //String videoUri1 = videoUri.getPath();
-        //Intent video = new Intent(MainActivity.this, viewVideo.class);
-        Bundle bundle = new Bundle();
-        //video.putExtras(bundle);
-        //String test = (String) data.getExtras().get("data");
-        //Uri test = data.getData();
-        //String test = videoURI.getPath();
-//        bundle.putParcelable("uri", test);
-//        bundle.putString("uri", test);
-//        video.setData(test);
-       // video.putExtra("uri", test);
-        // -------------------------
-
-
-
-        File newFile = new File(dir, "VIDEO");
-
-        //Uri contentUri = FileProvider.getUriForFile(getApplicationContext(), "com.example.fileprovider", newFile);
-        Uri contentUri = data.getData();
-
-        File uriToFile = new File(contentUri.getPath());
-        saveVideoToInternalStorage(uriToFile.toString());
-
-        //video.putExtra("uri",contentUri);
-
-
-
-        MediaPlayer mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        //Intent intent1 = new Intent();
-        //setResult(RESULT_OK, intent1);
-        //finish();
-
-        try {
-            mediaPlayer.setDataSource(getApplicationContext(), Uri.fromFile(uriToFile));
-            mediaPlayer.prepareAsync();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            mediaPlayer.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        mediaPlayer.start();
-        videoView = findViewById(R.id.surface);
-        videoView.setVideoURI(contentUri);
-        videoView.start();
-        videoView.setOnCompletionListener ( new MediaPlayer.OnCompletionListener() {
-
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-                videoView.start();
-            }
-        });
-
-
-        //startActivity(video);
-
-        if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK && videoUri != null) {
-            // do what you want with videoUri
-
-
-        }
-
-
+//        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 2) {
             String replacer = data.getStringExtra("result");
             String name = data.getStringExtra("name");
             int position = data.getIntExtra("position", -1);
             System.out.println(data.getStringExtra("tags"));
+
             JSONObject jTags = null;
             try {
                 jTags = new JSONObject (data.getStringExtra("tags"));
@@ -545,7 +494,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 jRecord.remove(name);
                 jRecord.put(replacer, jTags);
-            } catch (JSONException    e) {
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
 //            for (String keyName: tagRecord.keySet()){
@@ -557,31 +506,75 @@ public class MainActivity extends AppCompatActivity {
 //            JSONObject obj = new JSONObject(tagRecord);
 //            System.out.println(obj);
             System.out.println("JTAGS" + jTags);
-
-            String email = getIntent().getStringExtra("account");
-            String firstname = getIntent().getStringExtra("name");
-            String ownerid = getIntent().getStringExtra("id");
-
-            parseAndSend(new RegisterActivity.VolleyCallback() {
-                @Override
-                public void onSuccess(String result) {
-                    System.out.println("SENT JTAGS BACK TO DB");
-                }
-            }, email,firstname,jTags, ownerid);
-
-
             PreferenceManager.getDefaultSharedPreferences(this).edit().putString("tagRecord", jRecord.toString()).apply();
 ////
             renameIt(getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+name,  getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+replacer);
             renameIt(getExternalFilesDir(null).getAbsolutePath()+"/Video/"+name.replace(".encrypt",""), getExternalFilesDir(null).getAbsolutePath()+"/Video/"+replacer.replace(".encrypt",""));
             System.out.println("myDataset" + Arrays.toString(myDataset));
+
+            FFmpeg ffmpeg = FFmpeg.getInstance(this);
+            try {
+                //Load the binary
+                ffmpeg.loadBinary(new LoadBinaryResponseHandler() {
+
+                    @Override
+                    public void onStart() {}
+
+                    @Override
+                    public void onFailure() {}
+
+                    @Override
+                    public void onSuccess() {}
+
+                    @Override
+                    public void onFinish() {}
+                });
+            } catch (FFmpegNotSupportedException e) {
+                // Handle if FFmpeg is not supported by device
+            }
+            try {
+                // to execute "ffmpeg -version" command you just need to pass "-version"
+                // Now, you can execute your command here
+
+                String[] command = {"-i", CameraApi.cfileName , "-ab", "128k", "-ac", "2", "-ar", "44100", "-vn", CameraApi.cfileName.replace(".mp4",".mp3")};
+                ffmpeg.execute(command, new ExecuteBinaryResponseHandler() {
+
+                    @Override
+                    public void onStart() {
+                        System.out.println("FFMPEG COMMAND STARTS");
+                    }
+
+                    @Override
+                    public void onProgress(String message) {
+                        System.out.println("FFMPEG COMMAND IN PROGRESS: " + message);
+
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        System.out.println("FFMPEG COMMAND FAILED" + message);
+
+                    }
+
+                    @Override
+                    public void onSuccess(String message) {
+                        Log.i("SUCCESS", message);
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        watsonSend(replacer);
+
+                    }
+                });
+            } catch (FFmpegCommandAlreadyRunningException e) {
+                // Handle if FFmpeg is already running
+            }
         }
 
-        //if (requestCode == REQUEST_TAKE_GALLERY_VIDEO) {
-        if(resultCode == RESULT_OK){
+        if (requestCode == REQUEST_TAKE_GALLERY_VIDEO) {
             Uri selectedImageUri = data.getData();
-            //String path  = getPath(selectedImageUri);
-            String path = selectedImageUri.toString();
+            String path  = getPath(selectedImageUri);
             try {
 
                 FileInputStream fis;
@@ -592,7 +585,7 @@ public class MainActivity extends AppCompatActivity {
                 //this is where you set whatever path you want to save it as:
 
                 File tmpFile = new File("/storage/emulated/0/Android/data/ca.imdc.newp/files/Encrypted/","VideoFile.mp4");
-                tmpFile.canWrite();
+
                 //save the video to the File path
                 FileOutputStream fos = new FileOutputStream(tmpFile);
 
@@ -603,13 +596,10 @@ public class MainActivity extends AppCompatActivity {
                 }
                 fis.close();
                 fos.close();
-
             } catch (IOException io_e) {
                 // TODO: handle error
-
             }
             if (videosExist()) {
-
                 myDataset = populateList("names");
                 System.out.println("myDataset" + Arrays.toString(myDataset));
                 myDate = populateList("date");
@@ -628,7 +618,7 @@ public class MainActivity extends AppCompatActivity {
                     myDataset = populateList("names");
                     System.out.println("myDataset" + Arrays.toString(myDataset));
                     myDate = populateList("date");
-                   System.out.println("nyDate" + Arrays.toString(myDate));
+                    System.out.println("nyDate" + Arrays.toString(myDate));
                 }
 
                 mAdapter = new MyAdapter(myDataset, myDate, this);
@@ -810,23 +800,20 @@ public class MainActivity extends AppCompatActivity {
         return fName;
     }
 
-
-
-
-    public class dialog extends DialogFragment {
+    public static class dialog extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstance) {
 
             // Use the Builder class for convenient dialog construction
+
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
             LayoutInflater inflater = getActivity().getLayoutInflater();
             builder.setTitle("Who are you recording?")
                     .setPositiveButton("SELF", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             clicked=true;
-
                             try {
-                                dispatchTakeVideoIntent();
+                                ((MainActivity)getActivity()).dispatchTakeVideoIntent();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -835,13 +822,17 @@ public class MainActivity extends AppCompatActivity {
                     })
                     .setNegativeButton("EXISTING", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            dispatchUploadVideoIntent();
+                            try {
+                                ((MainActivity)getActivity()).dispatchTakeVideoIntent();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
 
                         }
                     })
                     .setNeutralButton("OTHER", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            //MainActivity.isOther = true;
+                            MainActivity.isOther = true;
                             clicked= false;
                             dialog2 myAlert2 = new dialog2();
                             myAlert2.show(getFragmentManager(), "dialog2");
@@ -852,7 +843,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public class dialog2 extends DialogFragment {
+    public static class dialog2 extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstance) {
 
@@ -870,7 +861,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int id) {
 
                             try {
-                                dispatchTakeVideoIntent();
+                                ((MainActivity)getActivity()).dispatchTakeVideoIntent();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -894,7 +885,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public int parseAndSend(final RegisterActivity.VolleyCallback callback, String gmail, String name, JSONObject tags, String ownerid){
+    /*public int parseAndSend(final RegisterActivity.VolleyCallback callback, String gmail, String name, JSONObject tags, String ownerid){
 
         final String googleEmail = gmail;
         final String googleName = name;
@@ -966,6 +957,6 @@ public class MainActivity extends AppCompatActivity {
         }).start();
 
         return 0;
-    }
+    }*/
 
 }

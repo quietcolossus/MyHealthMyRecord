@@ -1,7 +1,6 @@
 package ca.imdc.newp;
 
-import android.content.ContentProvider;
-import android.support.v4.content.FileProvider;
+import androidx.core.content.FileProvider;
 
 public class GenericFileProvider extends FileProvider {
 }

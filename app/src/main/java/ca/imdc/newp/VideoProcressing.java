@@ -1,27 +1,24 @@
 package ca.imdc.newp;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
-import java.util.Random;
 
 /**
  * Created by imdc on 18/08/2016.
  */
 public class VideoProcressing extends AppCompatActivity{
+
     private static final int REQUEST_VIDEO_CAPTURE = 1;
     Context con;
-    Activity act;
+    AppCompatActivity act;
     Thread t = null;
     public String cfileName;
     public String encfileName;
 
-    public VideoProcressing(Context x, Activity c)
+    public VideoProcressing(Context x, AppCompatActivity c)
     {
         this.act = c;
         this.con = x;

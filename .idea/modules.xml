@@ -2,8 +2,17 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Desktop-mhmr.iml" filepath="$PROJECT_DIR$/.idea/modules/Desktop-mhmr.iml" group="mhmr" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Desktop-mhmr-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Desktop-mhmr-app.iml" group="mhmr/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/library-release/Desktop-mhmr-library-release.iml" filepath="$PROJECT_DIR$/.idea/modules/library-release/Desktop-mhmr-library-release.iml" group="mhmr/library-release" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/volley/Desktop-mhmr-volley.iml" filepath="$PROJECT_DIR$/.idea/modules/volley/Desktop-mhmr-volley.iml" group="mhmr/volley" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/cihr.iml" filepath="$PROJECT_DIR$/cihr.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library-release/library-release.iml" filepath="$PROJECT_DIR$/library-release/library-release.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mhmr.iml" filepath="$PROJECT_DIR$/mhmr.iml" group="mhmr" />
+      <module fileurl="file://$PROJECT_DIR$/app/mhmr-app.iml" filepath="$PROJECT_DIR$/app/mhmr-app.iml" group="mhmr/app" />
+      <module fileurl="file://$PROJECT_DIR$/library-release/mhmr-library-release.iml" filepath="$PROJECT_DIR$/library-release/mhmr-library-release.iml" group="mhmr/library-release" />
+      <module fileurl="file://$PROJECT_DIR$/volley/mhmr-volley.iml" filepath="$PROJECT_DIR$/volley/mhmr-volley.iml" group="mhmr/volley" />
       <module fileurl="file://$PROJECT_DIR$/volley/volley.iml" filepath="$PROJECT_DIR$/volley/volley.iml" />
     </modules>
   </component>
