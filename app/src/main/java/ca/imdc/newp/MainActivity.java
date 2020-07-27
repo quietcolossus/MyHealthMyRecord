@@ -26,11 +26,14 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.firebase.ui.auth.AuthUI;
 import com.github.hiteshsondhi88.libffmpeg.ExecuteBinaryResponseHandler;
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
 import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler;
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.ibm.cloud.sdk.core.http.HttpMediaType;
@@ -58,6 +61,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -191,6 +195,11 @@ public class MainActivity extends AppCompatActivity {
                     } else if (id == R.id.nav_settings) {
 
                         }
+                    else if(id == R.id.nav_sign_out)
+                        {
+                            Log.i("NavigationMenu","Signing out from Navigation menu");
+                            signOut();
+                        }
                         mDrawerLayout.closeDrawer(GravityCompat.START);
                         return true;
                     }
@@ -265,6 +274,20 @@ public class MainActivity extends AppCompatActivity {
         intent.setType("video/");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Video"),REQUEST_TAKE_GALLERY_VIDEO);
+    }
+
+    public void signOut()
+    {
+        AuthUI.getInstance().signOut(this).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful())
+                {
+                    startActivity(new Intent(MainActivity.this,LoginActivity.class));
+                }
+            }
+        });
+
     }
 
     private void saveVideoToInternalStorage (String filePath) {

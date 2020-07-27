@@ -1,5 +1,6 @@
 package ca.imdc.newp;
 
+        import androidx.annotation.NonNull;
         import androidx.appcompat.app.AppCompatActivity;
         import android.os.Bundle;
         import android.content.Intent;
@@ -27,6 +28,7 @@ package ca.imdc.newp;
         import com.google.android.gms.common.SignInButton;
         import com.google.android.gms.common.api.ApiException;
         import com.google.android.gms.common.api.GoogleApiClient;
+        import com.google.android.gms.tasks.OnCompleteListener;
         import com.google.android.gms.tasks.Task;
         import com.google.firebase.auth.FirebaseAuth;
         import com.google.firebase.auth.FirebaseUser;
@@ -102,6 +104,7 @@ public class LoginActivity extends AppCompatActivity {
         void onSuccess(JSONArray result);
         void onFailure();
     }
+
 
 
 
