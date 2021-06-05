@@ -35,8 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/my_text_view"
-            android:layout_below="@+id/my_text_view"
-            android:text="Date" />
+            android:layout_below="@+id/my_text_view" />
 
         <TextView
             android:id="@+id/time_text"

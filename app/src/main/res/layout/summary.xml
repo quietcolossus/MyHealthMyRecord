@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.NoActionBar"
+        tools:ignore="MissingConstraints">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <SeekBar
+        android:id="@+id/date_bar"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_weight="90"
+        android:progress="50"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <Button
+        android:id="@+id/wordcloud_button"
+        android:layout_width="152dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="16dp"
+        android:text="Word Cloud"
+        app:layout_constraintBottom_toBottomOf="@+id/bar_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.041"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/bar_button"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/bar_button"
+        android:layout_width="158dp"
+        android:layout_height="59dp"
+        android:text="Bar Graph"
+        app:layout_constraintBottom_toTopOf="@+id/date_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.653"
+        app:layout_constraintStart_toEndOf="@+id/wordcloud_button"
+        app:layout_constraintTop_toBottomOf="@+id/wordcloud_web"
+        app:layout_constraintVertical_bias="0.44" />
+
+    <TextView
+        android:id="@+id/mSummary"
+        android:layout_width="353dp"
+        android:layout_height="563dp"
+        android:text=""
+        android:textAlignment="center"
+        android:textSize="24sp"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="26dp"
+        tools:layout_editor_absoluteY="33dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

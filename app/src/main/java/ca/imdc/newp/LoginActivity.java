@@ -1,6 +1,5 @@
 package ca.imdc.newp;
 
-        import androidx.annotation.NonNull;
         import androidx.appcompat.app.AppCompatActivity;
         import android.os.Bundle;
         import android.content.Intent;
@@ -19,8 +18,6 @@ package ca.imdc.newp;
 
         import com.android.volley.toolbox.StringRequest;
         import com.android.volley.toolbox.Volley;
-        import com.firebase.ui.auth.AuthUI;
-        import com.firebase.ui.auth.IdpResponse;
         import com.google.android.gms.auth.api.signin.GoogleSignIn;
         import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
         import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -28,83 +25,171 @@ package ca.imdc.newp;
         import com.google.android.gms.common.SignInButton;
         import com.google.android.gms.common.api.ApiException;
         import com.google.android.gms.common.api.GoogleApiClient;
-        import com.google.android.gms.tasks.OnCompleteListener;
         import com.google.android.gms.tasks.Task;
-        import com.google.firebase.auth.FirebaseAuth;
-        import com.google.firebase.auth.FirebaseUser;
 
         import org.json.JSONArray;
         import org.json.JSONException;
         import org.json.JSONObject;
 
-        import java.util.Arrays;
         import java.util.HashMap;
-        import java.util.List;
         import java.util.Map;
 
         import static android.widget.Toast.*;
 
 
 public class LoginActivity extends AppCompatActivity {
-    private static final int RC_SIGN_IN = 1;
     GoogleApiClient mGoogleApiClient;
     String googleEmail = "";
     String googleName = "";
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RC_SIGN_IN) {
-            IdpResponse response = IdpResponse.fromResultIntent(data);
-
-            if (resultCode == RESULT_OK) {
-                // Successfully signed in
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                updateUI(user);
-
-                // ...
-            } else {
-                // Sign in failed. If response is null the user canceled the
-                // sign-in flow using the back button. Otherwise check
-                // response.getError().getErrorCode() and handle the error.
-                // ...
-            }
+        if(requestCode == 1) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
         }
-
     }
 
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
 
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+
+            // Signed in successfully, show authenticated UI.
+            String email = account.getEmail();
+            String id = account.getId();
+            System.out.println(email);
+            System.out.println(id);
+            sendInfo(new RegisterActivity.VolleyCallback() {
+                @Override
+                public void onSuccess(String result) {
+                    System.out.println(result);
+                }
+
+            }, email, id);
+            updateUI(account);
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w("ERROR:", "signInResult:failed code=" + e.getStatusCode());
+            updateUI(null);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Choose authentication providers
         super.onCreate(savedInstanceState);
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.GoogleBuilder().build()
-                );
+        setContentView(R.layout.activity_login);
 
-// Create and launch sign-in intent
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(providers)
-                        .build(),
-                RC_SIGN_IN);
-    }
+        final EditText mUsername= findViewById(R.id.usernameTextF);
+        final EditText  mPassword= findViewById(R.id.passwordTextF);
+        final TextView mRegisterLink = findViewById(R.id.RegisterTV);
+        final Button mLoginBtn= findViewById(R.id.LoginBTN);
+        final SignInButton googleButton= findViewById(R.id.google_signin);
 
-    public void updateUI(FirebaseUser user){
+        final String username = mUsername.getText().toString();
+        final String password = mPassword.getText().toString();
+
         Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
-        mainIntent.putExtra("email", user.getEmail());
-        mainIntent.putExtra("name", user.getDisplayName());
-        mainIntent.putExtra("name", user.getUid());
+
+        startActivity(mainIntent);
+        //updateUI(account);
+
+        //Requests user's informations
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                //.requestIdToken("91115775985-7thudski6t1mhj1a1aj9lufkugsu0elr.apps.googleusercontent.com")
+                .requestEmail()
+                .requestId()
+                .build();
+        // Build a GoogleSignInClient with the options specified by gso.
+        final GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        //mGoogleApiClient = new GoogleApiClient.Builder(this)
+          //      .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+            //    .build();
+
+
+        googleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+                startActivityForResult(signInIntent, 1);
+            }
+
+        });
+
+
+
+
+        mRegisterLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(registerIntent);
+            }
+        });
+
+
+
+        mLoginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                loginVolley(new VolleyCallback() {
+                    @Override
+                    public void onSuccess(JSONArray result) {
+                        System.out.println(result);
+                        System.out.println("--------------------------------SUCCESS----------");
+                        Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                        mainIntent.putExtra("username", username);
+                        startActivity(mainIntent);
+                    }
+                    public void onFailure(){
+                        if(mUsername.getText().toString().isEmpty() || mPassword.getText().toString().isEmpty()){
+                            Toast toast = makeText(v.getContext(), "Username and/or password has not been entered.", LENGTH_SHORT);
+                            toast.show();
+                        }
+                        else{
+                            Toast toast = makeText(v.getContext(), "Username and/or password is incorrect.", LENGTH_SHORT);
+                            toast.show();
+                        }
+                    }
+
+                }, mUsername, mPassword);
+
+
+
+                System.out.println("Password entered---------------------->"+ mPassword.getText().toString());
+
+            }
+        });}
+    /*@Override
+    protected void onStart() {
+        super.onStart();
+        OptionalPendingResult<GoogleSignInResult> opr= Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
+        if(opr.isDone()){
+            GoogleSignInResult result = opr.get();
+            handleSignInResult(result);
+        }else{
+            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+                @Override
+                public void onResult(@NonNull GoogleSignInResult googleSignInResult) {
+                    handleSignInResult(googleSignInResult);
+                }
+            });
+        }
+    }*/
+
+    public void updateUI(GoogleSignInAccount account){
+        Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+        mainIntent.putExtra("email", account.getEmail());
+        mainIntent.putExtra("name", account.getGivenName());
+        mainIntent.putExtra("name", account.getId());
         startActivity(mainIntent);
     }
     public interface VolleyCallback{
         void onSuccess(JSONArray result);
         void onFailure();
     }
-
 
 
 
@@ -215,9 +300,6 @@ public class LoginActivity extends AppCompatActivity {
         requestQueue.add(jsonObjReq);
         return 0;
     }
-
-
-
 
 
 }

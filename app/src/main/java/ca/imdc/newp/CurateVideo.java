@@ -3,13 +3,23 @@ package ca.imdc.newp;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
+
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.ToggleButton;
+
+import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,16 +28,10 @@ public class CurateVideo extends AppCompatActivity {
 
     public EditText mRenameVideo;
     public Button mSubmitButton;
+    private DrawerLayout mDrawerLayout;
+    public SeekBar mValence, mArousal;
 
-    public SeekBar mValence;
-    public SeekBar mArousal;
-
-    public ToggleButton mHome;
-    public ToggleButton mWorkplace;
-    public ToggleButton mInstitution;
-    public ToggleButton mOutdoors;
-    public ToggleButton mIndoors;
-    public ToggleButton mSchool;
+    public ToggleButton mHome, mWorkplace, mInstitution, mOutdoors, mIndoors, mSchool;
 
     public ToggleButton mLeisure;
     public ToggleButton mWork;
@@ -45,6 +49,19 @@ public class CurateVideo extends AppCompatActivity {
 
     public JSONObject tags;
     public JSONObject vidMemory;
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        //noinspection SimplifiableIfStatement
+
+        if (id == android.R.id.home) {
+            mDrawerLayout.openDrawer(GravityCompat.START);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +119,49 @@ public class CurateVideo extends AppCompatActivity {
             position = (int) b.get("position");
         }
         else { name = "default123"; position = -1;}
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Curate Video: " + name);
+        setSupportActionBar(toolbar);
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        mDrawerLayout = findViewById(R.id.drawer);
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            VectorDrawableCompat indicator
+                    = VectorDrawableCompat.create(getResources(), R.drawable.ic_menu_black_24dp, getTheme());
+            indicator.setTint(ResourcesCompat.getColor(getResources(), R.color.colorAccent, getTheme()));
+            supportActionBar.setHomeAsUpIndicator(indicator);
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+        }
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    // This method will trigger on item Click of navigation menu
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        int id = menuItem.getItemId();
+                        menuItem.setChecked(true);
+
+                        if (id == R.id.nav_myvideos) {
+                            Intent mainIntent = new Intent(CurateVideo.this, MainActivity.class);
+                            startActivity(mainIntent);
+                        }
+
+                        else if (id == R.id.nav_share) {
+                            Intent shareIntent = new Intent(CurateVideo.this, shareCircleActivity.class);
+                            startActivity(shareIntent);
+                        }
+                        else if (id == R.id.nav_myv) {
+                            Intent dataIntent = new Intent(CurateVideo.this, WordCloudActivity.class);
+                            startActivity(dataIntent);
+
+                        } else if (id == R.id.nav_settings) {
+
+                        }
+                        mDrawerLayout.closeDrawer(GravityCompat.START);
+                        return true;
+                    }
+                });
 
         System.out.println(name);
         mRenameVideo.setHint(name);

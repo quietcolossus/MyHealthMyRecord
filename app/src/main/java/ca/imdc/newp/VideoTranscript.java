@@ -25,10 +25,12 @@ public class VideoTranscript extends AppCompatActivity {
         Intent intent = getIntent();
         String message = intent.getStringExtra("TRANSCRIPT");
         System.out.println(message);
+
         TextView transcript = findViewById(R.id.message);
         MainActivity mainact = new MainActivity();
         JSONObject rTags = mainact.tRecord;
         try {
+            System.out.println((String) rTags.get(message));
             transcript.setText((String) rTags.get(message));
         } catch (JSONException e) {
             e.printStackTrace();

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no">
+</head>
+
+<script src="plotly-latest.min.js"></script>
+
+<body>
+<div id="tester" style="width:600px;height:250px;"></div>
+</body>
+
+<script>
+    function graph(data) {
+        var indexOfMaxValue = data.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
+        var layout = {
+            autosize: true,
+            height: 500,
+            width: 400,
+            font: {
+    family: 'Courier New, monospace',
+    size: 18,
+    color: '#7f7f7f'
+  },
+   yaxis: {
+    title: 'Frequency',
+    tickvals: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    tickmode: 'array',
+    automargin: true,
+    fixedrange: true
+  },
+  xaxis: {
+    title: 'Videos',
+    tickmode: 'linear',
+    nticks: 100,
+    dtick: 1,
+    tick0: 1,
+    automargin: true,
+    fixedrange: true,
+  },
+      annotations: [{
+    xref: 'x',
+    yref: 'y',
+    x: indexOfMaxValue,
+    xanchor: 'left',
+    y: Math.max(...data),
+    yanchor: 'top',
+    text: 'Maximum',
+    showarrow: false
+  }],
+             paper_bgcolor: '#ffffff',
+             plot_bgcolor: '#ffffff'
+            };
+        var foo = [];
+
+        for (var i = 1; i <= data.length; i++) {
+            foo.push(i);
+        }
+
+	    TESTER = document.getElementById('tester');
+	    Plotly.newPlot( TESTER, [{
+	    x: foo,
+	    y: data }], layout );
+	 console.log(Math.max(...data));
+	 console.log(data);
+	 var indexOfMaxValue = data.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
+	 console.log(indexOfMaxValue);
+	}
+</script>
+
+</html>

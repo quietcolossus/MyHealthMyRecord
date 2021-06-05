@@ -691,7 +691,7 @@ public class CameraApi extends AppCompatActivity {
     }
 
     //storage method #1 creates folder to save videos in
-    private void createVideoFolder(){
+     void createVideoFolder(){
         //finds the folder in the device where videos are normally stored
         File movieFile = new File(getExternalFilesDir(null).getAbsolutePath());
         mVideoFolder = new File(movieFile, "Video"); //creates our folder in movies direcotry in device
@@ -710,7 +710,7 @@ public class CameraApi extends AppCompatActivity {
     }
 
     //storage method #2 creates unique file for each video
-    private File createVideoFileName() throws IOException{
+     File createVideoFileName() throws IOException{
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String prepend = "VIDEO_" + timeStamp + "_";
         File videoFile = File.createTempFile(prepend,".mp4",mVideoFolder); //creates the actual file

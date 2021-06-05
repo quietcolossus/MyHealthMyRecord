@@ -23,6 +23,8 @@ public class dataNavigationActivity extends AppCompatActivity {
     //public TextView transcript = (TextView) findViewById(R.id.message);
     public TextView mWordCloud;
     public TextView mLineGraph;
+    public TextView mBarGraph;
+    public TextView mTextSummary;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +33,8 @@ public class dataNavigationActivity extends AppCompatActivity {
 
         mLineGraph = findViewById(R.id.linegraph);
         mWordCloud = findViewById(R.id.wordcloud);
+        mBarGraph = findViewById(R.id.bargraph);
+        mTextSummary = findViewById(R.id.summary);
 
         mLineGraph.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,6 +49,22 @@ public class dataNavigationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent wcIntent = new Intent(dataNavigationActivity.this, WordCloudActivity.class);
                 startActivity(wcIntent);
+            }
+        });
+
+        mBarGraph.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent bgIntent = new Intent(dataNavigationActivity.this, BarGraphActivity.class);
+                startActivity(bgIntent);
+            }
+        });
+
+        mTextSummary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent bgIntent = new Intent(dataNavigationActivity.this, SummaryActivity.class);
+                startActivity(bgIntent);
             }
         });
     }

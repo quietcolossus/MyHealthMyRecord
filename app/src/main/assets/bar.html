@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no">
+</head>
+
+<script src="plotly-latest.min.js"></script>
+
+<body>
+<div id="tester" style="width:600px;height:250px;"></div>
+</body>
+
+<script>
+    function graph(data, words) {
+        var indexOfMaxValue = data.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
+        var layout = {
+            autosize: true,
+            width: 500,
+            height: 500,
+   yaxis: {
+    title: 'Frequency',
+    nticks: 100,
+    dtick: 1,
+    tick0: 1,
+    automargin: true,
+    titlefont: { size:12 }
+  },
+  xaxis: {
+    title: 'Words',
+    tickmode: 'linear',
+    nticks: 100,
+    dtick: 1,
+    tick0: 1,
+    automargin: true,
+    titlefont: { size:12 },
+  },
+             paper_bgcolor: '#ffffff',
+             plot_bgcolor: '#c7c7c7'
+            };
+
+	    TESTER = document.getElementById('tester');
+	    Plotly.newPlot( TESTER, [{
+	    x: words,
+	    y: data,
+	    type: 'bar' }], layout );
+
+    document.getElementById("tester").on('plotly_click', function(data){
+        console.log(data.points[0].x);
+        window.open(data.points[0].x, "_blank");
+    });
+	 console.log(Math.max(...data));
+	 console.log(data);
+	 var indexOfMaxValue = data.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
+	 console.log(indexOfMaxValue);
+	}
+</script>
+
+</html>

@@ -2,24 +2,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_share"
+            android:id="@+id/nav_myvideos"
             android:icon="@drawable/ic_ondemand_video_black_24dp"
+            android:tint="@color/colorAccent"
+            android:title="My Videos" />
+        <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/ic_share_black_24dp"
             android:tint="@color/colorAccent"
             android:title="Share Circle" />
         <item
             android:id="@+id/nav_myv"
             android:icon="@drawable/ic_trending_up_black_24dp"
             android:tint="@color/colorAccent"
-            android:title="MyVitals" />
+            android:title="My Data" />
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings_black_24dp"
             android:tint="@color/colorAccent"
             android:title="Settings" />
-        <item
-            android:id="@+id/nav_sign_out"
-            android:icon="@drawable/ic_baseline_exit_to_app_24"
-            android:tint="@color/colorAccent"
-            android:title="Sign Out" />
     </group>
 </menu>

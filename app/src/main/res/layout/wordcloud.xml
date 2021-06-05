@@ -1,21 +1,187 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
-    <ImageView
-        android:id="@+id/cloud_image"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:adjustViewBounds="true"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints"></ImageView>
+        android:fitsSystemWindows="true">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/tg_button"
+            android:layout_width="120dp"
+            android:layout_height="38dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/custom_rounded_corners"
+            android:bottomLeftRadius="10dp"
+            android:bottomRightRadius="10dp"
+            android:fontFamily="@font/cantarell"
+            android:text="Text Graph"
+            android:textAllCaps="false"
+            android:textColor="@color/button_focused"
+            android:textSize="14sp"
+            android:topLeftRadius="10dp"
+            android:topRightRadius="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/date_bar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/summary_button"
+            app:layout_constraintVertical_bias="0.708"
+            tools:ignore="MissingConstraints" />
+
+        <Button
+            android:id="@+id/summary_button"
+            android:layout_width="120dp"
+            android:layout_height="38dp"
+            android:layout_marginEnd="14dp"
+            android:background="@drawable/custom_rounded_corners"
+            android:bottomLeftRadius="10dp"
+            android:bottomRightRadius="10dp"
+            android:fontFamily="@font/cantarell"
+            android:text="Text Summary"
+            android:textAllCaps="false"
+            android:textColor="@color/button_focused"
+            android:textSize="14sp"
+            android:topLeftRadius="10dp"
+            android:topRightRadius="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/date_bar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.478"
+            app:layout_constraintStart_toEndOf="@+id/bar_button"
+            app:layout_constraintTop_toBottomOf="@+id/wordcloud_web"
+            app:layout_constraintVertical_bias="0.126"
+            tools:ignore="MissingConstraints" />
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:ignore="MissingConstraints">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:titleTextColor="@color/button_focused" />
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <ca.imdc.newp.MobileWebView
+            android:id="@+id/wordcloud_web"
+            android:layout_width="411dp"
+            android:layout_height="582dp"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints" />
+
+        <SeekBar
+            android:id="@+id/date_bar"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="90"
+            android:max="16"
+            android:progress="16"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="0dp" />
+
+        <Button
+            android:id="@+id/wordcloud_button"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="120dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="14dp"
+            android:background="@drawable/custom_rounded_corners"
+            android:bottomLeftRadius="10dp"
+            android:bottomRightRadius="10dp"
+            android:ellipsize="middle"
+            android:fontFamily="@font/cantarell"
+            android:text="Word Cloud"
+            android:textAllCaps="false"
+            android:textSize="14sp"
+            android:topLeftRadius="10dp"
+            android:topRightRadius="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/date_bar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/wordcloud_web"
+            app:layout_constraintVertical_bias="0.126" />
+
+        <Button
+            android:id="@+id/line_button"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="120dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/custom_rounded_corners"
+            android:bottomLeftRadius="10dp"
+            android:bottomRightRadius="10dp"
+            android:ellipsize="middle"
+            android:fontFamily="@font/cantarell"
+            android:text="Line Graph"
+            android:textAllCaps="false"
+            android:textSize="14sp"
+            android:topLeftRadius="10dp"
+            android:topRightRadius="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/date_bar"
+            app:layout_constraintEnd_toStartOf="@+id/tg_button"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/wordcloud_button"
+            app:layout_constraintVertical_bias="0.125"
+            tools:ignore="MissingConstraints" />
+
+        <Button
+            android:id="@+id/bar_button"
+            android:layout_width="120dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="2dp"
+            android:background="@drawable/custom_rounded_corners"
+            android:bottomLeftRadius="10dp"
+            android:bottomRightRadius="10dp"
+            android:fontFamily="@font/cantarell"
+            android:text="Bar Graph"
+            android:textAllCaps="false"
+            android:textColor="@color/button_focused"
+            android:textSize="14sp"
+            android:topLeftRadius="10dp"
+            android:topRightRadius="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/date_bar"
+            app:layout_constraintStart_toEndOf="@+id/wordcloud_button"
+            app:layout_constraintTop_toBottomOf="@+id/wordcloud_web"
+            app:layout_constraintVertical_bias="0.507" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="20dp" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="top"
+            app:constraint_referenced_ids="wordcloud_button" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/navheader"
+        app:menu="@menu/menu_navigation">
+
+
+    </com.google.android.material.navigation.NavigationView>
+</androidx.drawerlayout.widget.DrawerLayout>

@@ -5,12 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
+import androidx.core.content.FileProvider;
 import androidx.transition.Fade;
 import androidx.transition.Scene;
 import androidx.transition.TransitionManager;
 import androidx.fragment.app.FragmentManager;
 import androidx.core.content.res.TypedArrayUtils;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.os.Environment;
+import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +24,12 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import org.json.JSONException;
+
+import java.io.File;
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import static androidx.transition.Fade.IN;
 import static ca.imdc.newp.R.layout.item;
@@ -37,7 +45,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     private Fade mFade;
     private ViewGroup rootV;
     private int iD = 1;
-
 
     public Context mContext;
     public FragmentManager manager;
@@ -147,8 +154,38 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.mTextView.setText(mDataset[position]);
-        holder.time.setText(mDate[position % mDate.length]);
+        System.out.println("HULLABALLOO " + mDataset[position]);
+        String compare = mDataset[position].replace(".mp4", "");
+        MainActivity mainact = new MainActivity();
+        Iterator<String> keys = mainact.nRecord.keys();
+        String finaltext = "";
+
+        while(keys.hasNext()) {
+            String key = keys.next();
+            try {
+                System.out.println("KEY"+mainact.nRecord.get(key));
+                System.out.println("COMPARE"+compare);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (mDataset[position].equals(compare)) {
+                    finaltext = mDataset[position];
+                    System.out.println("Hello");
+                    break;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        holder.mTextView.setText(finaltext);
+        System.out.println("FINAL" + finaltext);
+        String fdate = mDate[position % mDate.length];
+        System.out.println(fdate);
+        String[] flist = fdate.split(" ");
+        System.out.println(flist[0]);
+        holder.date.setText(flist[0]);
+        holder.time.setText(flist[1]);
 
      //   holder.date.setText(mDate[position % mDate.length]);
         holder.mTextView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -175,14 +212,26 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         holder.View.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                String name = (String) holder.mTextView.getText();
+                Intent splash = new Intent(mContext, ActivitySplash.class);
+                splash.putExtra("filename", name);
+                ((Activity) mContext).startActivityForResult(splash, 2);
                 MainActivity mainact = new MainActivity();
                 System.out.println(holder.mTextView.getText());
-                String name = (String) holder.mTextView.getText();
-                System.out.println("Name:"+name);
-                String bc = mainact.decrypt(name);
-                System.out.println("BC:"+bc);
-                Intent intent=new Intent(Intent.ACTION_VIEW,Uri.parse(bc));
-                intent.setDataAndType(Uri.parse(bc), "video/*");
+                //String name = (String) holder.mTextView.getText();
+
+                File file = null;
+                try {
+                    file = new File(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Video/" + mainact.nRecord.get(name) + ".mp4");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println("File: " + file);
+                System.out.println("Exists: " + file.exists());
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.fromFile(file));
+                intent.setDataAndType(Uri.fromFile(file), "video/*");
+
                 mContext.startActivity(intent);
             }
         });
@@ -200,14 +249,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             public void onClick(View v) {
                 MainActivity mainact = new MainActivity();
                 ArrayList<String> list = new ArrayList<>(Arrays.asList(mDataset));
+                ArrayList<String> datelist = new ArrayList<>(Arrays.asList(mDate));
                 list.remove(list.get(position));
+                datelist.remove(datelist.get(position));
 
                 mDataset = list.toArray(new String[list.size()]);
+                mDate = datelist.toArray(new String[datelist.size()]);
                 notifyItemRemoved(position);
                 notifyDataSetChanged();
-                System.out.println(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/");
                 String name = (String) holder.mTextView.getText();
-                mainact.deleteIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Encrypted/"+name);
                 mainact.deleteIt(mContext.getExternalFilesDir(null).getAbsolutePath()+"/Video/"+name.replace(".encrypt",""));
             }
 

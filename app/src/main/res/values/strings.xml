@@ -118,4 +118,7 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="title_activity_video_transcript">VideoTranscript</string>
+    <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
+    <string name="ok">OK</string>
+    <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
 </resources>
