@@ -155,7 +155,7 @@ public class GraphActivity extends AppCompatActivity {
         String word = intent.getStringExtra("WORD");
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Word Frequency of \"" + word + "\" over time.");
+        toolbar.setTitle("Word count of \"" + word + "\" over time.");
         System.out.println("HEYHEYHEYEHYHEYEYEUHJHJKDHJK");
 
         mWordCloud = findViewById(R.id.wordcloud_button);

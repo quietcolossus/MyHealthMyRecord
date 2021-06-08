@@ -14,6 +14,24 @@
 <script>
     function graph(data, date) {
         var indexOfMaxValue = data.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
+        var trace1 = {
+            x: date,
+            y: data,
+            legendgroup: 'group',
+            showlegend: false,
+            marker: {color: 'rgb(64, 80, 181)'},
+            name: 'first legend group',
+            type: 'scatter'
+        };
+        var trace2 = {
+            x: [null],
+            y: [null],
+            legendgroup: 'weekends',
+            marker: {color: 'rgb(183, 189, 230)'},
+            mode: 'markers',
+            name: 'weekends',
+            type: 'bar'
+        };
         var layout = {
             autosize: true,
             shapes: [
@@ -28,8 +46,8 @@
             y0: 0,
             x1: '2021-06-07',
             y1: 1,
-            fillcolor: '#d3d3d3',
-            opacity: 0.2,
+            fillcolor: '#B7BDE6',
+            opacity: 0.5,
             line: {
                 width: 0
             }
@@ -45,8 +63,8 @@
             y0: 0,
             x1: '2021-05-31',
             y1: 1,
-            fillcolor: '#d3d3d3',
-            opacity: 0.2,
+            fillcolor: '#B7BDE6',
+            opacity: 0.5,
             line: {
                 width: 0
             }
@@ -88,9 +106,7 @@
 
 
 	    TESTER = document.getElementById('tester');
-	    Plotly.newPlot( TESTER, [{
-	    x: date,
-	    y: data,  type: 'scatter' }], layout );
+	    Plotly.newPlot( TESTER, [trace1, trace2], layout );
 	 console.log(Math.max(...data));
 	 console.log(data);
 	 var indexOfMaxValue = data.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
