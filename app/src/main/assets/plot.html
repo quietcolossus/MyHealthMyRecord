@@ -16,6 +16,42 @@
         var indexOfMaxValue = data.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
         var layout = {
             autosize: true,
+            shapes: [
+        // 1st highlight during Feb 4 - Feb 6
+        {
+            type: 'rect',
+            // x-reference is assigned to the x-values
+            xref: 'x',
+            // y-reference is assigned to the plot paper [0,1]
+            yref: 'paper',
+            x0: '2021-06-05',
+            y0: 0,
+            x1: '2021-06-07',
+            y1: 1,
+            fillcolor: '#d3d3d3',
+            opacity: 0.2,
+            line: {
+                width: 0
+            }
+        },
+
+        // 2nd highlight during Feb 20 - Feb 23
+
+        {
+            type: 'rect',
+            xref: 'x',
+            yref: 'paper',
+            x0: '2021-05-29',
+            y0: 0,
+            x1: '2021-05-31',
+            y1: 1,
+            fillcolor: '#d3d3d3',
+            opacity: 0.2,
+            line: {
+                width: 0
+            }
+        }
+    ],
             height: 500,
             width: 500,
             font: {

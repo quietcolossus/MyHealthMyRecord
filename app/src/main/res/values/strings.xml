@@ -9,6 +9,7 @@
     <string name="login">Login</string>
     <string name="enter_password">Enter Password</string>
     <string name="register">Register</string>
+    <string name="prompt">Filter By:</string>
     <string name="TV1">SS</string>
     <string name="TV2">LW</string>
     <string name="TV3">PK</string>

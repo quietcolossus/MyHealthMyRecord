@@ -15,10 +15,11 @@ public class ActivitySplash extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         try {
             splashPlayer();
         } catch (Exception ex) {
-            jumpMain();
+            jumpMain("main", "");
         }
     }
 
@@ -32,31 +33,44 @@ public class ActivitySplash extends AppCompatActivity {
         setContentView(videoHolder);
         Intent intent = getIntent();
         String video_name = intent.getStringExtra("filename");
+        String prev = intent.getStringExtra("prev");
+        String word = null;
+        if (prev.equals("graph")) {word = intent.getStringExtra("word");}
+
         int rawId = getResources().getIdentifier(video_name,  "raw", getPackageName());
         Uri video = Uri.parse("android.resource://" + getPackageName() + "/"
                 + rawId);
         videoHolder.setVideoURI(video);
+        String finalWord = word;
         videoHolder.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             public void onCompletion(MediaPlayer mp) {
-                jumpMain();
+                jumpMain(prev, finalWord);
             }
 
         });
         videoHolder.start();
+        String finalWord1 = word;
         videoHolder.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 ((VideoView) v).stopPlayback();
-                jumpMain();
+                jumpMain(prev, finalWord1);
                 return true;
             }
         });
     }
 
-    private synchronized void jumpMain() {
-        Intent intent = new Intent(ActivitySplash.this, MainActivity.class);
-        startActivity(intent);
+    private synchronized void jumpMain(String prev, String word) {
+        if (prev.equals("graph")) {
+            Intent intent = new Intent(ActivitySplash.this, GraphActivity.class);
+            intent.putExtra("WORD", word);
+            startActivity(intent);
+        }
+        else {
+            Intent intent = new Intent(ActivitySplash.this, MainActivity.class);
+            startActivity(intent);
+        }
         finish();
     }
 }

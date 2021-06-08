@@ -215,6 +215,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
                 String name = (String) holder.mTextView.getText();
                 Intent splash = new Intent(mContext, ActivitySplash.class);
                 splash.putExtra("filename", name);
+                splash.putExtra("prev", "main");
                 ((Activity) mContext).startActivityForResult(splash, 2);
                 MainActivity mainact = new MainActivity();
                 System.out.println(holder.mTextView.getText());
