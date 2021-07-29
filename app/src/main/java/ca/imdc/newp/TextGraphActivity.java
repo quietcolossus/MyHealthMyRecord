@@ -46,7 +46,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class WordCloudActivity extends AppCompatActivity {
+public class TextGraphActivity extends AppCompatActivity {
     public Button mWordCloud;
     public Button mBarGraph;
     public Button mLineGraph;
@@ -80,7 +80,7 @@ public class WordCloudActivity extends AppCompatActivity {
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-        @Override
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
@@ -122,7 +122,7 @@ public class WordCloudActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
-                Intent dataIntent = new Intent(WordCloudActivity.this, WordCloudActivity.class);
+                Intent dataIntent = new Intent(TextGraphActivity.this, WordCloudActivity.class);
                 System.out.println(position);
                 switch (position) {
 
@@ -157,7 +157,7 @@ public class WordCloudActivity extends AppCompatActivity {
         mLineGraph.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent lgIntent = new Intent(WordCloudActivity.this, GraphActivity.class);
+                Intent lgIntent = new Intent(TextGraphActivity.this, GraphActivity.class);
                 lgIntent.putExtra("WORD", "pain");
                 startActivity(lgIntent);
             }
@@ -166,7 +166,7 @@ public class WordCloudActivity extends AppCompatActivity {
         mSummary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent wcIntent = new Intent(WordCloudActivity.this, SummaryActivity.class);
+                Intent wcIntent = new Intent(TextGraphActivity.this, SummaryActivity.class);
                 startActivity(wcIntent);
             }
         });
@@ -174,7 +174,7 @@ public class WordCloudActivity extends AppCompatActivity {
         mWordCloud.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent wcIntent = new Intent(WordCloudActivity.this, WordCloudActivity.class);
+                Intent wcIntent = new Intent(TextGraphActivity.this, WordCloudActivity.class);
                 startActivity(wcIntent);
             }
         });
@@ -182,7 +182,7 @@ public class WordCloudActivity extends AppCompatActivity {
         mBarGraph.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent bgIntent = new Intent(WordCloudActivity.this, BarGraphActivity.class);
+                Intent bgIntent = new Intent(TextGraphActivity.this, BarGraphActivity.class);
                 startActivity(bgIntent);
             }
         });
@@ -210,15 +210,15 @@ public class WordCloudActivity extends AppCompatActivity {
                         menuItem.setChecked(true);
 
                         if (id == R.id.nav_myvideos) {
-                            Intent mainIntent = new Intent(WordCloudActivity.this, MainActivity.class);
+                            Intent mainIntent = new Intent(TextGraphActivity.this, MainActivity.class);
                             startActivity(mainIntent);
                         }
                         else if (id == R.id.nav_share) {
-                            Intent shareIntent = new Intent(WordCloudActivity.this, shareCircleActivity.class);
+                            Intent shareIntent = new Intent(TextGraphActivity.this, shareCircleActivity.class);
                             startActivity(shareIntent);
                         }
                         else if (id == R.id.nav_myv) {
-                            Intent dataIntent = new Intent(WordCloudActivity.this, WordCloudActivity.class);
+                            Intent dataIntent = new Intent(TextGraphActivity.this, WordCloudActivity.class);
                             startActivity(dataIntent);
 
                         } else if (id == R.id.nav_settings) {
@@ -255,7 +255,7 @@ public class WordCloudActivity extends AppCompatActivity {
 
         final MobileWebView d3 = findViewById(R.id.wordcloud_web);
         d3.getSettings().setLoadWithOverviewMode(true);
-        d3.getSettings().setUseWideViewPort(false);
+        d3.getSettings().setUseWideViewPort(true);
 
         WebSettings ws = d3.getSettings();
         ws.setJavaScriptEnabled(true);
@@ -266,7 +266,7 @@ public class WordCloudActivity extends AppCompatActivity {
                 if (url.contains("viddate")) {
 
                 }
-                Intent intent = new Intent(WordCloudActivity.this, GraphActivity.class);
+                Intent intent = new Intent(TextGraphActivity.this, GraphActivity.class);
                 intent.putExtra("WORD",url.replace("file:///android_asset/", ""));
                 startActivity(intent);
                 return true;

@@ -235,7 +235,6 @@ public class GraphActivity extends AppCompatActivity {
         LocalDate stop = LocalDate.now( ZoneId.of( "America/Montreal" ) );
         List<LocalDate> alldates = getDatesBetweenUsingJava8(start, stop);
 
-        System.out.println("HEYHEYHEYEHYHEYEYEUHJHJKDHJK");
         System.out.println(alldates);
         System.out.println(alldates.get(0).toString());
         StringBuilder frequency = new StringBuilder();

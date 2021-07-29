@@ -12,48 +12,6 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
 
-        <Button
-            android:id="@+id/tg_button"
-            android:layout_width="120dp"
-            android:layout_height="38dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/custom_rounded_corners"
-            android:bottomLeftRadius="10dp"
-            android:bottomRightRadius="10dp"
-            android:fontFamily="@font/cantarell"
-            android:text="Text Graph"
-            android:textAllCaps="false"
-            android:textColor="@color/button_focused"
-            android:textSize="14sp"
-            android:topLeftRadius="10dp"
-            android:topRightRadius="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/summary_button"
-            tools:ignore="MissingConstraints" />
-
-        <Button
-            android:id="@+id/summary_button"
-            android:layout_width="120dp"
-            android:layout_height="38dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="14dp"
-            android:background="@drawable/custom_rounded_corners"
-            android:bottomLeftRadius="10dp"
-            android:bottomRightRadius="10dp"
-            android:fontFamily="@font/cantarell"
-            android:text="Text Summary"
-            android:textAllCaps="false"
-            android:textColor="@color/button_focused"
-            android:textSize="14sp"
-            android:topLeftRadius="10dp"
-            android:topRightRadius="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.866"
-            app:layout_constraintStart_toEndOf="@+id/bar_button"
-            app:layout_constraintTop_toBottomOf="@+id/wordcloud_web"
-            tools:ignore="MissingConstraints" />
-
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout2"
             android:layout_width="match_parent"
@@ -72,9 +30,10 @@
 
         <ca.imdc.newp.MobileWebView
             android:id="@+id/wordcloud_web"
-            android:layout_width="411dp"
-            android:layout_height="582dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
+            android:layout_above="@+id/wordcloud_button"
             tools:ignore="MissingConstraints" />
 
         <Button
@@ -141,6 +100,48 @@
             app:layout_constraintStart_toEndOf="@+id/wordcloud_button"
             app:layout_constraintTop_toBottomOf="@+id/wordcloud_web"
             app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/tg_button"
+            android:layout_width="120dp"
+            android:layout_height="38dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/custom_rounded_corners"
+            android:bottomLeftRadius="10dp"
+            android:bottomRightRadius="10dp"
+            android:fontFamily="@font/cantarell"
+            android:text="Text Graph"
+            android:textAllCaps="false"
+            android:textColor="@color/button_focused"
+            android:textSize="14sp"
+            android:topLeftRadius="10dp"
+            android:topRightRadius="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/summary_button"
+            tools:ignore="MissingConstraints" />
+
+        <Button
+            android:id="@+id/summary_button"
+            android:layout_width="120dp"
+            android:layout_height="38dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="14dp"
+            android:background="@drawable/custom_rounded_corners"
+            android:bottomLeftRadius="10dp"
+            android:bottomRightRadius="10dp"
+            android:fontFamily="@font/cantarell"
+            android:text="Text Summary"
+            android:textAllCaps="false"
+            android:textColor="@color/button_focused"
+            android:textSize="14sp"
+            android:topLeftRadius="10dp"
+            android:topRightRadius="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.866"
+            app:layout_constraintStart_toEndOf="@+id/bar_button"
+            app:layout_constraintTop_toBottomOf="@+id/wordcloud_web"
+            tools:ignore="MissingConstraints" />
 
         <Spinner
             android:id="@+id/spinner"

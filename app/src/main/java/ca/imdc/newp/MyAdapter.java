@@ -213,10 +213,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 String name = (String) holder.mTextView.getText();
-                Intent splash = new Intent(mContext, ActivitySplash.class);
+                Intent splash = new Intent(mContext, VideoPlay.class);
                 splash.putExtra("filename", name);
                 splash.putExtra("prev", "main");
-                ((Activity) mContext).startActivityForResult(splash, 2);
+                ((Activity) mContext).startActivity(splash);
                 MainActivity mainact = new MainActivity();
                 System.out.println(holder.mTextView.getText());
                 //String name = (String) holder.mTextView.getText();

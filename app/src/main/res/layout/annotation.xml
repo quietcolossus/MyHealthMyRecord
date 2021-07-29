@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.NoActionBar"
+            tools:ignore="MissingConstraints" >
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:titleTextColor="@color/button_focused" />
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            xmlns:tools="http://schemas.android.com/tools">
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:weightSum="16">
+
+
+            <!--TITLE-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="75dp"
+                    android:text="Input new video title:"
+                    android:textSize="20sp"/>
+                <Space
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+                <EditText
+                    android:id="@+id/nameentry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Video title"
+                    android:imeOptions="actionDone"
+                    android:textSize="20sp"/>
+                <Space
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+            <!--TRANSCRIPT-->
+
+            <TextView
+                android:id="@+id/slide_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="75dp"
+                android:text="VIDEO TRANSCRIPT ▼"
+                android:onClick="onClick"
+                android:clickable="true"
+                android:textSize="20sp" />
+            <Space
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
+
+            <LinearLayout android:layout_width="fill_parent"
+                android:id="@+id/slide_layout"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+                <Space
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+                <TextView
+                    android:id="@+id/transcript_read"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="I'm just coming to check in %HESITATION and record %HESITATION my pain for today %HESITATION woke up this morning with %HESITATION increased pain on my joints on my hand and %HESITATION its uncomfortable to move %HESITATION and and have my coffee in the morning and its just uncomfortable pain"
+                    android:textSize="18sp"
+                    />
+                <EditText
+                    android:id="@+id/transcript_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="I'm just coming to check in %HESITATION and record %HESITATION my pain for today %HESITATION woke up this morning with %HESITATION increased pain on my joints on my hand and %HESITATION its uncomfortable to move %HESITATION and and have my coffee in the morning and its just uncomfortable pain"
+                    android:imeOptions="actionDone"
+                    android:textSize="18sp"/>
+                <Button
+                    android:id="@+id/transcript_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_rounded_corners"
+                    android:bottomLeftRadius="10dp"
+                    android:bottomRightRadius="10dp"
+                    android:fontFamily="@font/cantarell"
+                    android:text="Edit Transcript"
+                    android:textAllCaps="false"
+                    android:textColor="@color/button_focused"
+                    android:textSize="14sp"
+                    android:topLeftRadius="10dp"
+                    android:topRightRadius="10dp"
+                    tools:ignore="MissingConstraints" />
+            </LinearLayout>
+
+            <!--TAGS-->
+
+                <TextView
+                    android:id="@+id/tag_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="75dp"
+                    android:text="VIDEO LABELS ▼"
+                    android:onClick="onClick"
+                    android:clickable="true"
+                    android:textSize="20sp" />
+                <Space
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+                <LinearLayout android:layout_width="fill_parent"
+                    android:id="@+id/tag_layout"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="15dp"
+                        android:text="Text Labels"
+                        android:onClick="onClick"
+                        android:clickable="true"
+                        android:textSize="20sp" />
+                    <Spinner
+                        android:id="@+id/spinner"
+                        android:layout_width="408dp"
+                        android:layout_height="51dp"
+                        android:prompt="@string/prompt"
+                        android:spinnerMode="dropdown"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        tools:ignore="MissingConstraints"
+                        tools:layout_editor_absoluteX="1dp" />
+                    <LinearLayout android:layout_width="fill_parent"
+
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        xmlns:android="http://schemas.android.com/apk/res/android">
+                        <CheckBox android:id="@+id/checkbox_none"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="None"
+                            android:onClick="onCheckboxClicked"/>
+                    <CheckBox android:id="@+id/checkbox_meat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pain"
+                        android:onClick="onCheckboxClicked"/>
+                    <CheckBox android:id="@+id/checkbox_cheese"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Morning"
+                        android:onClick="onCheckboxClicked"/>
+                        <CheckBox android:id="@+id/checkbox_a"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Depression"
+                            android:onClick="onCheckboxClicked"/>
+                        <CheckBox android:id="@+id/checkbox_b"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Chronic"
+                            android:onClick="onCheckboxClicked"/>
+                        <CheckBox android:id="@+id/checkbox_c"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Home"
+                            android:onClick="onCheckboxClicked"/>
+                        <CheckBox android:id="@+id/checkbox_d"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Wellness"
+                            android:onClick="onCheckboxClicked"/>
+                        <CheckBox android:id="@+id/checkbox_e"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Fever"
+                            android:onClick="onCheckboxClicked"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="15dp"
+                        android:text="Stickers"
+                        android:onClick="onClick"
+                        android:clickable="true"
+                        android:textSize="20sp" />
+
+                    <LinearLayout android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        xmlns:android="http://schemas.android.com/apk/res/android">
+
+                    <ImageButton
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/angry" />
+                    <ImageButton
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/happy" />
+                    <ImageButton
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/sad" />
+                    <ImageButton
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/surprise" />
+                    <ImageButton
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/fear" />
+                    <ImageButton
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/disgust" />
+                    <ImageButton
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/neutral" /></LinearLayout>
+                    </LinearLayout>
+
+            <!--RATINGS-->
+                <TextView
+                    android:id="@+id/rating_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="75dp"
+                    android:text="RATING SCALES ▼"
+                    android:onClick="onClick"
+                    android:clickable="true"
+                    android:textSize="20sp" />
+                <Space
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+            <LinearLayout android:layout_width="fill_parent"
+                android:id="@+id/rating_layout"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                xmlns:android="http://schemas.android.com/apk/res/android">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:text="Rate your feelings from negative to positive:"
+                    android:textSize="20sp"/>
+                <Space
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="true"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/ic_badmood" />
+
+                    <SeekBar
+                        android:id="@+id/valence_bar"
+                        android:layout_height="40dp"
+                        android:layout_weight="90"
+                        android:progress="50"
+                        android:layout_width="0dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/ic_goodmood" />
+                </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Rate your PAIN level from low to high:"
+                    android:textSize="20sp"/>
+                <Space
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="true"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/ic_lowenergy" />
+
+                    <SeekBar
+                        android:id="@+id/arousal_bar"
+                        android:layout_height="40dp"
+                        android:layout_weight="90"
+                        android:progress="0"
+                        android:tickMark="@drawable/tickmark"
+                        android:max="10"
+                        android:layout_width="0dp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:srcCompat="@drawable/ic_highenergy" />
+                </LinearLayout>
+                <Button
+                    android:id="@+id/scale_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_rounded_corners"
+                    android:bottomLeftRadius="10dp"
+                    android:bottomRightRadius="10dp"
+                    android:fontFamily="@font/cantarell"
+                    android:text="Add a Scale"
+                    android:textAllCaps="false"
+                    android:textColor="@color/button_focused"
+                    android:textSize="14sp"
+                    android:topLeftRadius="10dp"
+                    android:topRightRadius="10dp"
+                    tools:ignore="MissingConstraints" />
+            </LinearLayout>
+
+            <!--COMMENTS-->
+                <TextView
+                    android:id="@+id/comment_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="75dp"
+                    android:text="COMMENTS AND NOTES ▼"
+                    android:onClick="onClick"
+                    android:clickable="true"
+                    android:textSize="20sp" />
+                <Space
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+                <LinearLayout android:layout_width="fill_parent"
+                    android:id="@+id/comment_layout"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+                    <Space
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"/>
+                    <TextView
+                        android:id="@+id/comment_read"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Video taken in the afternoon after a walk, pain in leg, ate lunch after and felt better"
+                        android:textSize="18sp"
+                        />
+                    <EditText
+                        android:id="@+id/comment_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Video taken in the afternoon after a walk, pain in leg, ate lunch after and felt better"
+                        android:imeOptions="actionDone"
+                        android:textSize="18sp"/>
+                    <Button
+                        android:id="@+id/comment_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/custom_rounded_corners"
+                        android:bottomLeftRadius="10dp"
+                        android:bottomRightRadius="10dp"
+                        android:fontFamily="@font/cantarell"
+                        android:text="Edit"
+                        android:textAllCaps="false"
+                        android:textColor="@color/button_focused"
+                        android:textSize="14sp"
+                        android:topLeftRadius="10dp"
+                        android:topRightRadius="10dp"
+                        tools:ignore="MissingConstraints" />
+                </LinearLayout>
+
+            <!--SHARING-->
+                <TextView
+                    android:id="@+id/sharing_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="75dp"
+                    android:text="SHARING ▼"
+                    android:onClick="onClick"
+                    android:clickable="true"
+                    android:textSize="20sp" />
+                <Space
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+                <LinearLayout android:layout_width="fill_parent"
+                    android:id="@+id/sharing_layout"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+
+                    </LinearLayout>
+
+                <LinearLayout
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+
+
+                    <Button
+
+                        android:id="@+id/submit_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorPrimary"
+                        android:textColor="@color/white"
+                        android:text="Save and Submit"
+                        android:textSize="20dp"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/navheader"
+        app:menu="@menu/menu_navigation" />
+</androidx.drawerlayout.widget.DrawerLayout>

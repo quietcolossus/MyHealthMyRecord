@@ -59,6 +59,8 @@
         <activity android:name=".GraphActivity" />
         <activity android:name=".FaceTrackerActivity" />
         <activity android:name=".ActivitySplash" />
+        <activity android:name=".AnnotationActivity"/>
+        <activity android:name=".VideoPlay"/>
         <activity android:name=".BarGraphActivity" /> <!-- FileProvider - a ContentProvider for making the image file securely available to the other end -->
         <provider
             android:name="androidx.core.content.FileProvider"

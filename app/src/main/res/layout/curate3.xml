@@ -99,7 +99,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Rate your energy level from low to high:"
+            android:text="Rate your PAIN level from low to high:"
             android:textSize="20sp"/>
         <Space
             android:layout_weight="1"

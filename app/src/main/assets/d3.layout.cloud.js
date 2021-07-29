@@ -7,7 +7,7 @@ else cloud(this.d3);
 
 function cloud(d3) {
   d3.layout.cloud = function cloud() {
-    var size = [256, 256],
+    var size = [512, 512],
         text = cloudText,
         font = cloudFont,
         fontSize = cloudFontSize,
