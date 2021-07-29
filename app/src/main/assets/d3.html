@@ -46,8 +46,10 @@ function wordCloud(data) {
     var sizeScale = d3.scale.linear()
                        .domain([0, d3.max(frequency_list, function(d) { return d.freq} )])
                                         .range([10, 95]);
+    var w = window.innerWidth;
+    var h = window.innerHeight;
     var layout = d3.layout.cloud()
-        .size([350, 700 ])
+        .size([w, h ])
         .words(unique.map(function(d) {
           return {text: d, size: Math.min(10 + data.filter(function(x){return x==d}).length ** 2, 64)};
         }))

@@ -31,7 +31,7 @@
         <ca.imdc.newp.MobileWebView
             android:id="@+id/wordcloud_web"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_above="@+id/wordcloud_button"
             tools:ignore="MissingConstraints" />
