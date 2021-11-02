@@ -150,20 +150,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        //Getting stored data in the fully functional version of the application
 
         //String obj = PreferenceManager.getDefaultSharedPreferences(this).getString("tagRecord", null);
         //String transcripts = PreferenceManager.getDefaultSharedPreferences(this).getString("transcriptRecord", null);
         //String names_record = PreferenceManager.getDefaultSharedPreferences(this).getString("nameRecord", null);
+
+        // --- Demo data - hard coded in
         String transcripts = "{\"checkin\":\"I'm just coming to check in %HESITATION and record %HESITATION my pain for today %HESITATION woke up this morning with %HESITATION increased pain on my joints on my hand and %HESITATION its uncomfortable to move %HESITATION and and have my coffee in the morning and its just uncomfortable pain\",\"comparison\":\"%HESITATION comparison to yesterday the pain in my limbs are %HESITATION about the same %HESITATION my leg pain has increased and %HESITATION there was discomfort in our bed %HESITATION it took me a few seconds longer to go to the toilet \",\"goodmorning\":\"good morning %HESITATION todays pain was significantly better %HESITATION I could still feel a numbness the pain but %HESITATION was significantly better than it was yesterday\", \"general\":\"hello %HESITATION today I experienced a slight discomfort going to the toilet %HESITATION I experienced slight diarrhea and %HESITATION discomfort and pain in my legs but my arms seem to be okay or a least not as painful as it was yesterday %HESITATION the headache has subsided hopefully by tomorrow the pain in my legs is less painful\", \"lesspain2\":\"hello %HESITATION today i experienced a slight discomfort going to the toilet %HESITATION i experienced slight diarrhea and %HESITATION discomfort and pain in my legs but my arms seem to be okay or a least not as painful as it was yesterday %HESITATION the headache has subsided hopefully by tomorrow the pain in my legs is less painful\", \"morepain3\":\"good morning %HESITATION today the pain in my my fin my hands and my legs are a lot better %HESITATION but I was just experiencing a little discomfort %HESITATION aches and a headache %HESITATION slight aches not too much %HESITATION but I would say the pain top %HESITATION the pain levels today would be around a five\"}";
         String obj = "{\"checkin\":{\"Arousal\":25,\"Valence\":25,\"Location\":{\"Home\":true,\"Indoors\":true},\"Activity\":{\"Leisure\":true,\"Meds\":true},\"Sharing\":{\"Everyone\":true,\"Medical\":true}}, \"comparison\":{\"Arousal\":25,\"Valence\":25,\"Location\":{\"Home\":true,\"Indoors\":true},\"Activity\":{\"Leisure\":true,\"Meds\":true},\"Sharing\":{\"Everyone\":true,\"Medical\":true}}, \"goodmorning\":{\"Arousal\":60,\"Valence\":50,\"Location\":{\"Home\":true,\"Indoors\":true},\"Activity\":{\"Leisure\":true,\"Meds\":true},\"Sharing\":{\"Everyone\":true,\"Medical\":true}}, \"general\":{\"Arousal\":25,\"Valence\":25,\"Location\":{\"Home\":true,\"Indoors\":true},\"Activity\":{\"Leisure\":true,\"Meds\":true},\"Sharing\":{\"Everyone\":true,\"Medical\":true}}, \"lesspain2\":{\"Arousal\":25,\"Valence\":25,\"Location\":{\"Home\":true,\"Indoors\":true},\"Activity\":{\"Leisure\":true,\"Meds\":true},\"Sharing\":{\"Everyone\":true,\"Medical\":true}}, \"morepain3\":{\"Arousal\":25,\"Valence\":25,\"Location\":{\"Home\":true,\"Indoors\":true},\"Activity\":{\"Leisure\":true,\"Meds\":true},\"Sharing\":{\"Everyone\":true,\"Medical\":true}}}";
         String names_record = "{\"checkin\":\"2021-07-01 14:13\",\"comparison\":\"2021-07-02 14:14\",\"goodmorning\":\"2021-07-04 15:39\", \"general\":\"2021-07-06 15:39\", \"lesspain2\":\"2021-07-07 15:39\", \"morepain3\":\"2021-07-10 15:39\"}";
-        System.out.println("TAGS: " + obj + "\n");
-        System.out.println("\nSAVED TRANSCRIPTS: " + transcripts + "\n");
-        System.out.println("\nVIDEO NAMES: " + names_record);
+
+        //System.out.println("TAGS: " + obj + "\n");
+        //System.out.println("\nSAVED TRANSCRIPTS: " + transcripts + "\n");
+        //System.out.println("\nVIDEO NAMES: " + names_record);
+
+        //StrictMode hinders testing on Virtual Machines, so we turn it off
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
 
+        // --- Splitting stored data strings into JSON objects for easier reference, empty string if data is null
         if (obj == null) { obj = ""; };
         try {
             jRecord = new JSONObject(obj);
@@ -171,7 +177,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         if (transcripts == null) { transcripts = ""; };
         try {
             tRecord = new JSONObject(transcripts);
@@ -186,7 +191,9 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        System.out.println(obj);
+        //System.out.println(obj);
+
+        //Boilerplate
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("MyHealthMyRecord");
         setSupportActionBar(toolbar);
@@ -460,7 +467,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-// wait 20 seconds for the asynchronous response
+        // wait 20 seconds for the asynchronous response
         try {
             Thread.sleep(5000);
 
