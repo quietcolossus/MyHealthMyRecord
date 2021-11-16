@@ -272,7 +272,8 @@ public class MainActivity extends AppCompatActivity {
                             startActivity(annotationIntent);
                         }
                         else if (id == R.id.nav_settings) {
-
+                            Intent annotationIntent = new Intent(MainActivity.this, SettingsActivity.class);
+                            startActivity(annotationIntent);
                         }
                         mDrawerLayout.closeDrawer(GravityCompat.START);
                         return true;
@@ -409,6 +410,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    // -- sentiment analysis service from Watson
     void analyzeTone(String transcript) {
         Authenticator authenticator = new IamAuthenticator("6dWIfcCzOVS9tn1uTeIkJGJ1ueiABxQ6_5zf8gRQ-uDh");
         ToneAnalyzer ta = new ToneAnalyzer("2020-02-24", authenticator);
@@ -423,19 +425,23 @@ public class MainActivity extends AppCompatActivity {
         System.out.println(toneAnalysis);
     }
 
+    // -- this method sends an receives a video title, finds the corresponding audio file,
+    // -- which it sends to Watson API and receives a speech-to-text transcript
      void watsonSend(String videoTitle) {
 
+        // -- creating objects needed for the Watson API call, including the Authenticator with the API key
         Authenticator authenticator =  new IamAuthenticator("ilPJZOJKW6OhAKjLVEnq2cQXYWjnf73vZWy1dJSUt0Am");
         SpeechToText service = new SpeechToText(authenticator);
-
         InputStream audio = null;
 
+        // -- find the audio file in Internal Storage
         try {
             audio = new FileInputStream(cfileName.replace(".mp4",".mp3"));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
+        // -- set the options for the API call
         RecognizeOptions options = new RecognizeOptions.Builder()
                 .audio(audio)
                 .contentType(HttpMediaType.AUDIO_MP3)
@@ -444,12 +450,14 @@ public class MainActivity extends AppCompatActivity {
 
         service.recognizeUsingWebSocket(options, new BaseRecognizeCallback() {
 
+            // -- acknowledge connection to Watson API
             @Override
             public void onConnected() {
                 super.onConnected();
                 System.out.println("CONNECTED TO WATSON *_*_*_*_*_*_*_*_*__*_**_*_*_**__");
             }
 
+            // -- when the transcript is returned, convert to string and call displayTranscript
             @Override
             public void onTranscription(SpeechRecognitionResults speechResults) {
                 super.onTranscription(speechResults);
@@ -467,7 +475,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // wait 20 seconds for the asynchronous response
+        // -- wait 20 seconds for the asynchronous response
         try {
             Thread.sleep(5000);
 
@@ -509,10 +517,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
 
             Uri videoUri = getOutputMediaFileUri();
-            Log.i("NativeCameraStatus",  "Captured video with uri: "+videoUri+" at "+LocalDateTime.now());
+            Log.i("NativeCameraStatus", "Captured video with uri: " + videoUri + " at " + LocalDateTime.now());
 
             createVideoFolder();
 
@@ -529,7 +538,11 @@ public class MainActivity extends AppCompatActivity {
 
             Intent intent = new Intent(MainActivity.this, CurateVideo.class);
             int position = 0;
-            for (int i = 0 ; i < myDataset.length; i++) { if (myDataset[i].equals(globName)) { position = i;}}
+            for (int i = 0; i < myDataset.length; i++) {
+                if (myDataset[i].equals(globName)) {
+                    position = i;
+                }
+            }
             intent.putExtra("position", position);
             intent.putExtra("name", globName);
             startActivityForResult(intent, 2);
@@ -544,7 +557,7 @@ public class MainActivity extends AppCompatActivity {
 
             JSONObject jTags = null;
             try {
-                jTags = new JSONObject (data.getStringExtra("tags"));
+                jTags = new JSONObject(data.getStringExtra("tags"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -561,7 +574,8 @@ public class MainActivity extends AppCompatActivity {
 
             PreferenceManager.getDefaultSharedPreferences(this).edit().putString("nameRecord", nRecord.toString()).apply();
 
-            myDataset = namelist.toArray(new String[0]);;
+            myDataset = namelist.toArray(new String[0]);
+            ;
             Arrays.sort(myDataset, Collections.reverseOrder());
             myDate = datelist.toArray(new String[0]);
 
@@ -580,7 +594,7 @@ public class MainActivity extends AppCompatActivity {
             PreferenceManager.getDefaultSharedPreferences(this).edit().putString("tagRecord", jRecord.toString()).apply();
             PreferenceManager.getDefaultSharedPreferences(this).edit().putString("nameRecord", nRecord.toString()).apply();
 
-            renameIt(getExternalFilesDir(null).getAbsolutePath()+"/Video/"+name, getExternalFilesDir(null).getAbsolutePath()+"/Video/"+replacer);
+            renameIt(getExternalFilesDir(null).getAbsolutePath() + "/Video/" + name, getExternalFilesDir(null).getAbsolutePath() + "/Video/" + replacer);
             System.out.println("myDataset" + Arrays.toString(myDataset));
 
             FFmpeg ffmpeg = FFmpeg.getInstance(this);
@@ -588,37 +602,48 @@ public class MainActivity extends AppCompatActivity {
                 //Load the binary
                 ffmpeg.loadBinary(new LoadBinaryResponseHandler() {
                     @Override
-                    public void onStart() {}
+                    public void onStart() {
+                    }
+
                     @Override
-                    public void onFailure() {}
+                    public void onFailure() {
+                    }
+
                     @Override
-                    public void onSuccess() {}
+                    public void onSuccess() {
+                    }
+
                     @Override
-                    public void onFinish() {}
+                    public void onFinish() {
+                    }
                 });
             } catch (FFmpegNotSupportedException e) {
                 // Handle if FFmpeg is not supported by device
             }
             try {
-                String[] command = {"-i", cfileName , "-ab", "128k", "-ac", "2", "-ar", "44100", "-vn", cfileName.replace(".mp4",".mp3")};
+                String[] command = {"-i", cfileName, "-ab", "128k", "-ac", "2", "-ar", "44100", "-vn", cfileName.replace(".mp4", ".mp3")};
                 ffmpeg.execute(command, new ExecuteBinaryResponseHandler() {
 
                     @Override
                     public void onStart() {
                         System.out.println("FFMPEG COMMAND STARTS");
                     }
+
                     @Override
                     public void onProgress(String message) {
                         System.out.println("FFMPEG COMMAND IN PROGRESS: " + message);
                     }
+
                     @Override
                     public void onFailure(String message) {
                         System.out.println("FFMPEG COMMAND FAILED" + message);
                     }
+
                     @Override
                     public void onSuccess(String message) {
                         Log.i("SUCCESS", message);
                     }
+
                     @Override
                     public void onFinish() {
                         watsonSend(replacer);

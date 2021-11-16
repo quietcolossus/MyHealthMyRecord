@@ -22,9 +22,11 @@ package ca.imdc.newp;
         import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
         import com.google.android.gms.auth.api.signin.GoogleSignInClient;
         import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+        import com.google.android.gms.common.Scopes;
         import com.google.android.gms.common.SignInButton;
         import com.google.android.gms.common.api.ApiException;
         import com.google.android.gms.common.api.GoogleApiClient;
+        import com.google.android.gms.common.api.Scope;
         import com.google.android.gms.tasks.Task;
 
         import org.json.JSONArray;
@@ -45,7 +47,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if(requestCode == 1) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
@@ -96,9 +99,11 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(mainIntent);
         //updateUI(account);
 
-        //Requests user's informations
+        //Requests user's information
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                //.requestIdToken("91115775985-7thudski6t1mhj1a1aj9lufkugsu0elr.apps.googleusercontent.com")
+                .requestScopes(new Scope(Scopes.PLUS_LOGIN))
+                .requestScopes(new Scope(Scopes.PLUS_ME))
+                .requestIdToken("91115775985-7thudski6t1mhj1a1aj9lufkugsu0elr.apps.googleusercontent.com")
                 .requestEmail()
                 .requestId()
                 .build();

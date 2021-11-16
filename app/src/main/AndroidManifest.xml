@@ -3,20 +3,12 @@
     package="ca.imdc.newp"
     android:installLocation="preferExternal">
 
-
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="true" />
-    <uses-feature
-        android:name="android.hardware.camera.front"
-        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -28,7 +20,7 @@
         <activity
             android:name=".VideoTranscript"
             android:label="@string/title_activity_video_transcript"
-            android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -61,9 +53,14 @@
         <activity android:name=".GraphActivity" />
         <activity android:name=".FaceTrackerActivity" />
         <activity android:name=".ActivitySplash" />
-        <activity android:name=".AnnotationActivity"/>
-        <activity android:name=".VideoPlay"/>
+        <activity android:name=".AnnotationActivity" />
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".VideoPlay" />
         <activity android:name=".BarGraphActivity" /> <!-- FileProvider - a ContentProvider for making the image file securely available to the other end -->
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="ca.imdc.newp.fileprovider"
@@ -73,9 +70,20 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
     </application>
+    <uses-feature
+        android:name="android.hardware.camera.front"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 </manifest>

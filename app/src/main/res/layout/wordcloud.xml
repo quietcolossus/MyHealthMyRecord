@@ -27,24 +27,15 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 app:titleTextColor="@color/button_focused" />
         </com.google.android.material.appbar.AppBarLayout>
-        <LinearLayout android:layout_width="fill_parent"
-            android:id="@+id/vert_layout"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            tools:ignore="MissingConstraints">
+
         <ca.imdc.newp.MobileWebView
             android:id="@+id/wordcloud_web"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_above="@+id/wordcloud_button"
             tools:ignore="MissingConstraints" />
-        <LinearLayout android:layout_width="fill_parent"
-            android:id="@+id/button_row_1"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            xmlns:android="http://schemas.android.com/apk/res/android">
+
         <Button
             android:id="@+id/wordcloud_button"
             style="@style/Widget.AppCompat.Button.Colored"
@@ -108,12 +99,8 @@
             app:layout_constraintEnd_toStartOf="@+id/tg_button"
             app:layout_constraintStart_toEndOf="@+id/wordcloud_button"
             app:layout_constraintTop_toBottomOf="@+id/wordcloud_web"
-            app:layout_constraintVertical_bias="0.0" /></LinearLayout>
-        <LinearLayout android:layout_width="fill_parent"
-            android:id="@+id/button_row_2"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            xmlns:android="http://schemas.android.com/apk/res/android">
+            app:layout_constraintVertical_bias="0.0" />
+
         <Button
             android:id="@+id/tg_button"
             android:layout_width="120dp"
@@ -154,7 +141,7 @@
             app:layout_constraintHorizontal_bias="0.866"
             app:layout_constraintStart_toEndOf="@+id/bar_button"
             app:layout_constraintTop_toBottomOf="@+id/wordcloud_web"
-            tools:ignore="MissingConstraints" /></LinearLayout>
+            tools:ignore="MissingConstraints" />
 
         <Spinner
             android:id="@+id/spinner"
@@ -164,7 +151,7 @@
             android:spinnerMode="dropdown"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="1dp" /></LinearLayout>
+            tools:layout_editor_absoluteX="1dp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

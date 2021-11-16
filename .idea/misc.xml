@@ -3,7 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/IMDC/AndroidStudioProjects/mhmr/app/src/main/res/layout/activity_main.xml" value="0.209375" />
+        <entry key="..\:/Users/IMDC/AndroidStudioProjects/mhmr/app/src/main/res/layout/activity_settings.xml" value="0.21770833333333334" />
         <entry key="..\:/Users/IMDC/AndroidStudioProjects/mhmr/app/src/main/res/layout/annotation.xml" value="0.20572916666666666" />
+        <entry key="..\:/Users/IMDC/AndroidStudioProjects/mhmr/app/src/main/res/layout/content_settings.xml" value="0.21770833333333334" />
+        <entry key="..\:/Users/IMDC/AndroidStudioProjects/mhmr/app/src/main/res/layout/item.xml" value="0.209375" />
+        <entry key="..\:/Users/IMDC/AndroidStudioProjects/mhmr/app/src/main/res/layout/navheader.xml" value="0.209375" />
         <entry key="..\:/Users/IMDC/AndroidStudioProjects/mhmr/app/src/main/res/layout/wordcloud.xml" value="0.2140625" />
       </map>
     </option>
