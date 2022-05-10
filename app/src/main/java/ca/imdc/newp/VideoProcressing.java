@@ -36,33 +36,7 @@ public String getFileName()
         return encfileName;
     }
 
-    private void cry()
-    {
-        final String key = "1111111111111111";
-        final cryptoHash halo = new cryptoHash();
-        try
-        {
-            String name =  createfile("encrypt");
-            final File encryptedFile = new File(name);
-            final File inputFile = new File(cfileName);
-            t = new Thread(new Runnable() {
-                public void run()
-                {
-                    try {
-                        halo.encrypt(key,inputFile,encryptedFile);
-                    } catch (CryptoException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            t.start();
-            t.join();
-        }
-        catch(Exception e)
-        {
-            System.out.println(e.getMessage());
-        }
-    }
+
     private String createfile(String type)
     {
         String fName = null;
