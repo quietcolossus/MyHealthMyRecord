@@ -224,19 +224,19 @@ public class GraphActivity extends AppCompatActivity {
         Iterator<String> date_keys = dates.keys();
         String first = date_keys.next();
         String first_date = null;
+
         try {
             first_date = (String) dates.get(first);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         String[] date_time = first_date.split(" ");
         String[] date_comp = date_time[0].split("-");
         LocalDate start = LocalDate.of(Integer.parseInt(date_comp[0]), Integer.parseInt(date_comp[1]) , Integer.parseInt(date_comp[2]) );
         LocalDate stop = LocalDate.now( ZoneId.of( "America/Montreal" ) );
         List<LocalDate> alldates = getDatesBetweenUsingJava8(start, stop);
 
-        System.out.println(alldates);
-        System.out.println(alldates.get(0).toString());
         StringBuilder frequency = new StringBuilder();
         for (LocalDate d : alldates) {
             String date_string  = d.toString();

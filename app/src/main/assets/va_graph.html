@@ -21,6 +21,7 @@
             showlegend: false,
             marker: {color: 'rgb(64, 80, 181)'},
             name: 'first legend group',
+            mode: 'markers',
             type: 'scatter'
         };
         var trace2 = {
@@ -36,42 +37,7 @@
             autosize: true,
             showlegend: false,
             legend: {"orientation": "h"},
-            shapes: [
-        // 1st highlight during Feb 4 - Feb 6
-        {
-            type: 'rect',
-            // x-reference is assigned to the x-values
-            xref: 'x',
-            // y-reference is assigned to the plot paper [0,1]
-            yref: 'paper',
-            x0: '2022-02-05',
-            y0: 0,
-            x1: '2022-02-07',
-            y1: 1,
-            fillcolor: '#B7BDE6',
-            opacity: 0.5,
-            line: {
-                width: 0
-            }
-        },
-
-        // 2nd highlight during Feb 20 - Feb 23
-
-        {
-            type: 'rect',
-            xref: 'x',
-            yref: 'paper',
-            x0: '2022-02-12',
-            y0: 0,
-            x1: '2022-02-14',
-            y1: 1,
-            fillcolor: '#B7BDE6',
-            opacity: 0.5,
-            line: {
-                width: 0
-            }
-        }
-    ],
+            shapes: [],
             height: 500,
             width: 500,
             font: {
@@ -79,29 +45,17 @@
     color: '#7f7f7f'
   },
    yaxis: {
-    title: 'Frequency',
-    tickvals: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    tickmode: 'array',
-    automargin: true,
-    rangemode: 'tozero'
-  },
-  xaxis: {
-    range: [date[0], date[date.length - 1]],
-    title: 'Time',
-    type: 'date',
+    range: [0, 100],
+    title: 'Arousal',
     automargin: true,
     fixedrange: true,
   },
-      annotations: [{
-    xref: 'x',
-    yref: 'y',
-    x: indexOfMaxValue,
-    xanchor: 'left',
-    y: Math.max(...data),
-    yanchor: 'top',
-    text: 'Maximum',
-    showarrow: false
-  }],
+  xaxis: {
+    range: [0, 100],
+    title: 'Valence',
+    automargin: true,
+    fixedrange: true,
+  },
              paper_bgcolor: '#fafafa',
              plot_bgcolor: '#fafafa'
             };

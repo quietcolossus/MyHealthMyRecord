@@ -1,5 +1,17 @@
 package ca.imdc.newp;
 
+//change pain levels
+//check data from Fatima
+//layout from Sarah
+//share circle from Rabia
+//size scale, list underneath?
+//information icon?
+
+//more default data viz screen
+
+
+
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -51,11 +63,12 @@ public class WordCloudActivity extends AppCompatActivity {
     public Button mBarGraph;
     public Button mLineGraph;
     public Button mSummary;
+    public Button mTextGraph;
     private DrawerLayout mDrawerLayout;
-
 
     public List<String> stopwords =  Arrays.asList("HESITATION","I", "i", "ive", "im", "id", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "can", "will", "just", "dont", "should", "now");
     public List<String> medwords = Arrays.asList("hurt", "hurts", "hurting", "sore", "soreness", "dizzy", "dizziness", "vertigo", "light-headed", "chill", "chills", "diarrhea", "stiff", "stiffness", "pain", "painful", "nausea", "nauseous", "nauseate", "nauseated", "insomnia", "sick", "fever", "ache", "aches", "ached", "aching", "pains", "flu", "vomit", "vomiting", "cough", "coughing", "coughs", "coughed", "tired", "exhausted", "numb", "numbness", "numbed", "weak", "weakness", "tingle", "tingling", "tingles", "tingled", "fever", "shiver", "shivering", "shivered", "rash", "swell", "swollen", "sweat", "sweaty", "sweats", "fatigue", "fatigued", "heartburn", "headache", "headaches", "constipation", "constipated", "bloated", "bloating", "cramp", "cramps", "cramped", "cramping");
+
     public String[] destop(String[] cloud) {
         StringBuilder ds = new StringBuilder();
         for (String word : cloud) {
@@ -102,6 +115,7 @@ public class WordCloudActivity extends AppCompatActivity {
         mBarGraph = findViewById(R.id.bar_button);
         mLineGraph = findViewById(R.id.line_button);
         mSummary = findViewById(R.id.summary_button);
+        mTextGraph = findViewById(R.id.tg_button);
         Spinner dropdown = findViewById(R.id.spinner);
 
         String extra = null;
@@ -158,6 +172,16 @@ public class WordCloudActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent lgIntent = new Intent(WordCloudActivity.this, GraphActivity.class);
+                lgIntent.putExtra("WORD", "pain");
+                startActivity(lgIntent);
+            }
+        });
+
+        mTextGraph.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("HELLO");
+                Intent lgIntent = new Intent(WordCloudActivity.this, TextGraphActivity.class);
                 lgIntent.putExtra("WORD", "pain");
                 startActivity(lgIntent);
             }

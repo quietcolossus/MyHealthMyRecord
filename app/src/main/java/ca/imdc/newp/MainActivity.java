@@ -145,6 +145,8 @@ public class MainActivity extends AppCompatActivity {
 
     public String transcript;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,13 +158,18 @@ public class MainActivity extends AppCompatActivity {
         //String transcripts = PreferenceManager.getDefaultSharedPreferences(this).getString("transcriptRecord", null);
         //String names_record = PreferenceManager.getDefaultSharedPreferences(this).getString("nameRecord", null);
         String transcripts = "{\"checkin\":\"I'm just coming to check in %HESITATION and record %HESITATION my pain for today %HESITATION woke up this morning with %HESITATION increased pain on my joints on my hand and %HESITATION its uncomfortable to move %HESITATION and and have my coffee in the morning and its just uncomfortable pain\",\"comparison\":\"%HESITATION comparison to yesterday the pain in my limbs are %HESITATION about the same %HESITATION my leg pain has increased and %HESITATION there was discomfort in our bed %HESITATION it took me a few seconds longer to go to the toilet \",\"goodmorning\":\"good morning %HESITATION todays pain was significantly better %HESITATION I could still feel a numbness the pain but %HESITATION was significantly better than it was yesterday\", \"general\":\"hello %HESITATION today I experienced a slight discomfort going to the toilet %HESITATION I experienced slight diarrhea and %HESITATION discomfort and pain in my legs but my arms seem to be okay or a least not as painful as it was yesterday %HESITATION the headache has subsided hopefully by tomorrow the pain in my legs is less painful\", \"lesspain2\":\"hello %HESITATION today i experienced a slight discomfort going to the toilet %HESITATION i experienced slight diarrhea and %HESITATION discomfort and pain in my legs but my arms seem to be okay or a least not as painful as it was yesterday %HESITATION the headache has subsided hopefully by tomorrow the pain in my legs is less painful\", \"morepain3\":\"good morning %HESITATION today the pain in my my fin my hands and my legs are a lot better %HESITATION but I was just experiencing a little discomfort %HESITATION aches and a headache %HESITATION slight aches not too much %HESITATION but I would say the pain top %HESITATION the pain levels today would be around a five\"}";
-        String obj = "{\"checkin\":{\"Arousal\":25,\"Valence\":25,\"Location\":{\"Home\":true,\"Indoors\":true},\"Activity\":{\"Leisure\":true,\"Meds\":true},\"Sharing\":{\"Everyone\":true,\"Medical\":true}}, \"comparison\":{\"Arousal\":25,\"Valence\":25,\"Location\":{\"Home\":true,\"Indoors\":true},\"Activity\":{\"Leisure\":true,\"Meds\":true},\"Sharing\":{\"Everyone\":true,\"Medical\":true}}, \"goodmorning\":{\"Arousal\":60,\"Valence\":50,\"Location\":{\"Home\":true,\"Indoors\":true},\"Activity\":{\"Leisure\":true,\"Meds\":true},\"Sharing\":{\"Everyone\":true,\"Medical\":true}}, \"general\":{\"Arousal\":25,\"Valence\":25,\"Location\":{\"Home\":true,\"Indoors\":true},\"Activity\":{\"Leisure\":true,\"Meds\":true},\"Sharing\":{\"Everyone\":true,\"Medical\":true}}, \"lesspain2\":{\"Arousal\":25,\"Valence\":25,\"Location\":{\"Home\":true,\"Indoors\":true},\"Activity\":{\"Leisure\":true,\"Meds\":true},\"Sharing\":{\"Everyone\":true,\"Medical\":true}}, \"morepain3\":{\"Arousal\":25,\"Valence\":25,\"Location\":{\"Home\":true,\"Indoors\":true},\"Activity\":{\"Leisure\":true,\"Meds\":true},\"Sharing\":{\"Everyone\":true,\"Medical\":true}}}";
-        String names_record = "{\"checkin\":\"2021-07-01 14:13\",\"comparison\":\"2021-07-02 14:14\",\"goodmorning\":\"2021-07-04 15:39\", \"general\":\"2021-07-06 15:39\", \"lesspain2\":\"2021-07-07 15:39\", \"morepain3\":\"2021-07-10 15:39\"}";
+        String obj = "{\"checkin\":{\"Arousal\":75,\"Valence\":13,\"Location\":{\"Home\":true,\"Indoors\":true},\"Activity\":{\"Leisure\":true,\"Meds\":true},\"Sharing\":{\"Everyone\":true,\"Medical\":true}}, \"comparison\":{\"Arousal\":89,\"Valence\":83,\"Location\":{\"Home\":true,\"Indoors\":true},\"Activity\":{\"Leisure\":true,\"Meds\":true},\"Sharing\":{\"Everyone\":true,\"Medical\":true}}, \"goodmorning\":{\"Arousal\":7,\"Valence\":26,\"Location\":{\"Home\":true,\"Indoors\":true},\"Activity\":{\"Leisure\":true,\"Meds\":true},\"Sharing\":{\"Everyone\":true,\"Medical\":true}}, \"general\":{\"Arousal\":55,\"Valence\":95,\"Location\":{\"Home\":true,\"Indoors\":true},\"Activity\":{\"Leisure\":true,\"Meds\":true},\"Sharing\":{\"Everyone\":true,\"Medical\":true}}, \"lesspain2\":{\"Arousal\":81,\"Valence\":36,\"Location\":{\"Home\":true,\"Indoors\":true},\"Activity\":{\"Leisure\":true,\"Meds\":true},\"Sharing\":{\"Everyone\":true,\"Medical\":true}}, \"morepain3\":{\"Arousal\":70,\"Valence\":11,\"Location\":{\"Home\":true,\"Indoors\":true},\"Activity\":{\"Leisure\":true,\"Meds\":true},\"Sharing\":{\"Everyone\":true,\"Medical\":true}}}";
+        String names_record = "{\"checkin\":\"2022-02-04 14:13\",\"comparison\":\"2022-02-05 14:14\",\"goodmorning\":\"2022-02-07 15:39\", \"general\":\"2022-02-09 15:39\", \"lesspain2\":\"2022-02-10 15:39\", \"morepain3\":\"2022-02-13 15:39\"}";
         System.out.println("TAGS: " + obj + "\n");
         System.out.println("\nSAVED TRANSCRIPTS: " + transcripts + "\n");
         System.out.println("\nVIDEO NAMES: " + names_record);
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
+
+        System.setProperty("http.proxyHost","");
+        System.setProperty("http.proxyPort","");
+        System.setProperty("https.proxyHost","");
+        System.setProperty("https.proxyPort","");
 
         if (obj == null) { obj = ""; };
         try {
@@ -614,6 +621,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     @Override
                     public void onFinish() {
+                        System.out.println("HELLO");
                         watsonSend(replacer);
                     }
                 });

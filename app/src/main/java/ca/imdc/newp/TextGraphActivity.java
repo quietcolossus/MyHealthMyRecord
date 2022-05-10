@@ -40,6 +40,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -56,6 +57,8 @@ public class TextGraphActivity extends AppCompatActivity {
 
     public List<String> stopwords =  Arrays.asList("HESITATION","I", "i", "ive", "im", "id", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "can", "will", "just", "dont", "should", "now");
     public List<String> medwords = Arrays.asList("hurt", "hurts", "hurting", "sore", "soreness", "dizzy", "dizziness", "vertigo", "light-headed", "chill", "chills", "diarrhea", "stiff", "stiffness", "pain", "painful", "nausea", "nauseous", "nauseate", "nauseated", "insomnia", "sick", "fever", "ache", "aches", "ached", "aching", "pains", "flu", "vomit", "vomiting", "cough", "coughing", "coughs", "coughed", "tired", "exhausted", "numb", "numbness", "numbed", "weak", "weakness", "tingle", "tingling", "tingles", "tingled", "fever", "shiver", "shivering", "shivered", "rash", "swell", "swollen", "sweat", "sweaty", "sweats", "fatigue", "fatigued", "heartburn", "headache", "headaches", "constipation", "constipated", "bloated", "bloating", "cramp", "cramps", "cramped", "cramping");
+
+
     public String[] destop(String[] cloud) {
         StringBuilder ds = new StringBuilder();
         for (String word : cloud) {
@@ -105,6 +108,8 @@ public class TextGraphActivity extends AppCompatActivity {
         Spinner dropdown = findViewById(R.id.spinner);
 
         String extra = null;
+
+        System.out.println("HOHOHOHO");
 
         try {
             Intent intent = getIntent();
@@ -188,7 +193,7 @@ public class TextGraphActivity extends AppCompatActivity {
         });
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Word Cloud");
+        toolbar.setTitle("Emotional Circumplex");
         setSupportActionBar(toolbar);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -231,27 +236,29 @@ public class TextGraphActivity extends AppCompatActivity {
 
         MainActivity mainact = new MainActivity();
         JSONObject rTags = mainact.tRecord;
-        Iterator<String> keys = rTags.keys();
-        StringBuilder allwords = new StringBuilder();
-        while (keys.hasNext()) {
-            String key = keys.next();
+        JSONObject plot_data = mainact.jRecord;
+
+        StringBuilder arousal_list = new StringBuilder();
+        StringBuilder valence_list = new StringBuilder();
+
+        Iterator<String> plot_keys = plot_data.keys();
+
+        while (plot_keys.hasNext()) {
+            String d2 = plot_keys.next();
+            String arousal = null;
+            String valence = null;
             try {
-                allwords.append((String) rTags.get(key) + " ");
+                arousal = ((JSONObject) plot_data.get(d2)).get("Arousal").toString();
+                valence = ((JSONObject) plot_data.get(d2)).get("Valence").toString();
+                arousal_list.append(arousal + " ");
+                valence_list.append(valence + " ");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        String meta = allwords.toString();
-        meta = meta.replace("'", "");
-        meta = meta.replace("%", "");
-        String[] wordCloud;
-        if (!(extra == null) && extra.equals("lang_med")) {
-            wordCloud = demed(destop(meta.split(" ")));
-        }
-        else {
-            wordCloud = destop(meta.split(" "));
-        }
-        System.out.println("HEY LOOK" + Arrays.toString(wordCloud));
+
+        String[] arousals = arousal_list.toString().split(" ");
+        String[] valences = valence_list.toString().split(" ");
 
         final MobileWebView d3 = findViewById(R.id.wordcloud_web);
         d3.getSettings().setLoadWithOverviewMode(true);
@@ -259,8 +266,11 @@ public class TextGraphActivity extends AppCompatActivity {
 
         WebSettings ws = d3.getSettings();
         ws.setJavaScriptEnabled(true);
-        d3.loadUrl("file:///android_asset/d3.html");
+
+        d3.loadUrl("file:///android_asset/va_graph.html");
+
         d3.setWebViewClient(new WebViewClient() {
+
             public boolean shouldOverrideUrlLoading(WebView view, String url)
             {
                 if (url.contains("viddate")) {
@@ -272,18 +282,23 @@ public class TextGraphActivity extends AppCompatActivity {
                 return true;
             }
 
-
-
-
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 System.out.println(url);
                 StringBuffer sb = new StringBuffer();
-                sb.append("wordCloud([");
-                for (int i = 0; i < wordCloud.length; i++) {
-                    sb.append("'").append(wordCloud[i]).append("'");
-                    if (i < wordCloud.length - 1) {
+
+                sb.append("graph([");
+                for (int i = 0; i < arousals.length; i++) {
+                    sb.append("'").append(arousals[i]).append("'");
+                    if (i < arousals.length - 1) {
+                        sb.append(",");
+                    }
+                }
+                sb.append("],[");
+                for (int i = 0; i < valences.length; i++) {
+                    sb.append("'").append(valences[i]).append("'");
+                    if (i < valences.length - 1) {
                         sb.append(",");
                     }
                 }

@@ -765,6 +765,7 @@ public class VideoPlay extends AppCompatActivity {
                         break;
                     }
                 } catch (Exception e) {
+                    break;
                 }
             } while (mProgressBar.getProgress() <= 100);
             return null;
